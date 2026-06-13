@@ -15,6 +15,14 @@ const timeline = [
   { year: "2025", text: "サークル CEED（シード）に所属" },
   { year: "2026", text: "3年次に進級。水野慎士研究室（CGメディア）に所属／CEED 副部長" },
 ];
+
+// 実績ハイライト（すべて事実・ガクチカ準拠）
+const highlights = [
+  { n: "60名", l: "規模へ拡大", d: "CEED副部長として「誰も置いてけぼりにしない」体制づくりを進め、サークルを60名規模のコミュニティへ。", href: "/ceed", c: "var(--c-green)" },
+  { n: "企業賞", l: "ハッカソン", d: "割り勘アプリ「Settlo」を開発し企業賞を受賞。これが企業からのアプリ受託にもつながった。", href: "/works#cat-web", c: "var(--c-blue)" },
+  { n: "出展", l: "TGS 他", d: "体感型ゲーム「虫歯アニマルズ」をデザイン・造形で担当。東京ゲームショウ・ゲームマーケット・安城Eフェスで出展。", href: "/works#cat-cg", c: "var(--c-red)" },
+  { n: "接客", l: "ビール売り子", d: "バンテリンドームで「応援したくなる接客」を追求。発信や会話まで含めた自己プロデュースに挑戦。", href: null, c: "var(--c-orange)" },
+];
 ---
 
 <Base title="About — Osaki Ryoma">
@@ -35,6 +43,28 @@ const timeline = [
         <div class="about-photo reveal" data-delay="2">
           <img src="/assets/works/profile.jpg" alt="大崎稜馬" loading="lazy" />
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Highlights</span>
+        <h2 class="display">主な実績</h2>
+      </div>
+      <div class="highlights">
+        {highlights.map((h, i) => {
+          const Tag = h.href ? "a" : "div";
+          return (
+            <Tag class:list={["hl", "reveal", { "hl--link": !!h.href }]} href={h.href ?? undefined} data-delay={(i % 4) + 1} style={`--hc:${h.c}`}>
+              <span class="hl-num display">{h.n}</span>
+              <span class="hl-label">{h.l}</span>
+              <p class="hl-desc">{h.d}</p>
+              {h.href && <span class="hl-arrow">詳しく ↗</span>}
+            </Tag>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -100,6 +130,17 @@ const timeline = [
     .about-hero-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-top: 1.5rem; }
     @media (min-width: 820px) { .about-hero-grid { grid-template-columns: 1.4fr 0.6fr; } }
     .about-photo img { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
+
+    .highlights { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 900px) { .highlights { grid-template-columns: repeat(4, 1fr); } }
+    .hl { position: relative; display: flex; flex-direction: column; gap: 0.5rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; overflow: hidden; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .hl::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--hc); }
+    .hl--link:hover { transform: translateY(-4px); border-color: var(--hc); }
+    .hl-num { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; line-height: 1; color: var(--hc); letter-spacing: -0.02em; }
+    .hl-label { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .hl-desc { color: var(--fg-soft); font-size: var(--fs-small); margin-top: 0.3rem; }
+    .hl-arrow { margin-top: auto; padding-top: 0.6rem; font-family: var(--font-display); font-size: 0.78rem; font-weight: 600; color: var(--fg-soft); transition: color 0.25s var(--ease); }
+    .hl--link:hover .hl-arrow { color: var(--fg); }
 
     .skills { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 540px) { .skills { grid-template-columns: 1fr; } }

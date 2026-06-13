@@ -20,17 +20,32 @@ const channels = [
       </h1>
       <p class="lead reveal" data-delay="1">制作のご相談やご連絡は、以下からお気軽にどうぞ。</p>
 
-      <ul class="channels">
-        {channels.map((c, i) => (
-          <li class="reveal" data-delay={(i % 3) + 1}>
-            <a href={c.href} target={c.href.startsWith("http") ? "_blank" : null} rel="noopener noreferrer">
-              <span class="ch-label display">{c.label}</span>
-              <span class="ch-value">{c.value}</span>
-              <span class="ch-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class="contact-grid">
+        <ul class="channels">
+          {channels.map((c, i) => (
+            <li class="reveal" data-delay={(i % 3) + 1}>
+              <a href={c.href} target={c.href.startsWith("http") ? "_blank" : null} rel="noopener noreferrer">
+                <span class="ch-label display">{c.label}</span>
+                <span class="ch-value">{c.value}</span>
+                <span class="ch-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <aside class="contact-aside reveal" data-delay="2">
+          <span class="spectrum-bar" aria-hidden="true"></span>
+          <p class="aside-eyebrow">Open to</p>
+          <h2 class="aside-title">こんなご相談を<br />歓迎します</h2>
+          <ul class="topics">
+            <li>Web サイト制作・リデザイン</li>
+            <li>映像・3DCG / モーション</li>
+            <li>グラフィック・ロゴ</li>
+            <li>企画・発表スライド</li>
+          </ul>
+          <p class="aside-note">学生ですが、一つひとつ本気で取り組みます。まずは気軽にメッセージをどうぞ。</p>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -40,12 +55,23 @@ const channels = [
     .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1rem; }
     .lead { color: var(--fg-soft); margin-bottom: var(--space-4); max-width: 50ch; }
 
-    .channels { display: grid; gap: 0.8rem; max-width: 760px; }
+    .contact-grid { display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: stretch; }
+    @media (min-width: 900px) { .contact-grid { grid-template-columns: 1.15fr 0.85fr; gap: 2rem; } }
+    .channels { display: grid; gap: 0.8rem; align-content: start; }
     .channels a { display: flex; align-items: center; gap: 1.2rem; padding: 1.5rem 1.8rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
     .channels a:hover { transform: translateX(8px); border-color: var(--accent-ink); }
     .ch-label { min-width: 130px; font-size: 1.2rem; font-weight: 700; }
     .ch-value { color: var(--fg-soft); flex: 1; }
     .ch-arrow { color: var(--accent-ink); font-size: 1.3rem; }
     @media (max-width: 540px) { .channels a { flex-wrap: wrap; gap: 0.3rem; } .ch-label { min-width: 0; width: 100%; } }
+
+    .contact-aside { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem 1.8rem 2rem; display: flex; flex-direction: column; }
+    .contact-aside .spectrum-bar { margin-bottom: 1.3rem; }
+    .aside-eyebrow { font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); }
+    .aside-title { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.25; margin: 0.5rem 0 1.2rem; }
+    .topics { display: grid; gap: 0.6rem; }
+    .topics li { color: var(--fg-soft); padding-left: 1.4rem; position: relative; font-size: var(--fs-small); }
+    .topics li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 50%; background: var(--spectrum); }
+    .aside-note { margin-top: auto; padding-top: 1.4rem; color: var(--muted); font-size: var(--fs-small); }
   </style>
 </Base>
