@@ -26,6 +26,7 @@ export interface Work {
   video?: string;         // ループ再生する軽量mp4（任意）
   featured?: boolean;     // トップのBentoで大きく見せる
   link?: string;          // 外部/別サイトへのリンク（Web作品など）
+  status?: string;        // 進行中・公開予定・出展 などのバッジ（任意）
 }
 
 export const works: Work[] = [
@@ -113,6 +114,15 @@ export const works: Work[] = [
     summary: "操作に連動して地面が変化するインタラクティブなCG。",
     tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/07.png",
+  },
+
+  {
+    slug: "mushiba-animals",
+    title: "虫歯アニマルズ（東京ゲームショー出展）",
+    category: "cg",
+    summary: "サークル CEED が制作し東京ゲームショーに出展した体感型ゲーム。動物の口を模した造形コントローラで遊ぶインタラクティブ展示。",
+    status: "東京ゲームショー出展",
+    thumb: "/assets/works/mushiba.jpg",
   },
 
   // ---- グラフィック・ロゴ ----
@@ -210,6 +220,26 @@ export const works: Work[] = [
   },
 
   // ---- Web ----
+  {
+    slug: "chuo-seisakusho",
+    title: "中央製作所 採用サイト リデザイン",
+    category: "web",
+    summary: "学生・若手求職者に向けた企業採用サイトのリデザイン。サークル CEED のWEB班でのクライアント案件。",
+    goal: "応募者が必要な情報にたどり着き、企業の魅力が伝わる導線にして応募数を増やす。",
+    approach: "技術紹介ページの設計を担当。Figmaでレイアウトを組み、写真と文章の構成・撮影イメージをディレクション。電気／機械／化学の専門性を直感的に見せる構成にした。",
+    tools: ["Figma", "Webデザイン"],
+    thumb: "/assets/works/chuo-seisakusho.jpg",
+    status: "進行中",
+    featured: true,
+  },
+  {
+    slug: "ceed-site",
+    title: "CEED 公式サイト",
+    category: "web",
+    summary: "所属サークル CEED（愛知工業大学マルチクリエイティブサークル）の公式サイト。WEB班として構築を進行中。",
+    tools: ["Webデザイン"],
+    status: "公開予定",
+  },
   {
     slug: "yumiki-world",
     title: "推しサイト「YUMIKI WORLD」",

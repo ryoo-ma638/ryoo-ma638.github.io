@@ -47,7 +47,10 @@ const grouped = order.map((cat) => ({
                   : <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />}
               </div>
               <div class="work-info">
-                <span class="tag" style={`--c:${g.label.color}`}>{g.label.ja}</span>
+                <span class="tags-row">
+                  <span class="tag" style={`--c:${g.label.color}`}>{g.label.ja}</span>
+                  {w.status && <span class="status-pill">{w.status}</span>}
+                </span>
                 <h3>{w.title}</h3>
                 <p class="work-summary">{w.summary}</p>
                 {w.goal && <p class="kv"><span>狙い</span>{w.goal}</p>}
@@ -94,7 +97,9 @@ const grouped = order.map((cat) => ({
     .work-media.noimg::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
     .work-media.noimg img { display: none; }
 
-    .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); margin-bottom: 0.8rem; }
+    .tags-row { display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
+    .status-pill { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.28rem 0.7rem; border-radius: 999px; color: var(--fg); border: 1.5px solid var(--line); background: var(--bg-3); }
     .work-info h3 { font-size: clamp(1.5rem, 3vw, 2.3rem); margin-bottom: 0.7rem; }
     .work-summary { color: var(--fg); margin-bottom: 1rem; }
     .kv { color: var(--fg-soft); font-size: var(--fs-small); margin-bottom: 0.5rem; display: grid; grid-template-columns: 3.5rem 1fr; gap: 0.6rem; }
