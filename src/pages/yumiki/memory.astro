@@ -25,7 +25,7 @@ import { memories, img } from "../../data/yumiki.ts";
       </div>
 
       <h3 class="y-sub y-reveal">🤝 リアルミーグリの思い出</h3>
-      <div class="y-mem-grid">
+      <div class="y-mem-grid y-mem-grid--narrow">
         {memories.meet.map((m) => (
           <article class="y-mem y-card y-reveal">
             <div class="y-mem-photo"><img src={img(m.img)} alt={m.title} loading="lazy" onerror="this.closest('.y-mem-photo').classList.add('noimg')" /></div>
@@ -56,10 +56,11 @@ import { memories, img } from "../../data/yumiki.ts";
   <style>
     .y-sub { font-size: 1.4rem; margin: 2.5rem 0 1.3rem; }
     .y-mem-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 1rem; }
+    .y-mem-grid--narrow { max-width: 520px; }
     .y-mem { display: flex; flex-direction: column; transition: transform .35s var(--y-ease); }
     .y-mem:hover { transform: translateY(-5px) rotate(-0.6deg); box-shadow: var(--y-shadow); }
-    .y-mem-photo { aspect-ratio: 16/10; overflow: hidden; background: var(--y-cream-2); }
-    .y-mem-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .y-mem-photo { aspect-ratio: 4/3; overflow: hidden; background: var(--y-cream-2); }
+    .y-mem-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
     .y-mem-photo.noimg img { display: none; }
     .y-mem-photo.noimg::after { content: "✿"; display: grid; place-items: center; height: 100%; font-size: 2.5rem; color: var(--y-pink); }
     .y-mem-body { padding: 1.3rem 1.4rem 1.5rem; }

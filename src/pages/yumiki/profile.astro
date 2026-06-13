@@ -12,7 +12,7 @@ import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
 
       <div class="y-prof-top">
         <div class="y-prof-photo y-card y-reveal">
-          <img src={img("left-profile.jpg")} alt="弓木奈於さん" onerror="this.src='/assets/yumiki/nao_main.jpg'" />
+          <img src={img("nao_main.jpg")} alt="弓木奈於さん" onerror="this.src='/assets/yumiki/yumiki-main.png'" />
         </div>
         <div class="y-reveal" data-delay="1">
           <h3 class="y-prof-name">{profile.name} <small>（{profile.kana}）</small></h3>
@@ -57,7 +57,7 @@ import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
     .y-prof-top { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
     @media (min-width: 820px) { .y-prof-top { grid-template-columns: 0.8fr 1.2fr; } }
     .y-prof-photo { padding: 10px; transform: rotate(-2deg); }
-    .y-prof-photo img { width: 100%; border-radius: 20px; aspect-ratio: 4/5; object-fit: cover; }
+    .y-prof-photo img { width: 100%; border-radius: 20px; aspect-ratio: 4/5; object-fit: cover; object-position: center top; }
     .y-prof-name { font-size: 1.8rem; }
     .y-prof-name small { font-size: 1rem; color: var(--y-muted); font-weight: 500; }
     .y-prof-en { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); letter-spacing: 0.1em; margin-bottom: 1.2rem; }
