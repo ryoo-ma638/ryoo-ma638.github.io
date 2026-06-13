@@ -39,15 +39,31 @@ const {
       rel="stylesheet"
     />
 
-    <!-- ダーク既定。light保存時のみ切替（チラつき防止で先行適用） -->
+    <!-- ダーク既定。light保存時のみ切替（チラつき防止で先行適用）＋初回イントロ判定 -->
     <script is:inline>
       (() => {
         const s = localStorage.getItem("theme");
         if (s === "light") document.documentElement.setAttribute("data-theme", "light");
+        try {
+          const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!reduce && !sessionStorage.getItem("introSeen")) {
+            document.documentElement.classList.add("intro");
+            sessionStorage.setItem("introSeen", "1");
+          }
+        } catch (e) {}
       })();
     </script>
   </head>
   <body>
+    <span class="scroll-progress" id="scrollProgress" aria-hidden="true"></span>
+    <div class="site-intro" aria-hidden="true">
+      <div class="intro-glow" aria-hidden="true"></div>
+      <div class="intro-mark">
+        <span class="intro-bar"></span>
+        <span class="intro-name"><span class="spectrum-text">OSAKI</span></span>
+        <span class="intro-tag">Creative Portfolio</span>
+      </div>
+    </div>
     <a href="#main" class="sr-only">本文へスキップ</a>
     <Cursor />
     <Header />
@@ -67,6 +83,27 @@ const {
         els.forEach((el) => io.observe(el));
       } else {
         els.forEach((el) => el.classList.add("is-visible"));
+      }
+
+      // スクロール進捗バー
+      const bar = document.getElementById("scrollProgress");
+      if (bar) {
+        const onScrollBar = () => {
+          const h = document.documentElement;
+          const max = h.scrollHeight - h.clientHeight;
+          bar.style.transform = `scaleX(${max > 0 ? Math.min(1, h.scrollTop / max) : 0})`;
+        };
+        onScrollBar();
+        addEventListener("scroll", onScrollBar, { passive: true });
+        addEventListener("resize", onScrollBar);
+      }
+
+      // イントロ：アニメ後にクラス除去（body の overflow を戻す）／早期スキップ
+      if (document.documentElement.classList.contains("intro")) {
+        const clearIntro = () => document.documentElement.classList.remove("intro");
+        setTimeout(clearIntro, 2200);
+        addEventListener("pointerdown", clearIntro, { once: true });
+        addEventListener("keydown", clearIntro, { once: true });
       }
 
       // 作品動画は画面内のときだけ再生（省電力・なめらかさ確保）

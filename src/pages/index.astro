@@ -14,6 +14,7 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
   <!-- ===== HERO ===== -->
   <section class="hero">
     <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-aurora" aria-hidden="true"></div>
     <div class="container hero-inner">
       <p class="eyebrow reveal">Portfolio — Osaki Ryoma</p>
       <h1 class="hero-title display reveal">
@@ -120,6 +121,20 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
       filter: blur(10px); animation: float 16s var(--ease) infinite alternate;
     }
     @keyframes float { to { transform: translate3d(-2%, 2%, 0) scale(1.08); } }
+    /* スペクトラムのオーロラ（ゆっくり回転して呼吸する） */
+    .hero-aurora { position: absolute; inset: -30% -10%; z-index: -1; pointer-events: none;
+      background: conic-gradient(from 0deg at 60% 40%,
+        color-mix(in srgb, var(--c-violet) 22%, transparent),
+        color-mix(in srgb, var(--c-cyan) 20%, transparent),
+        color-mix(in srgb, var(--c-green) 16%, transparent),
+        color-mix(in srgb, var(--c-orange) 18%, transparent),
+        color-mix(in srgb, var(--c-red) 20%, transparent),
+        color-mix(in srgb, var(--c-violet) 22%, transparent));
+      filter: blur(80px); opacity: 0.5; mix-blend-mode: screen;
+      animation: aurora 30s linear infinite; }
+    @keyframes aurora { to { transform: rotate(360deg); } }
+    :root[data-theme="light"] .hero-aurora { mix-blend-mode: multiply; opacity: 0.32; }
+    @media (prefers-reduced-motion: reduce) { .hero-aurora { animation: none; } }
     .hero-inner { padding-top: 100px; }
     .hero-title { font-size: var(--fs-mega); font-weight: 700; line-height: 0.92; letter-spacing: -0.04em; margin-bottom: var(--space-4); }
     .hero-foot { display: grid; gap: var(--space-3); grid-template-columns: 1fr; max-width: 760px; }
@@ -137,9 +152,9 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
     .link-arrow:hover { color: var(--fg); }
 
     /* BENTO */
-    .bento { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 230px; }
+    .bento { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 230px; perspective: 1400px; }
     @media (min-width: 760px) { .bento { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 220px; } }
-    .bento-card { position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-3); grid-column: span 2; }
+    .bento-card { position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-3); grid-column: span 2; transition: transform 0.4s var(--ease); transform-style: preserve-3d; }
     @media (min-width: 760px) {
       .bento-card { grid-column: span 2; }
       .bento-card:nth-child(1) { grid-column: span 4; grid-row: span 2; }
@@ -178,4 +193,28 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
     .center { text-align: center; }
     .about-copy { font-size: var(--fs-h2); font-weight: 700; line-height: 1.4; margin: 0.8rem 0 1.8rem; }
   </style>
+
+  <script>
+    // Bento カードの立体ホバー（fine pointer かつ motion 許可時のみ）
+    const fine = matchMedia("(pointer: fine)").matches;
+    const okMotion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (fine && okMotion) {
+      document.querySelectorAll<HTMLElement>(".bento-card").forEach((card) => {
+        let raf = 0;
+        card.addEventListener("pointermove", (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            card.style.transform = `perspective(1400px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg) translateZ(8px)`;
+          });
+        });
+        card.addEventListener("pointerleave", () => {
+          cancelAnimationFrame(raf);
+          card.style.transform = "";
+        });
+      });
+    }
+  </script>
 </Base>

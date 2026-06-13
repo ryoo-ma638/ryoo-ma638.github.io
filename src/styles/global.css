@@ -171,6 +171,39 @@ h1, h2, h3, h4 { line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; f
 .marquee__item .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--spectrum); flex-shrink: 0; }
 @keyframes marquee { to { transform: translateX(-100%); } }
 
+/* ---------- ページ・フェードイン（遷移をなめらかに） ---------- */
+@keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+body { animation: pageFade 0.5s var(--ease) both; }
+
+/* ---------- スクロール進捗バー（スペクトラム） ---------- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 999;
+  transform: scaleX(0); transform-origin: 0 50%;
+  background: var(--spectrum); background-size: 200% auto; animation: hue 8s linear infinite;
+  will-change: transform;
+}
+
+/* ---------- シネマティック・イントロ（初回のみ／reduced-motion時はスキップ） ---------- */
+.site-intro { position: fixed; inset: 0; z-index: 2000; display: none; place-items: center; background: var(--bg); overflow: hidden; }
+html.intro .site-intro { display: grid; animation: introWipe 1s var(--ease) 1.15s forwards; }
+html.intro body { overflow: hidden; }
+.site-intro::after { /* グレインは前面に出さない */ content: none; }
+.intro-glow { position: absolute; inset: 0; background:
+  radial-gradient(40% 50% at 50% 50%, color-mix(in srgb, var(--c-violet) 40%, transparent), transparent 70%),
+  radial-gradient(35% 40% at 30% 60%, color-mix(in srgb, var(--c-cyan) 30%, transparent), transparent 70%),
+  radial-gradient(35% 40% at 70% 40%, color-mix(in srgb, var(--c-red) 26%, transparent), transparent 70%);
+  filter: blur(20px); opacity: 0; animation: introGlow 1.6s var(--ease) forwards; }
+.intro-mark { position: relative; text-align: center; }
+.intro-bar { height: 3px; width: 0; margin: 0 auto 0.9rem; background: var(--spectrum); background-size: 200% auto; animation: introBar 0.7s var(--ease) 0.1s forwards, hue 8s linear infinite; }
+.intro-name { display: block; overflow: hidden; }
+.intro-name span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 11vw, 7.5rem); letter-spacing: 0.08em; line-height: 1; transform: translateY(110%); animation: introName 0.9s var(--ease) 0.45s forwards; }
+.intro-tag { display: block; margin-top: 0.8rem; font-family: var(--font-display); font-size: clamp(0.7rem, 2vw, 0.95rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: introTag 0.7s var(--ease) 0.9s forwards; }
+@keyframes introGlow { 40% { opacity: 1; } 100% { opacity: 0.7; } }
+@keyframes introBar { to { width: clamp(140px, 32vw, 360px); } }
+@keyframes introName { to { transform: none; } }
+@keyframes introTag { to { opacity: 1; } }
+@keyframes introWipe { to { transform: translateY(-101%); pointer-events: none; } }
+
 /* ---------- Custom cursor（fine pointer のみ） ---------- */
 .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; border-radius: 50%; mix-blend-mode: difference; will-change: transform; }
 .cursor-dot { width: 8px; height: 8px; background: #fff; transform: translate(-50%, -50%); }
