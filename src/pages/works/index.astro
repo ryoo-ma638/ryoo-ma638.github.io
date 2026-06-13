@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Lightbox from "../../components/Lightbox.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
 
 const order: Category[] = ["cg", "graphic", "imaging", "planning", "web"];
@@ -38,15 +39,26 @@ const grouped = order.map((cat) => ({
         </div>
 
         <div class="work-list">
-          {g.items.map((w, i) => (
+          {g.items.map((w, i) => {
+            const lb = !w.video ? (w.gallery ?? (w.thumb ? [w.thumb] : null)) : null;
+            return (
             <article class="work-row reveal" id={w.slug}>
               <span class="work-index display">{String(i + 1).padStart(2, "0")}</span>
-              <div class="work-media" style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}>
+              <div
+                class:list={["work-media", { "is-zoom": !!lb }]}
+                style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}
+                data-gallery={lb ? JSON.stringify(lb) : undefined}
+                data-caption={lb ? w.title : undefined}
+                role={lb ? "button" : undefined}
+                tabindex={lb ? "0" : undefined}
+                aria-label={lb ? `${w.title} の画像を拡大（${lb.length}枚）` : undefined}
+              >
                 {w.video
                   ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
                   : w.thumb
                     ? <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />
                     : <span class="media-ph">準備中</span>}
+                {lb && <span class="zoom-hint">{w.gallery ? `＋${w.gallery.length}枚 見る` : "拡大"}<span aria-hidden="true"> ⤢</span></span>}
               </div>
               <div class="work-info">
                 <span class="tags-row">
@@ -64,11 +76,13 @@ const grouped = order.map((cat) => ({
                 {w.link && <a class="btn btn--ghost" href={w.link}>サイトを見る →</a>}
               </div>
             </article>
-          ))}
+          );})}
         </div>
       </div>
     </section>
   ))}
+
+  <Lightbox />
 
   <style>
     .works-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-4); overflow: hidden; }
@@ -98,6 +112,10 @@ const grouped = order.map((cat) => ({
     .work-media img, .work-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-row:hover .work-media img { transform: scale(1.04); }
     .media-ph { position: relative; z-index: 1; color: var(--muted); font-size: var(--fs-small); }
+    .work-media.is-zoom { cursor: zoom-in; }
+    .work-media.is-zoom:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+    .zoom-hint { position: absolute; z-index: 2; bottom: 0.7rem; right: 0.7rem; font-family: var(--font-display); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.2); padding: 0.32rem 0.7rem; border-radius: 999px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); backdrop-filter: blur(4px); pointer-events: none; }
+    .work-media.is-zoom:hover .zoom-hint, .work-media.is-zoom:focus-visible .zoom-hint { opacity: 1; transform: none; }
     .work-media.noimg::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
     .work-media.noimg img { display: none; }
 

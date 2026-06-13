@@ -25,6 +25,7 @@ export interface Work {
   duration?: string;      // 制作時間
   thumb?: string;         // サムネイル画像パス
   video?: string;         // ループ再生する軽量mp4（任意）
+  gallery?: string[];     // 複数画像（ライトボックスで拡大閲覧。スライド資料・スクショ等）
   featured?: boolean;     // トップのBentoで大きく見せる
   link?: string;          // 外部/別サイトへのリンク（Web作品など）
   status?: string;        // 進行中・公開予定・出展 などのバッジ（任意）
@@ -183,12 +184,12 @@ export const works: Work[] = [
     slug: "shuwa-game",
     title: "手話認識ゲーム",
     category: "imaging",
-    summary: "カメラに映した手話を認識して採点するゲーム。「ありがとう」「さようなら」などの手話を、手と顔のランドマーク検出でリアルタイムに判定する。",
-    goal: "手の形・動きをコンピュータに認識させ、学びながら遊べる手話の入口をつくる。",
-    approach: "MediaPipe の手・顔ランドマーク検出（Hands / Face Mesh）で指や顔の特徴点を取得し、手話のジェスチャーを判定。スコアや「苦手な手話」の集計までを実装したチーム制作（デジタルコンテンツ演習）。",
-    tools: ["Python", "MediaPipe", "コンピュータビジョン"],
-    thumb: "/assets/works/shuwa-game.jpg",
-    video: "/assets/works/video/shuwa-game.mp4",
+    summary: "カメラに映した手話を認識して採点するゲームを実装。手と顔のランドマーク検出で、五十音や「ありがとう」「さようなら」などの手話をリアルタイムに判定する。",
+    goal: "手の形・動きをコンピュータに認識させ、楽しく学べる“次世代の手話アプリ”をつくる。",
+    approach: "MediaPipe の Hands / Face Mesh で指・顔の特徴点を取得し、各手話のポーズを判定するロジックを実装。初級（単音）・中級（フレーズ）・上級（ヒントなし）の難易度、ライブカメラへのランドマーク描画、制限時間とスコア、学習モード・手話辞典・成績確認（苦手な手話の集計）まで作り込んだ。実装とプレゼン資料を主に担当。",
+    tools: ["Python", "MediaPipe", "コンピュータビジョン", "GUI"],
+    thumb: "/assets/works/shuwa-2.jpg",
+    gallery: [1, 2, 3, 4, 5].map((n) => `/assets/works/shuwa-${n}.jpg`),
     featured: true,
   },
   {
@@ -300,6 +301,7 @@ export const works: Work[] = [
     approach: "CEEDの新入生向けプレゼンを一から制作したり、ワークショップ（Amazon Prime のCM構成分析など）の資料をデザイン。配色・余白・図解で視認性と説得力を両立させる。",
     tools: ["Keynote", "PowerPoint", "デザイン"],
     thumb: "/assets/works/ceed-slides.jpg",
+    gallery: [...[1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/nyu-${n}.jpg`), ...[1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/ws-${n}.jpg`)],
   },
   {
     slug: "todofuken-battle",
@@ -310,6 +312,7 @@ export const works: Work[] = [
     approach: "発表スライドとプレゼン構成、ルール改定・各都道府県の特殊能力設計、データ処理のPythonを担当（カードのグラフィックデザインは他メンバーが担当）。「運ゲー」から心理戦へとゲームバランスを再構築した。",
     tools: ["Python", "プレゼン設計", "ゲーム企画"],
     thumb: "/assets/works/cardgame.jpg",
+    gallery: [1, 2, 3, 4, 5].map((n) => `/assets/slides/cg-${n}.jpg`),
   },
 ];
 

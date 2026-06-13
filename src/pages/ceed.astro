@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import Lightbox from "../components/Lightbox.astro";
 
 // CEED（シード）= 愛知工業大学のマルチクリエイティブサークル。大崎は副部長。
 // 事実のみ（出典: ガクチカ.docx／CEED_資料 の本人制作スライド・運営資料）。
@@ -70,9 +71,13 @@ const principles = [
           </div>
           <div class="filmstrip" role="list" aria-label={`${d.title} のスライド`}>
             {d.slides.map((s, j) => (
-              <a class="slide" role="listitem" href={s} target="_blank" rel="noopener noreferrer" aria-label={`スライド ${j + 1} を拡大`}>
+              <button
+                class="slide" role="listitem"
+                data-gallery={JSON.stringify(d.slides)} data-index={j} data-caption={d.title}
+                aria-label={`スライド ${j + 1} を拡大（全${d.slides.length}枚）`}
+              >
                 <img src={s} alt={`${d.title} スライド ${j + 1}`} loading="lazy" />
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -140,6 +145,8 @@ const principles = [
     </div>
   </section>
 
+  <Lightbox />
+
   <style>
     .ceed-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; }
     .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 55% at 80% 0%, color-mix(in srgb, var(--c-green) 22%, transparent), transparent 70%); filter: blur(8px); }
@@ -156,7 +163,7 @@ const principles = [
     .deck-head h3 { font-size: var(--fs-h3); margin-bottom: 0.5rem; }
     .deck-head p { color: var(--fg-soft); font-size: var(--fs-small); max-width: 64ch; }
     .filmstrip { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-    .slide { flex: 0 0 auto; width: clamp(260px, 64vw, 460px); aspect-ratio: 842 / 595; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); scroll-snap-align: start; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .slide { flex: 0 0 auto; width: clamp(260px, 64vw, 460px); aspect-ratio: 842 / 595; padding: 0; display: block; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); scroll-snap-align: start; cursor: zoom-in; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
     .slide img { width: 100%; height: 100%; object-fit: cover; }
     .slide:hover { transform: translateY(-4px); border-color: var(--c-green); }
 
