@@ -10,7 +10,7 @@ export const categoryLabels: Record<Category, { ja: string; en: string; color: s
   graphic: { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
   cg:      { ja: "CG・映像",          en: "CG & Video",    color: "var(--accent-2)" },
   imaging: { ja: "画像処理",          en: "Image Processing", color: "var(--accent-3)" },
-  web:     { ja: "Web制作",           en: "Web",           color: "var(--accent-ink)" },
+  web:     { ja: "Web・アプリ",        en: "Web & App",     color: "var(--accent-ink)" },
 };
 
 export interface Work {
@@ -233,6 +233,27 @@ export const works: Work[] = [
     featured: true,
   },
   {
+    slug: "drone-note",
+    title: "ドローン点検・飛行日誌アプリ",
+    category: "web",
+    summary: "無人航空機の飛行記録・点検・機体／操縦者管理を行う業務用アプリ。企業からの受託制作。",
+    goal: "現場の点検と飛行記録をスマホひとつで完結できるようにする。",
+    approach: "飛行記録／日常点検／点検整備／機体・操縦者管理、CSV・PDF出力、日の出・日の入り表示などを実装。",
+    tools: ["React Native / Expo", "Firebase"],
+    thumb: "/assets/works/drone.jpg",
+    status: "受託制作",
+    featured: true,
+  },
+  {
+    slug: "web-programming",
+    title: "Webプログラミング作品集（JavaScript）",
+    category: "web",
+    summary: "授業で制作したインタラクティブなWeb作品集。疑似3Dレース・レイトレーシング・各種パズルなどをJavaScriptで実装。",
+    approach: "箱入り娘・ハノイの塔・ライツアウト・Hit&Blow・疑似3Dレース・簡易レイトレーシング・画像二値化ツールなど、アルゴリズムと描画をブラウザ上で実装した。",
+    tools: ["HTML", "CSS", "JavaScript"],
+    thumb: "/assets/works/webpro.jpg",
+  },
+  {
     slug: "ceed-site",
     title: "CEED 公式サイト",
     category: "web",
@@ -250,6 +271,40 @@ export const works: Work[] = [
     thumb: "/assets/works/yumiki.png",
     featured: true,
     link: "/yumiki/",
+  },
+
+  // ---- 制作中（枠組み・今後公開）----
+  {
+    slug: "settlo",
+    title: "Settlo（割り勘アプリ）",
+    category: "web",
+    summary: "グループの支払いを記録し精算する割り勘Webアプリ。Vue 3 と Firebase で開発中。",
+    tools: ["Vue 3", "Firebase"],
+    status: "制作中",
+  },
+  {
+    slug: "toka-club",
+    title: "藤華クラブ 公式サイト",
+    category: "web",
+    summary: "中学軟式野球チームの公式サイト。Astro で制作中のクライアント案件。",
+    tools: ["Astro"],
+    status: "制作中",
+  },
+  {
+    slug: "meegri",
+    title: "ミーグリ シミュレーター",
+    category: "web",
+    summary: "アイドルのミート＆グリート体験をシミュレートするWebアプリ。制作中。",
+    tools: ["Web"],
+    status: "制作中",
+  },
+  {
+    slug: "nogi-photo",
+    title: "NogiPhotoManager（iOSアプリ）",
+    category: "web",
+    summary: "生写真コレクションを管理するiOSアプリ。Swift で制作中。",
+    tools: ["Swift", "iOS"],
+    status: "制作中",
   },
 ];
 
