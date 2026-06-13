@@ -4,13 +4,14 @@
 // ※虚偽厳禁。「授業でやっただけ」の習作は載せず、見せられるものだけを厳選する方針。
 // =========================================================
 
-export type Category = "graphic" | "cg" | "imaging" | "web";
+export type Category = "graphic" | "cg" | "imaging" | "web" | "planning";
 
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
-  graphic: { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
-  cg:      { ja: "CG・映像",          en: "CG & Video",    color: "var(--accent-2)" },
-  imaging: { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--accent-3)" },
-  web:     { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
+  graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
+  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--accent-2)" },
+  imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--accent-3)" },
+  web:      { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
+  planning: { ja: "企画・発表",         en: "Planning & Slides", color: "var(--c-green)" },
 };
 
 export interface Work {
@@ -106,6 +107,27 @@ export const works: Work[] = [
     summary: "1年次に「学生チャレンジプロジェクト」として参加・制作し、東京ゲームショーに出展された体感型ゲーム。動物の口を模した造形コントローラで遊ぶインタラクティブ展示。",
     status: "東京ゲームショー出展",
     thumb: "/assets/works/mushiba.jpg",
+  },
+  {
+    slug: "mm2-cinematography",
+    title: "映像制作 ― 構図とアクション繋ぎ",
+    category: "cg",
+    summary: "同じ被写体を「接写」と「望遠」で同じ大きさに見せ分け、複数カットをアクション繋ぎで1シーンにまとめた撮影・編集作品。",
+    goal: "カメラワークと編集だけで、被写体の見え方と動きの流れをコントロールする。",
+    approach: "三分割法・水平・アングルを意識して構図を設計。寄り（接写）と引き（望遠）で距離感を作り分け、動き出すタイミングでカットを切り替えるアクション繋ぎで一連の所作を一つのシーンに編集した。",
+    tools: ["撮影", "Premiere Pro"],
+    thumb: "/assets/works/mm2-cinematography.jpg",
+    video: "/assets/works/video/mm2-cinematography.mp4",
+  },
+  {
+    slug: "manga-jitsuei",
+    title: "漫画の実写化 ― 構図再現の映像",
+    category: "cg",
+    summary: "実在する漫画の構図を実写で再現するグループ制作。コマ割り・効果線の迫力を、カメラワークと編集でどう映像化するかに挑戦。",
+    goal: "静止画である漫画の「迫力」を、動く映像の演出に翻訳する。",
+    approach: "漫画の構図を16:9に変換し、望遠・接写で距離感を、アクション繋ぎと緩急で時間を演出。撮影はグループ、編集を担当。",
+    tools: ["撮影", "Premiere Pro"],
+    status: "制作中",
   },
 
   // ====================== グラフィック・ロゴ ======================
@@ -284,6 +306,28 @@ export const works: Work[] = [
     summary: "生写真コレクションを管理するiOSアプリ。Swift で制作中。",
     tools: ["Swift", "iOS"],
     status: "制作中",
+  },
+
+  // ====================== 企画・発表（スライド制作・プレゼン・企画） ======================
+  {
+    slug: "presentation-slides",
+    title: "プレゼン・スライド制作",
+    category: "planning",
+    summary: "事業発表やサークルの場で、伝わるスライドを数多く制作・登壇。情報の優先順位と見せ方を設計し、ストーリーで聴衆を引き込むことを重視している。",
+    goal: "「何を・どの順で・どう見せるか」を設計し、内容の価値が伝わる発表にする。",
+    approach: "CEEDの新入生向けプレゼンを一から制作したり、ワークショップ（Amazon Prime のCM構成分析など）の資料をデザイン。配色・余白・図解で視認性と説得力を両立させる。",
+    tools: ["Keynote", "PowerPoint", "デザイン"],
+    thumb: "/assets/works/ceed-slides.jpg",
+  },
+  {
+    slug: "todofuken-battle",
+    title: "都道府県バトル（教育カードゲーム）",
+    category: "planning",
+    summary: "実在の統計データ（経済力・面積・観光力）を強さに変換した2人対戦型の教育カードゲーム。チーム制作。",
+    goal: "遊びながら日本の地理・経済を体感的に学べるコンテンツにする。",
+    approach: "発表スライドとプレゼン構成、ルール改定・各都道府県の特殊能力設計、データ処理のPythonを担当（カードのグラフィックデザインは他メンバーが担当）。「運ゲー」から心理戦へとゲームバランスを再構築した。",
+    tools: ["Python", "プレゼン設計", "ゲーム企画"],
+    thumb: "/assets/works/cardgame.jpg",
   },
 ];
 

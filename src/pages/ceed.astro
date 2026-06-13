@@ -1,0 +1,146 @@
+---
+import Base from "../layouts/Base.astro";
+
+// CEED（シード）= 愛知工業大学のマルチクリエイティブサークル。大崎は副部長。
+// 事実のみ。素材は本人制作（新入生プレゼン・ワークショップ資料・各種運営資料）。
+const presentations = [
+  {
+    title: "新入生向けプレゼン",
+    desc: "今年の新入生に向けた紹介プレゼンを一から制作・登壇。CEEDでの活動の魅力が伝わるよう、構成・配色・図解までデザインした。",
+    img: "/assets/ceed-nyu.jpg",
+    tag: "一から制作・登壇",
+  },
+  {
+    title: "ワークショップ企画",
+    desc: "12月23日のワークショップを企画・運営。Amazon Prime のCMを題材に「構成の必然性」を分解・再構築する90分のチーム対抗ワークを設計した。",
+    img: "/assets/ceed-workshop.jpg",
+    tag: "2024.12.23 開催",
+  },
+];
+
+const events = [
+  { title: "卒業生を送り出す会", desc: "お世話になった先輩方を送り出す会を企画。" },
+  { title: "新歓バーベキュー", desc: "買い出し・役割分担・当日運営まで計画し実施。" },
+  { title: "ビンゴ大会", desc: "部員が楽しめる交流イベントとして開催。" },
+];
+---
+
+<Base
+  title="CEED — Osaki Ryoma"
+  description="愛知工業大学のマルチクリエイティブサークル CEED（シード）副部長としての活動。発表・スライド制作、イベント企画、WEB制作の実績。"
+>
+  <!-- HERO -->
+  <section class="ceed-hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container ceed-hero-inner">
+      <div class="ceed-logo reveal"><img src="/assets/ceed-logo.png" alt="CEED ロゴ" loading="eager" /></div>
+      <p class="eyebrow reveal">Activity — サークル活動</p>
+      <h1 class="mega display reveal">
+        <span class="line-mask"><span><span class="spectrum-text">CEED</span> で</span></span>
+        <span class="line-mask"><span>つくる、動かす。</span></span>
+      </h1>
+      <p class="lead reveal" data-delay="1">
+        愛知工業大学のマルチクリエイティブサークル <span class="accent">CEED（シード）</span> で
+        <span class="accent">副部長</span> を務めています。発表・スライド制作、イベント企画、WEB制作まで、
+        「つくって人に届ける」活動を横断的に担当しています。
+      </p>
+    </div>
+  </section>
+
+  <!-- 発表・スライド -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Presentations</span>
+        <h2 class="display">発表・スライド制作</h2>
+        <p class="sec-lead">事業発表やサークルの場で登壇する機会が多く、「何を・どの順で・どう見せるか」を設計したスライドづくりを得意としています。</p>
+      </div>
+      <div class="cards two">
+        {presentations.map((p, i) => (
+          <article class="card reveal" data-delay={(i % 2) + 1}>
+            <div class="card-media"><img src={p.img} alt={p.title} loading="lazy" /></div>
+            <div class="card-body">
+              <span class="pill">{p.tag}</span>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- イベント企画 -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Events</span>
+        <h2 class="display">イベント企画・運営</h2>
+        <p class="sec-lead">副部長として、部員が楽しめる場づくりを企画から運営まで担当しました。</p>
+      </div>
+      <ul class="events">
+        {events.map((e, i) => (
+          <li class="event reveal" data-delay={(i % 3) + 1}>
+            <span class="event-no display">0{i + 1}</span>
+            <div>
+              <h3>{e.title}</h3>
+              <p>{e.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- WEB班 -->
+  <section class="section">
+    <div class="container narrow center">
+      <span class="eyebrow reveal">Web Team</span>
+      <p class="web-copy display reveal">
+        WEB班では、<span class="spectrum-text">クライアントの実案件</span>にも挑戦。
+      </p>
+      <p class="lead reveal" data-delay="1">
+        企業の採用サイト（中央製作所）のリデザインや、CEED公式サイトの構築を進めています。
+      </p>
+      <div class="reveal" data-delay="2">
+        <a href="/works#cat-web" class="btn btn--primary">WEB制作の実績を見る →</a>
+        <a href="/works#cat-planning" class="btn btn--ghost">企画・発表を見る →</a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .ceed-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; }
+    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 55% at 80% 0%, color-mix(in srgb, var(--c-green) 22%, transparent), transparent 70%); filter: blur(8px); }
+    .ceed-logo { width: 92px; height: 92px; border-radius: 18px; overflow: hidden; margin-bottom: 1.4rem; border: 1px solid var(--line); }
+    .ceed-logo img { width: 100%; height: 100%; object-fit: cover; }
+    :root[data-theme="light"] .ceed-logo { background: #0b0b0e; }
+    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.98; margin: 0.3rem 0 1.3rem; }
+    .lead { max-width: 60ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); }
+
+    .sec-lead { color: var(--fg-soft); max-width: 56ch; margin-top: 0.8rem; font-size: var(--fs-small); }
+
+    .cards.two { display: grid; gap: 1.4rem; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .cards.two { grid-template-columns: 1fr 1fr; } }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .card-media { aspect-ratio: 16/9; overflow: hidden; background: var(--bg-3); }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
+    .card:hover .card-media img { transform: scale(1.05); }
+    .card-body { padding: 1.4rem 1.5rem 1.7rem; }
+    .pill { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c-green); margin-bottom: 0.7rem; }
+    .card-body h3 { font-size: var(--fs-h3); margin-bottom: 0.6rem; }
+    .card-body p { color: var(--fg-soft); font-size: var(--fs-small); }
+
+    .events { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .events { grid-template-columns: repeat(3, 1fr); } }
+    .event { display: flex; gap: 1rem; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem 1.4rem; }
+    .event-no { font-size: 1.1rem; color: var(--c-green); font-weight: 700; }
+    .event h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .event p { color: var(--fg-soft); font-size: var(--fs-small); }
+
+    .center { text-align: center; }
+    .web-copy { font-size: var(--fs-h2); font-weight: 700; line-height: 1.35; margin-bottom: 1rem; }
+    .center .lead { margin: 0 auto 1.8rem; }
+    .center .btn { margin: 0 0.4rem 0.6rem; }
+  </style>
+</Base>

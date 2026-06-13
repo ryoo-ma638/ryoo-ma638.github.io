@@ -3,13 +3,11 @@ import Base from "../layouts/Base.astro";
 import Marquee from "../components/Marquee.astro";
 import { featuredWorks, categoryLabels, works } from "../data/works.ts";
 
-const counts = {
-  cg: works.filter((w) => w.category === "cg").length,
-  graphic: works.filter((w) => w.category === "graphic").length,
-  imaging: works.filter((w) => w.category === "imaging").length,
-  web: works.filter((w) => w.category === "web").length,
-};
-const marquee = ["CG", "VIDEO", "GRAPHIC", "IMAGE PROCESSING", "WEB", "MOTION"];
+const counts: Record<string, number> = {};
+for (const k of Object.keys(categoryLabels)) {
+  counts[k] = works.filter((w) => w.category === k).length;
+}
+const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTION"];
 ---
 
 <Base>
