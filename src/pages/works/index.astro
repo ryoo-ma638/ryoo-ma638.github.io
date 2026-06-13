@@ -41,10 +41,12 @@ const grouped = order.map((cat) => ({
           {g.items.map((w, i) => (
             <article class="work-row reveal" id={w.slug}>
               <span class="work-index display">{String(i + 1).padStart(2, "0")}</span>
-              <div class="work-media">
+              <div class="work-media" style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}>
                 {w.video
                   ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
-                  : <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />}
+                  : w.thumb
+                    ? <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />
+                    : <span class="media-ph">準備中</span>}
               </div>
               <div class="work-info">
                 <span class="tags-row">
@@ -90,10 +92,12 @@ const grouped = order.map((cat) => ({
     .work-index { font-size: 1rem; color: var(--muted); padding-top: 0.2rem; }
     @media (max-width: 879px) { .work-index { position: absolute; top: 0; right: 0; } }
 
-    .work-media { border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); }
-    .work-media img, .work-media video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
-    .work-row:hover .work-media img { transform: scale(1.05); }
-    .work-media.noimg { display: grid; place-items: center; }
+    .work-media { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); display: grid; place-items: center; }
+    /* 縦長画像も見切れないよう、ぼかした同画像を背景に敷き本体は全体表示 */
+    .work-media::before { content: ""; position: absolute; inset: -8%; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(26px) brightness(0.5) saturate(1.3); z-index: 0; }
+    .work-media img, .work-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
+    .work-row:hover .work-media img { transform: scale(1.04); }
+    .media-ph { position: relative; z-index: 1; color: var(--muted); font-size: var(--fs-small); }
     .work-media.noimg::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
     .work-media.noimg img { display: none; }
 
