@@ -9,7 +9,7 @@ export type Category = "graphic" | "cg" | "imaging" | "web";
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
   graphic: { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
   cg:      { ja: "CG・映像",          en: "CG & Video",    color: "var(--accent-2)" },
-  imaging: { ja: "画像処理",          en: "Computer Vision", color: "var(--accent-3)" },
+  imaging: { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--accent-3)" },
   web:     { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
 };
 
@@ -65,7 +65,6 @@ export const works: Work[] = [
     tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/aitland.jpg",
     video: "/assets/works/video/aitland.mp4",
-    featured: true,
   },
   {
     slug: "music-video",
@@ -104,7 +103,7 @@ export const works: Work[] = [
     slug: "mushiba-animals",
     title: "虫歯アニマルズ（東京ゲームショー出展）",
     category: "cg",
-    summary: "サークル CEED が制作し東京ゲームショーに出展した体感型ゲーム。動物の口を模した造形コントローラで遊ぶインタラクティブ展示。",
+    summary: "1年次に「学生チャレンジプロジェクト」として参加・制作し、東京ゲームショーに出展された体感型ゲーム。動物の口を模した造形コントローラで遊ぶインタラクティブ展示。",
     status: "東京ゲームショー出展",
     thumb: "/assets/works/mushiba.jpg",
   },
@@ -131,24 +130,6 @@ export const works: Work[] = [
     tools: ["Illustrator"],
     duration: "約12時間",
     thumb: "/assets/works/character.png",
-  },
-  {
-    slug: "additive-color",
-    title: "加法混色ポスター",
-    category: "graphic",
-    summary: "RGBの光を重ねると白に近づく性質を、理科の実験器具風に表現。",
-    tools: ["Illustrator"],
-    duration: "約2時間",
-    thumb: "/assets/works/additive.png",
-  },
-  {
-    slug: "subtractive-color",
-    title: "減法混色ポスター",
-    category: "graphic",
-    summary: "CMYの色が暗くなる性質を、インクと筆でビジュアル化。",
-    tools: ["Illustrator"],
-    duration: "約3時間",
-    thumb: "/assets/works/subtractive.png",
   },
   {
     slug: "animal-logo",
@@ -180,7 +161,19 @@ export const works: Work[] = [
     thumb: "/assets/works/club-poster.png",
   },
 
-  // ====================== 画像処理 / Computer Vision（3年・C++/OpenCV。研究室の専門に直結） ======================
+  // ====================== 画像処理・インタラクション（研究室＝CG・画像処理・インタラクションに直結） ======================
+  {
+    slug: "death-comer",
+    title: "Death カマー ― 身体で操る空間アクション",
+    category: "imaging",
+    summary: "プレイヤーが死神となり、大鎌を振って迫る敵を迎撃する全身体感型アクション。床のLiDARで現実の立ち位置を、手に持つM5Stickの動きで攻撃を検知し、壁・床への投影と連動させた体験型コンテンツ。",
+    goal: "ボタン操作では得られない“全身を使った没入感”を、空間とプロジェクションで作り出す。",
+    approach: "「移動は足（LiDARの位置測位）」「攻撃は手（M5Stickの6軸センサー）」と入力を物理的に分離して誤検知を解消。縦振り＝強攻撃・横振り＝範囲攻撃・静止＝防御を実装し、ウェーブ制（タイムアタック→ミッション→ボス）で構成。企画・ハード実装・C++/OpenGL描画まで個人制作（2000行超）。",
+    tools: ["C++", "OpenGL", "LiDAR", "M5Stick"],
+    thumb: "/assets/works/death-comer.jpg",
+    video: "/assets/works/video/death-comer.mp4",
+    featured: true,
+  },
   {
     slug: "optical-flow",
     title: "オプティカルフロー可視化",
@@ -214,17 +207,6 @@ export const works: Work[] = [
     tools: ["C++", "OpenCV"],
     thumb: "/assets/works/anime-render.jpg",
     video: "/assets/works/video/anime-render.mp4",
-  },
-  {
-    slug: "chroma-key",
-    title: "クロマキー合成と映像変形",
-    category: "imaging",
-    summary: "緑背景の被写体を切り抜いて別の背景に合成し、回転・拡大などの変形を加える映像。",
-    goal: "前景の切り抜き合成（クロマキー）と幾何変換を組み合わせる。",
-    approach: "HSVで緑領域をマスク化して前景だけを抽出し、別の背景に重ねて合成。アフィン変換で前景を回転・拡大させ、時間とともに動く合成映像を生成した。",
-    tools: ["C++", "OpenCV"],
-    thumb: "/assets/works/chroma-key.jpg",
-    video: "/assets/works/video/chroma-key.mp4",
   },
 
   // ====================== Web・アプリ ======================
