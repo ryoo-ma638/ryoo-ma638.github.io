@@ -1,0 +1,39 @@
+---
+// マウス追従のカスタムカーソル（PC/fine pointer のみ表示）
+---
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+<script>
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const dot = document.getElementById("cursorDot");
+  const ring = document.getElementById("cursorRing");
+  if (fine && dot && ring) {
+    let mx = innerWidth / 2, my = innerHeight / 2;
+    let rx = mx, ry = my;
+
+    addEventListener("mousemove", (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+    });
+
+    const loop = () => {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+
+    const hoverSel = "a, button, [data-cursor], .work-row, .bento-card";
+    document.querySelectorAll(hoverSel).forEach((el) => {
+      el.addEventListener("mouseenter", () => ring.classList.add("is-hover"));
+      el.addEventListener("mouseleave", () => ring.classList.remove("is-hover"));
+    });
+
+    addEventListener("mouseout", (e) => {
+      if (!e.relatedTarget) { dot.style.opacity = "0"; ring.style.opacity = "0"; }
+    });
+    addEventListener("mouseover", () => { dot.style.opacity = "1"; ring.style.opacity = "1"; });
+  }
+</script>

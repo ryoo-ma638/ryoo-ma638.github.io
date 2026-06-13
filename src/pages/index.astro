@@ -1,0 +1,183 @@
+---
+import Base from "../layouts/Base.astro";
+import Marquee from "../components/Marquee.astro";
+import { featuredWorks, categoryLabels, works } from "../data/works.ts";
+
+const counts = {
+  cg: works.filter((w) => w.category === "cg").length,
+  graphic: works.filter((w) => w.category === "graphic").length,
+  imaging: works.filter((w) => w.category === "imaging").length,
+  web: works.filter((w) => w.category === "web").length,
+};
+const marquee = ["CG", "VIDEO", "GRAPHIC", "IMAGE PROCESSING", "WEB", "MOTION"];
+---
+
+<Base>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <p class="eyebrow reveal">Portfolio — Osaki Ryoma</p>
+      <h1 class="hero-title display reveal">
+        <span class="line-mask"><span>つくって、</span></span>
+        <span class="line-mask"><span class="spectrum-text">光を放つ。</span></span>
+      </h1>
+      <div class="hero-foot reveal" data-delay="2">
+        <p class="hero-lead">
+          愛知工業大学 情報科学部 メディア情報専攻。水野慎士研究室で CG・画像処理を学びながら、
+          グラフィック・映像・Web まで横断してつくっています。
+        </p>
+        <div class="hero-actions">
+          <a href="/works" class="btn btn--primary">作品を見る →</a>
+          <a href="/about" class="btn btn--ghost">About</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">SCROLL<span></span></div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-wrap">
+    <Marquee items={marquee} />
+  </div>
+
+  <!-- ===== FEATURED (Bento) ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head sh-row reveal">
+        <div>
+          <span class="eyebrow">Selected Works</span>
+          <h2 class="display">代表的な作品</h2>
+        </div>
+        <a href="/works" class="link-arrow display">すべて見る →</a>
+      </div>
+
+      <div class="bento">
+        {featuredWorks.map((w, i) => (
+          <a href={`/works#${w.slug}`} class="bento-card reveal" data-delay={(i % 3) + 1}>
+            <div class="bento-media">
+              {w.video
+                ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
+                : <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.bento-card').classList.add('noimg')" />}
+            </div>
+            <div class="bento-overlay">
+              <span class="tag" style={`--c:${categoryLabels[w.category].color}`}>{categoryLabels[w.category].ja}</span>
+              <div class="bento-text">
+                <h3>{w.title}</h3>
+                <p>{w.summary}</p>
+              </div>
+              <span class="bento-view">View →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FIELDS ===== -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Fields</span>
+        <h2 class="display">5つの領域を、横断する。</h2>
+      </div>
+      <ul class="fields">
+        {Object.entries(categoryLabels).map(([key, c], i) => (
+          <li class="field reveal" data-delay={(i % 3) + 1}>
+            <a href={`/works#cat-${key}`}>
+              <span class="field-no display">0{i + 1}</span>
+              <span class="field-main">
+                <span class="field-en display" style={`color:${c.color}`}>{c.en}</span>
+                <span class="field-ja">{c.ja}</span>
+              </span>
+              <span class="field-count">{counts[key as keyof typeof counts]} <small>works</small></span>
+              <span class="field-arrow">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT teaser ===== -->
+  <section class="section about-teaser">
+    <div class="container narrow center">
+      <p class="eyebrow reveal">About</p>
+      <p class="about-copy display reveal">
+        <span class="spectrum-text">手を動かして学ぶ。</span><br />
+        CGメディア研究室での学びを軸に、表現の幅を広げています。
+      </p>
+      <div class="reveal" data-delay="1"><a href="/about" class="btn btn--ghost">プロフィールを見る →</a></div>
+    </div>
+  </section>
+
+  <style>
+    /* HERO */
+    .hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+    .hero-glow { position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(40% 38% at 78% 18%, color-mix(in srgb, var(--c-violet) 40%, transparent), transparent 70%),
+        radial-gradient(38% 40% at 10% 88%, color-mix(in srgb, var(--c-cyan) 28%, transparent), transparent 70%),
+        radial-gradient(30% 30% at 92% 92%, color-mix(in srgb, var(--c-red) 24%, transparent), transparent 70%);
+      filter: blur(10px); animation: float 16s var(--ease) infinite alternate;
+    }
+    @keyframes float { to { transform: translate3d(-2%, 2%, 0) scale(1.08); } }
+    .hero-inner { padding-top: 100px; }
+    .hero-title { font-size: var(--fs-mega); font-weight: 700; line-height: 0.92; letter-spacing: -0.04em; margin-bottom: var(--space-4); }
+    .hero-foot { display: grid; gap: var(--space-3); grid-template-columns: 1fr; max-width: 760px; }
+    .hero-lead { color: var(--fg-soft); font-size: clamp(1rem, 1.4vw, 1.2rem); max-width: 52ch; }
+    .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .hero-scroll { position: absolute; bottom: 1.6rem; left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.25em; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+    .hero-scroll span { width: 1px; height: 40px; background: linear-gradient(var(--muted), transparent); }
+
+    /* MARQUEE */
+    .marquee-wrap { padding-block: var(--space-3); border-block: 1px solid var(--line); }
+
+    /* section head row */
+    .sh-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
+    .link-arrow { color: var(--fg-soft); font-weight: 600; white-space: nowrap; transition: color 0.25s var(--ease); }
+    .link-arrow:hover { color: var(--fg); }
+
+    /* BENTO */
+    .bento { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 230px; }
+    @media (min-width: 760px) { .bento { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 220px; } }
+    .bento-card { position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-3); grid-column: span 2; }
+    @media (min-width: 760px) {
+      .bento-card { grid-column: span 2; }
+      .bento-card:nth-child(1) { grid-column: span 4; grid-row: span 2; }
+      .bento-card:nth-child(2) { grid-column: span 2; grid-row: span 2; }
+    }
+    .bento-media { position: absolute; inset: 0; }
+    .bento-media img, .bento-media video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease), filter 0.5s var(--ease); }
+    .bento-card.noimg .bento-media { display: grid; place-items: center; }
+    .bento-card.noimg .bento-media::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
+    .bento-card.noimg img { display: none; }
+    .bento-card:hover .bento-media img { transform: scale(1.07); }
+
+    .bento-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 1.2rem; background: linear-gradient(to top, rgba(5,5,8,0.92) 0%, rgba(5,5,8,0.35) 45%, transparent 75%); }
+    .tag { align-self: flex-start; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
+    .bento-text h3 { font-size: var(--fs-h3); color: #fff; margin-bottom: 0.3rem; }
+    .bento-text p { font-size: var(--fs-small); color: rgba(255,255,255,0.7); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .bento-view { position: absolute; top: 1.2rem; right: 1.2rem; font-family: var(--font-display); font-size: 0.78rem; color: #fff; opacity: 0; transform: translateY(-6px); transition: all 0.3s var(--ease); }
+    .bento-card:hover .bento-view { opacity: 1; transform: none; }
+
+    /* FIELDS */
+    .fields { border-top: 1px solid var(--line); }
+    .field { border-bottom: 1px solid var(--line); }
+    .field a { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 1.5rem; padding: 1.6rem 0.5rem; transition: padding 0.35s var(--ease); }
+    .field a:hover { padding-inline: 1.4rem 1rem; background: var(--bg-3); }
+    .field-no { font-size: 0.9rem; color: var(--muted); }
+    .field-main { display: flex; flex-direction: column; gap: 0.1rem; }
+    .field-en { font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 700; line-height: 1; }
+    .field-ja { color: var(--fg-soft); font-size: var(--fs-small); }
+    .field-count { font-family: var(--font-display); font-weight: 600; color: var(--fg-soft); }
+    .field-count small { color: var(--muted); font-weight: 400; }
+    .field-arrow { color: var(--muted); transition: transform 0.3s var(--ease), color 0.3s var(--ease); }
+    .field a:hover .field-arrow { transform: translate(4px, -4px); color: var(--fg); }
+    @media (max-width: 560px) { .field a { grid-template-columns: auto 1fr auto; gap: 0.8rem; } .field-arrow { display: none; } }
+
+    /* ABOUT teaser */
+    .center { text-align: center; }
+    .about-copy { font-size: var(--fs-h2); font-weight: 700; line-height: 1.4; margin: 0.8rem 0 1.8rem; }
+  </style>
+</Base>

@@ -1,0 +1,107 @@
+---
+import Base from "../../layouts/Base.astro";
+import { works, categoryLabels, type Category } from "../../data/works.ts";
+
+const order: Category[] = ["cg", "graphic", "imaging", "web"];
+const grouped = order.map((cat) => ({
+  cat,
+  label: categoryLabels[cat],
+  items: works.filter((w) => w.category === cat),
+}));
+---
+
+<Base title="Works — Osaki Ryoma" description="CG・映像・グラフィック・画像処理・Web の制作実績一覧。各作品に狙いと工夫を添えています。">
+  <!-- HERO -->
+  <section class="works-hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container">
+      <p class="eyebrow reveal">Works — 制作実績</p>
+      <h1 class="mega display reveal"><span class="line-mask"><span>これまでの<span class="spectrum-text">制作</span></span></span></h1>
+      <p class="lead reveal" data-delay="1">授業課題・個人制作で取り組んだ作品を分野別に。各作品に「狙い」と「工夫」を添えています。</p>
+      <nav class="cat-nav reveal" data-delay="2" aria-label="分野で絞り込み">
+        {grouped.map((g) => (
+          <a href={`#cat-${g.cat}`} style={`--c:${g.label.color}`}><span class="d"></span>{g.label.ja}<small>{g.items.length}</small></a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  {grouped.map((g, gi) => (
+    <section class="section cat-section" id={`cat-${g.cat}`}>
+      <div class="container">
+        <div class="cat-head reveal">
+          <span class="cat-no display" style={`color:${g.label.color}`}>0{gi + 1}</span>
+          <div>
+            <span class="eyebrow" style={`color:${g.label.color}`}>{g.label.en}</span>
+            <h2 class="display">{g.label.ja}</h2>
+          </div>
+        </div>
+
+        <div class="work-list">
+          {g.items.map((w, i) => (
+            <article class="work-row reveal" id={w.slug}>
+              <span class="work-index display">{String(i + 1).padStart(2, "0")}</span>
+              <div class="work-media">
+                {w.video
+                  ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
+                  : <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />}
+              </div>
+              <div class="work-info">
+                <span class="tag" style={`--c:${g.label.color}`}>{g.label.ja}</span>
+                <h3>{w.title}</h3>
+                <p class="work-summary">{w.summary}</p>
+                {w.goal && <p class="kv"><span>狙い</span>{w.goal}</p>}
+                {w.approach && <p class="kv"><span>工夫</span>{w.approach}</p>}
+                <dl class="work-meta">
+                  {w.tools && <div><dt>使用ツール</dt><dd>{w.tools.join(" / ")}</dd></div>}
+                  {w.duration && <div><dt>制作時間</dt><dd>{w.duration}</dd></div>}
+                </dl>
+                {w.link && <a class="btn btn--ghost" href={w.link}>サイトを見る →</a>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <style>
+    .works-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-4); overflow: hidden; }
+    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 50% at 80% 0%, color-mix(in srgb, var(--c-violet) 28%, transparent), transparent 70%); filter: blur(8px); }
+    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1.2rem; }
+    .lead { max-width: 56ch; color: var(--fg-soft); }
+    .cat-nav { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: var(--space-3); }
+    .cat-nav a { display: inline-flex; align-items: center; gap: 0.5rem; font-size: var(--fs-small); font-weight: 600; padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--line); color: var(--fg-soft); transition: all 0.25s var(--ease); }
+    .cat-nav a .d { width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+    .cat-nav a small { color: var(--muted); }
+    .cat-nav a:hover { border-color: var(--c); color: var(--fg); transform: translateY(-2px); }
+
+    .cat-section { padding-block: var(--space-5); border-top: 1px solid var(--line); }
+    .cat-head { display: flex; align-items: center; gap: 1.2rem; margin-bottom: var(--space-4); }
+    .cat-no { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 700; line-height: 1; opacity: 0.9; }
+    .cat-head h2 { font-size: var(--fs-h2); }
+
+    .work-list { display: grid; gap: var(--space-5); }
+    .work-row { display: grid; gap: 1rem 2rem; grid-template-columns: 1fr; align-items: start; scroll-margin-top: 96px; position: relative; }
+    @media (min-width: 880px) { .work-row { grid-template-columns: auto 1.1fr 1fr; align-items: center; } }
+    .work-index { font-size: 1rem; color: var(--muted); padding-top: 0.2rem; }
+    @media (max-width: 879px) { .work-index { position: absolute; top: 0; right: 0; } }
+
+    .work-media { border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); }
+    .work-media img, .work-media video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
+    .work-row:hover .work-media img { transform: scale(1.05); }
+    .work-media.noimg { display: grid; place-items: center; }
+    .work-media.noimg::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
+    .work-media.noimg img { display: none; }
+
+    .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); margin-bottom: 0.8rem; }
+    .work-info h3 { font-size: clamp(1.5rem, 3vw, 2.3rem); margin-bottom: 0.7rem; }
+    .work-summary { color: var(--fg); margin-bottom: 1rem; }
+    .kv { color: var(--fg-soft); font-size: var(--fs-small); margin-bottom: 0.5rem; display: grid; grid-template-columns: 3.5rem 1fr; gap: 0.6rem; }
+    .kv span { font-weight: 700; color: var(--fg); }
+
+    .work-meta { display: flex; gap: 2rem; margin: 1rem 0 0.5rem; flex-wrap: wrap; }
+    .work-meta dt { font-family: var(--font-display); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .work-meta dd { font-weight: 700; font-size: var(--fs-small); }
+  </style>
+</Base>

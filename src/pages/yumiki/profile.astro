@@ -1,0 +1,82 @@
+---
+import Yumiki from "../../layouts/Yumiki.astro";
+import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
+---
+<Yumiki title="プロフィール — YUMIKI WORLD">
+  <section class="y-section">
+    <div class="y-container">
+      <div class="y-head y-reveal">
+        <span class="y-eyebrow">Profile</span>
+        <h2>📖 <span class="wave">弓木奈於</span>って、こんな人</h2>
+      </div>
+
+      <div class="y-prof-top">
+        <div class="y-prof-photo y-card y-reveal">
+          <img src={img("left-profile.jpg")} alt="弓木奈於さん" onerror="this.src='/assets/yumiki/nao_main.jpg'" />
+        </div>
+        <div class="y-reveal" data-delay="1">
+          <h3 class="y-prof-name">{profile.name} <small>（{profile.kana}）</small></h3>
+          <p class="y-prof-en">{profile.en}</p>
+          <dl class="y-facts">
+            {profile.facts.map((f) => (<div><dt>{f.k}</dt><dd>{f.v}</dd></div>))}
+          </dl>
+          <div class="y-prof-sns">
+            {sns.map((s) => (<a href={s.href} target="_blank" rel="noopener noreferrer" class="y-tag" style="background:var(--y-pink)"><img src={img(s.icon)} alt="" width="18" height="18" />{s.label}</a>))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="y-section" style="padding-top:0">
+    <div class="y-container y-narrow">
+      <div class="y-head y-reveal"><span class="y-eyebrow">History</span><h2>🕰️ 活動年表</h2></div>
+      <ol class="y-timeline">
+        {timeline.map((t) => (
+          <li class="y-reveal"><span class="y-t-date">{t.date}</span><span class="y-t-dot"></span><span class="y-t-text">{t.text}</span></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="y-section" style="padding-top:0">
+    <div class="y-container">
+      <div class="y-head y-reveal"><span class="y-eyebrow">On TV</span><h2>📺 主な出演番組</h2></div>
+      <div class="y-shows">
+        {shows.map((s, i) => (
+          <div class="y-show y-card y-reveal" data-delay={(i % 3) + 1}>
+            <h3>{s.name}</h3>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .y-prof-top { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
+    @media (min-width: 820px) { .y-prof-top { grid-template-columns: 0.8fr 1.2fr; } }
+    .y-prof-photo { padding: 10px; transform: rotate(-2deg); }
+    .y-prof-photo img { width: 100%; border-radius: 20px; aspect-ratio: 4/5; object-fit: cover; }
+    .y-prof-name { font-size: 1.8rem; }
+    .y-prof-name small { font-size: 1rem; color: var(--y-muted); font-weight: 500; }
+    .y-prof-en { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); letter-spacing: 0.1em; margin-bottom: 1.2rem; }
+    .y-facts { display: grid; gap: 0; }
+    .y-facts > div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 0.7rem 0; border-bottom: 2px dotted var(--y-line); }
+    .y-facts dt { font-weight: 700; color: var(--y-ink-soft); font-size: 0.9rem; }
+    .y-facts dd { color: var(--y-ink); }
+    .y-prof-sns { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.4rem; }
+    .y-prof-sns .y-tag { gap: 0.4rem; }
+
+    .y-timeline { position: relative; }
+    .y-timeline li { display: grid; grid-template-columns: 5rem auto 1fr; gap: 1rem; align-items: baseline; padding: 0.6rem 0; }
+    .y-t-date { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); font-size: 0.9rem; }
+    .y-t-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--y-mint); align-self: center; }
+    .y-t-text { color: var(--y-ink-soft); }
+
+    .y-shows { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .y-show { padding: 1.5rem; border-left: 6px solid var(--y-butter); }
+    .y-show h3 { font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .y-show p { color: var(--y-ink-soft); font-size: 0.9rem; }
+  </style>
+</Yumiki>

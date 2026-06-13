@@ -1,0 +1,15 @@
+---
+interface Props { items: string[]; }
+const { items } = Astro.props;
+// 2セット並べて無限ループ
+const sets = [0, 1];
+---
+<div class="marquee" aria-hidden="true">
+  {sets.map(() => (
+    <div class="marquee__track">
+      {items.map((it) => (
+        <span class="marquee__item">{it}<span class="dot"></span></span>
+      ))}
+    </div>
+  ))}
+</div>

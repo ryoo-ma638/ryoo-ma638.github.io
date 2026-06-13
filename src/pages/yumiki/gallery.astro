@@ -1,0 +1,95 @@
+---
+import Yumiki from "../../layouts/Yumiki.astro";
+import { gallery, img } from "../../data/yumiki.ts";
+const g = gallery;
+---
+<Yumiki title="写真 — YUMIKI WORLD">
+  <section class="y-section">
+    <div class="y-container">
+      <div class="y-head y-reveal">
+        <span class="y-eyebrow">Gallery</span>
+        <h2>📷 <span class="wave">写真</span>ギャラリー</h2>
+      </div>
+
+      <!-- 写真集 -->
+      <div class="y-pb y-reveal">
+        <div class="y-pb-cover y-card">
+          <img src={img(g.photobook.cover)} alt={g.photobook.title} onerror="this.src='/assets/yumiki/nao_photobook_cover.jpg'" />
+        </div>
+        <div class="y-pb-text">
+          <span class="y-tag" style="background:var(--y-lav)">1st PHOTO BOOK</span>
+          <h3>{g.photobook.title}</h3>
+          <p>{g.photobook.text}</p>
+        </div>
+      </div>
+      <div class="y-offshots">
+        {g.photobook.offshots.map((o, i) => (
+          <div class="y-off y-reveal" data-delay={(i % 3) + 1}><img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.y-off').style.display='none'" /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 生写真 -->
+  <section class="y-section" style="padding-top:0">
+    <div class="y-container">
+      <div class="y-head y-reveal"><span class="y-eyebrow">Bromides</span><h2>🃏 生写真コレクション</h2></div>
+      <p class="y-note y-reveal">1人につき「ヨリ」「チュウ」「ヒキ」の3種類が基本。衣装によっては「座りヨリ」などレアポーズも。</p>
+      <div class="y-namashashin">
+        {g.namashashin.map((n, i) => (
+          <figure class="y-ns y-reveal" data-delay={(i % 3) + 1}>
+            <div class="y-ns-img"><img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.y-ns-img').classList.add('noimg')" /></div>
+            <figcaption>{n.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- お気に入り -->
+  <section class="y-section" style="padding-top:0">
+    <div class="y-container">
+      <div class="y-head y-reveal"><span class="y-eyebrow">My Favorites</span><h2>♡ お気に入りショット</h2></div>
+      <div class="y-fav-grid">
+        {g.favs.map((f, i) => (
+          <a class="y-fav y-reveal" data-delay={(i % 3) + 1} href={img(f)} target="_blank" rel="noopener noreferrer">
+            <img src={img(f)} alt="お気に入りショット" loading="lazy" onerror="this.closest('.y-fav').style.display='none'" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .y-pb { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-bottom: 1.5rem; }
+    @media (min-width: 820px) { .y-pb { grid-template-columns: 0.8fr 1.2fr; } }
+    .y-pb-cover { padding: 10px; transform: rotate(-2deg); }
+    .y-pb-cover img { width: 100%; border-radius: 18px; }
+    .y-pb-text h3 { font-size: 1.6rem; margin: 0.5rem 0 0.8rem; }
+    .y-pb-text p { color: var(--y-ink-soft); font-size: 0.95rem; }
+
+    .y-offshots { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+    @media (min-width: 700px) { .y-offshots { grid-template-columns: repeat(6, 1fr); } }
+    .y-off { border-radius: 14px; overflow: hidden; aspect-ratio: 3/4; border: 3px solid #fff; box-shadow: var(--y-shadow-sm); }
+    .y-off img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--y-ease); }
+    .y-off:hover img { transform: scale(1.08); }
+
+    .y-note { text-align: center; color: var(--y-ink-soft); max-width: 56ch; margin: 0 auto 2rem; font-size: 0.92rem; }
+    .y-namashashin { display: grid; gap: 1.2rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 760px) { .y-namashashin { grid-template-columns: repeat(5, 1fr); } }
+    .y-ns { text-align: center; }
+    .y-ns-img { aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: var(--y-cream-2); border: 3px solid #fff; box-shadow: var(--y-shadow-sm); }
+    .y-ns-img img { width: 100%; height: 100%; object-fit: cover; }
+    .y-ns-img.noimg img { display: none; }
+    .y-ns-img.noimg::after { content: "♡"; display: grid; place-items: center; height: 100%; color: var(--y-pink); font-size: 1.8rem; }
+    .y-ns figcaption { margin-top: 0.5rem; font-weight: 700; font-size: 0.85rem; color: var(--y-ink-soft); }
+
+    .y-fav-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 700px) { .y-fav-grid { grid-template-columns: repeat(4, 1fr); } }
+    .y-fav { border-radius: 16px; overflow: hidden; aspect-ratio: 1; border: 3px solid #fff; box-shadow: var(--y-shadow-sm); transition: transform .35s var(--y-ease); }
+    .y-fav:nth-child(odd) { transform: rotate(-1.5deg); }
+    .y-fav:nth-child(even) { transform: rotate(1.5deg); }
+    .y-fav:hover { transform: scale(1.05) rotate(0); box-shadow: var(--y-shadow); }
+    .y-fav img { width: 100%; height: 100%; object-fit: cover; }
+  </style>
+</Yumiki>

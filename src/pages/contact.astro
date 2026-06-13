@@ -1,0 +1,51 @@
+---
+import Base from "../layouts/Base.astro";
+
+// 既定の公開連絡先: 普段使いメール／GitHub／本垢Instagram。
+// 裏垢・学校メールは本人OK後に追加（裏垢の公開は非推奨）。
+const channels = [
+  { label: "Email", value: "ryoma630@gmail.com", href: "mailto:ryoma630@gmail.com" },
+  { label: "GitHub", value: "github.com/ryoo-ma638", href: "https://github.com/ryoo-ma638" },
+  { label: "Instagram", value: "@ryoma_v_dome", href: "https://www.instagram.com/ryoma_v_dome" },
+];
+---
+
+<Base title="Contact — Osaki Ryoma">
+  <section class="contact">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container">
+      <p class="eyebrow reveal">Contact</p>
+      <h1 class="mega display reveal">
+        <span class="line-mask"><span>お話、<span class="spectrum-text">しましょう。</span></span></span>
+      </h1>
+      <p class="lead reveal" data-delay="1">制作のご相談やご連絡は、以下からお気軽にどうぞ。</p>
+
+      <ul class="channels">
+        {channels.map((c, i) => (
+          <li class="reveal" data-delay={(i % 3) + 1}>
+            <a href={c.href} target={c.href.startsWith("http") ? "_blank" : null} rel="noopener noreferrer">
+              <span class="ch-label display">{c.label}</span>
+              <span class="ch-value">{c.value}</span>
+              <span class="ch-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <style>
+    .contact { position: relative; min-height: 90svh; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; display: flex; align-items: center; }
+    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(40% 45% at 50% 10%, color-mix(in srgb, var(--c-violet) 26%, transparent), transparent 70%); filter: blur(8px); }
+    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1rem; }
+    .lead { color: var(--fg-soft); margin-bottom: var(--space-4); max-width: 50ch; }
+
+    .channels { display: grid; gap: 0.8rem; max-width: 760px; }
+    .channels a { display: flex; align-items: center; gap: 1.2rem; padding: 1.5rem 1.8rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
+    .channels a:hover { transform: translateX(8px); border-color: var(--accent-ink); }
+    .ch-label { min-width: 130px; font-size: 1.2rem; font-weight: 700; }
+    .ch-value { color: var(--fg-soft); flex: 1; }
+    .ch-arrow { color: var(--accent-ink); font-size: 1.3rem; }
+    @media (max-width: 540px) { .channels a { flex-wrap: wrap; gap: 0.3rem; } .ch-label { min-width: 0; width: 100%; } }
+  </style>
+</Base>

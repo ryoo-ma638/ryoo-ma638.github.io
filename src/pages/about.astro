@@ -1,0 +1,109 @@
+---
+import Base from "../layouts/Base.astro";
+
+// 事実のみ。資格・職歴のねつ造は厳禁。
+const skills = [
+  { group: "CG・映像", items: ["C++ / OpenGL（CG制作）", "Maya", "映像編集"], c: "var(--c-red)" },
+  { group: "グラフィック", items: ["Illustrator", "Photoshop"], c: "var(--c-violet)" },
+  { group: "画像処理", items: ["Python", "OpenCV（画像・動画処理）"], c: "var(--c-cyan)" },
+  { group: "Web", items: ["HTML / CSS", "JavaScript（学習中）", "Astro（このサイト）"], c: "var(--c-blue)" },
+];
+
+const timeline = [
+  { year: "2024.4", text: "愛知工業大学 情報科学部 入学（コンピューターシステム専攻 / KKA）" },
+  { year: "2025.4", text: "メディア情報専攻（KX）へ転専攻" },
+  { year: "2025", text: "サークル CEED（シード）に所属" },
+  { year: "2026", text: "3年次に進級。水野慎士研究室（CGメディア）に所属／CEED 副部長" },
+];
+---
+
+<Base title="About — Osaki Ryoma">
+  <section class="about-hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container">
+      <p class="eyebrow reveal">About — 自己紹介</p>
+      <h1 class="mega display reveal">
+        <span class="line-mask"><span>大崎 稜馬</span></span>
+        <span class="sub display">Osaki Ryoma</span>
+      </h1>
+      <p class="lead reveal" data-delay="1">
+        愛知工業大学 情報科学部 メディア情報専攻の学生です。1年次はコンピューターシステム専攻に在籍し、
+        ものづくりへの興味からメディア情報専攻へ転専攻しました。現在は<span class="accent">水野慎士研究室（CGメディア）</span>に所属し、
+        CG・画像処理を軸に、手を動かしながら表現の幅を広げています。
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Skills</span>
+        <h2 class="display">できること</h2>
+      </div>
+      <div class="skills">
+        {skills.map((s, i) => (
+          <div class="skill-card reveal" data-delay={(i % 3) + 1}>
+            <span class="skill-bar" style={`background:${s.c}`}></span>
+            <h3>{s.group}</h3>
+            <ul>{s.items.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow">
+      <div class="section-head reveal">
+        <span class="eyebrow">Timeline</span>
+        <h2 class="display">これまで</h2>
+      </div>
+      <ol class="timeline">
+        {timeline.map((t) => (
+          <li class="reveal">
+            <span class="t-year display">{t.year}</span>
+            <span class="t-text">{t.text}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container narrow center reveal">
+      <span class="eyebrow">Activity</span>
+      <p class="activity display">
+        サークル <span class="spectrum-text">CEED（シード）</span> では<br />副部長として活動しています。
+      </p>
+      <p class="lead">研究室では CG・画像処理の学びを深め、課題制作や個人制作を続けています。</p>
+      <a href="/contact" class="btn btn--primary">連絡する →</a>
+    </div>
+  </section>
+
+  <style>
+    .about-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; }
+    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 50% at 85% 0%, color-mix(in srgb, var(--c-cyan) 24%, transparent), transparent 70%); filter: blur(8px); }
+    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1.3rem; }
+    .sub { display: block; font-size: clamp(1rem, 2vw, 1.6rem); color: var(--muted); font-weight: 500; letter-spacing: 0.05em; margin-top: 0.4rem; }
+    .lead { max-width: 60ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); }
+
+    .skills { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 540px) { .skills { grid-template-columns: 1fr; } }
+    @media (min-width: 900px) { .skills { grid-template-columns: repeat(4, 1fr); } }
+    .skill-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; overflow: hidden; }
+    .skill-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+    .skill-card h3 { font-size: var(--fs-h3); margin-bottom: 0.8rem; }
+    .skill-card li { color: var(--fg-soft); font-size: var(--fs-small); padding: 0.2rem 0; border-bottom: 1px solid var(--line); }
+    .skill-card li:last-child { border-bottom: none; }
+
+    .timeline { display: grid; gap: 0; }
+    .timeline li { display: grid; grid-template-columns: 6rem 1fr; gap: 1.5rem; padding: 1.4rem 0; border-top: 1px solid var(--line); align-items: baseline; }
+    .timeline li:last-child { border-bottom: 1px solid var(--line); }
+    .t-year { color: var(--accent-ink); font-size: 1.05rem; letter-spacing: 0.03em; }
+    .t-text { color: var(--fg-soft); }
+
+    .center { text-align: center; }
+    .activity { font-size: var(--fs-h2); font-weight: 700; line-height: 1.35; margin-bottom: 1rem; }
+    .center .lead { margin: 0 auto 1.8rem; }
+  </style>
+</Base>

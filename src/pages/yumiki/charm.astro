@@ -1,0 +1,57 @@
+---
+import Yumiki from "../../layouts/Yumiki.astro";
+import { charms, img } from "../../data/yumiki.ts";
+const colors = ["var(--y-pink)", "var(--y-sky)", "var(--y-mint)", "var(--y-butter)"];
+---
+<Yumiki title="魅力 — YUMIKI WORLD">
+  <section class="y-section">
+    <div class="y-container">
+      <div class="y-head y-reveal">
+        <span class="y-eyebrow">Charm</span>
+        <h2>✿ 弓木奈於の<span class="wave">魅力</span></h2>
+      </div>
+
+      <div class="y-charms">
+        {charms.map((c, i) => (
+          <article class={`y-charm y-reveal ${i % 2 ? "rev" : ""}`} style={`--cc:${colors[i % colors.length]}`}>
+            <div class="y-charm-photo">
+              <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.y-charm-photo').classList.add('noimg')" />
+              <span class="y-charm-tag y-tag">{c.tag}</span>
+            </div>
+            <div class="y-charm-body">
+              <span class="y-charm-no">0{i + 1}</span>
+              <h3>{c.title}</h3>
+              {c.body.map((p) => <p>{p}</p>)}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="y-cta y-card y-reveal">
+        <p>もっと知りたくなったら…</p>
+        <a href="/yumiki/memory" class="y-btn y-btn--peach">思い出ページへ ♡</a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .y-charms { display: grid; gap: 3rem; }
+    .y-charm { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 860px) {
+      .y-charm { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .y-charm.rev .y-charm-photo { order: 2; }
+    }
+    .y-charm-photo { position: relative; border-radius: var(--y-radius); overflow: hidden; aspect-ratio: 4/3; background: var(--y-cream-2); border: 5px solid #fff; box-shadow: var(--y-shadow-sm); }
+    .y-charm-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--y-ease); }
+    .y-charm:hover .y-charm-photo img { transform: scale(1.05); }
+    .y-charm-photo.noimg img { display: none; }
+    .y-charm-photo.noimg::after { content: "📷"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 2.5rem; opacity: 0.4; }
+    .y-charm-tag { position: absolute; top: 1rem; left: 1rem; background: var(--cc); }
+    .y-charm-no { font-family: var(--y-font-en); font-weight: 700; font-size: 2.4rem; color: var(--cc); line-height: 1; }
+    .y-charm-body h3 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 0.3rem 0 1rem; }
+    .y-charm-body p { color: var(--y-ink-soft); margin-bottom: 0.8rem; }
+
+    .y-cta { text-align: center; padding: 2.5rem; margin-top: 3.5rem; }
+    .y-cta p { margin-bottom: 1rem; color: var(--y-ink-soft); font-weight: 700; }
+  </style>
+</Yumiki>
