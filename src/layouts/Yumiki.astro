@@ -18,6 +18,8 @@ const isActive = (href: string) => href === "/yumiki/" ? pathname === "/yumiki/"
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <!-- 非公式ファンサイトのため検索エンジンには載せない -->
+    <meta name="robots" content="noindex, nofollow" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
