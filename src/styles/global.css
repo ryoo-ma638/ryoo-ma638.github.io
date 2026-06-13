@@ -30,6 +30,9 @@
     var(--c-green) 54%, var(--c-yellow) 70%, var(--c-orange) 85%, var(--c-red) 100%);
   --accent: var(--c-violet);
   --accent-ink: #9d86ff;
+  /* 作品カテゴリの色（スペクトラム上で分離）: graphic=violet / cg=red / imaging=cyan / web=blue */
+  --accent-2: var(--c-red);
+  --accent-3: var(--c-cyan);
 
   /* Type */
   --font-display: "Space Grotesk", "Zen Kaku Gothic New", system-ui, sans-serif;
