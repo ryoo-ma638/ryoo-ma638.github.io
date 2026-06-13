@@ -37,7 +37,7 @@ export const works: Work[] = [
     summary: "リアルな街並みの再現と光の表現に挑戦したCG作品。",
     goal: "実在の風景を題材に、空間スケールと光のリアリティを出す。",
     approach: "建物配置と人流のスケール感、ライティングで都市の空気感を再現。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/01.png",
     video: "/assets/works/video/shibuya.mp4",
     featured: true,
@@ -49,7 +49,7 @@ export const works: Work[] = [
     summary: "人気アニメの印象的なシーンを3Dで再構成。",
     goal: "構図と決めポーズの“間”をCGで表現する。",
     approach: "カメラアングルとライティングで原典の緊張感を再現。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/04.png",
   },
   {
@@ -58,7 +58,7 @@ export const works: Work[] = [
     category: "cg",
     summary: "昼夜の移ろいを表現した地球のアニメーション。",
     goal: "回転と陰影で時間の流れを感じさせる。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/08.png",
   },
   {
@@ -79,7 +79,7 @@ export const works: Work[] = [
     title: "ライブステージ CG",
     category: "cg",
     summary: "仮想のライブステージを題材にした空間演出のCG。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/02.png",
   },
   {
@@ -87,7 +87,7 @@ export const works: Work[] = [
     title: "光沢反射のCG実験",
     category: "cg",
     summary: "物理ベースのライティングと光沢反射を検証した習作。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/03.png",
   },
   {
@@ -95,7 +95,7 @@ export const works: Work[] = [
     title: "遊園地アトラクション CG",
     category: "cg",
     summary: "動きとタイミングを合わせて表現したアトラクションのCG。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/05.png",
   },
   {
@@ -103,7 +103,7 @@ export const works: Work[] = [
     title: "日の出と反射 CG",
     category: "cg",
     summary: "空と水面のグラデーション・反射を表現したCG。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/06.png",
   },
   {
@@ -111,7 +111,7 @@ export const works: Work[] = [
     title: "地面の隆起・膨張 CG",
     category: "cg",
     summary: "操作に連動して地面が変化するインタラクティブなCG。",
-    tools: ["C++", "OpenGL"],
+    tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/07.png",
   },
 

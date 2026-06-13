@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="404 — Osaki Ryoma">
+  <section class="nf">
+    <div class="container">
+      <p class="big display spectrum-text">404</p>
+      <h1 class="display">ページが見つかりません</h1>
+      <p class="lead">お探しのページは移動または削除された可能性があります。</p>
+      <a href="/" class="btn btn--primary">ホームへ戻る →</a>
+    </div>
+  </section>
+  <style>
+    .nf { min-height: 80svh; display: grid; place-items: center; text-align: center; }
+    .big { font-size: var(--fs-mega); font-weight: 700; line-height: 1; }
+    .nf h1 { font-size: var(--fs-h2); margin: 0.5rem 0 0.8rem; }
+    .lead { color: var(--fg-soft); margin-bottom: 1.6rem; }
+  </style>
+</Base>
