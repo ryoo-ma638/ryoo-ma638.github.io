@@ -1,7 +1,7 @@
 // =========================================================
-// 作品データ（事実ベース）
-// 出典: x24231_portfolio.pdf（本人制作・制作意図記載）＋各授業フォルダの成果物。
-// ※虚偽厳禁。画像/動画パスは public/assets 配下に後で配置する想定の暫定値。
+// 作品データ（事実ベース・厳選）
+// 出典: 各授業フォルダの成果物（ソース/レンダリング動画を確認）＋ x24231_portfolio.pdf。
+// ※虚偽厳禁。「授業でやっただけ」の習作は載せず、見せられるものだけを厳選する方針。
 // =========================================================
 
 export type Category = "graphic" | "cg" | "imaging" | "web";
@@ -30,12 +30,12 @@ export interface Work {
 }
 
 export const works: Work[] = [
-  // ---- CG・映像（最大の差別化要素） ----
+  // ====================== CG・映像 ======================
   {
     slug: "shibuya-crossing",
     title: "渋谷スクランブル交差点 CG",
     category: "cg",
-    summary: "リアルな街並みの再現と光の表現に挑戦したCG作品。",
+    summary: "リアルな街並みの再現と光の表現に挑戦した3DCG作品。",
     goal: "実在の風景を題材に、空間スケールと光のリアリティを出す。",
     approach: "建物配置と人流のスケール感、ライティングで都市の空気感を再現。",
     tools: ["C++", "OpenGL / GLUT"],
@@ -44,23 +44,28 @@ export const works: Work[] = [
     featured: true,
   },
   {
-    slug: "jojo-scene",
-    title: "JOJO風シーンの3D再現",
+    slug: "strikeout",
+    title: "ストラックアウト（3Dゲーム）",
     category: "cg",
-    summary: "人気アニメの印象的なシーンを3Dで再構成。",
-    goal: "構図と決めポーズの“間”をCGで表現する。",
-    approach: "カメラアングルとライティングで原典の緊張感を再現。",
+    summary: "C++とOpenGLで一から作った3Dストラックアウト。大砲から球を発射し、4×4のパネルを狙い撃つ“遊べる”作品。",
+    goal: "物理挙動・当たり判定・得点管理まで備えた、完成度の高い3Dゲームを作り上げる。",
+    approach: "発射した球の放物運動、球とパネルの衝突判定、命中パネルの状態変化と得点計算を実装。授業の総合演習として作り込み、講評でも高い評価をもらえた作品。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/04.png",
+    thumb: "/assets/works/strikeout.jpg",
+    video: "/assets/works/video/strikeout.mp4",
+    featured: true,
   },
   {
-    slug: "earth-rotation",
-    title: "地球の回転 CG",
+    slug: "aitland",
+    title: "AITランド（3D遊園地）",
     category: "cg",
-    summary: "昼夜の移ろいを表現した地球のアニメーション。",
-    goal: "回転と陰影で時間の流れを感じさせる。",
+    summary: "歩いて見渡せる3Dの遊園地。観覧車・コースター・噴水・キャラクターを配置し、テクスチャで世界観を作り込んだ総合作品。",
+    goal: "広い3D空間を破綻なく構成し、テーマパークの“居る感”を出す。",
+    approach: "多数のオブジェクトとテクスチャを配置し、視点移動で全体を見渡せるよう設計。授業の集大成として一番作り込んだ作品。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/08.png",
+    thumb: "/assets/works/aitland.jpg",
+    video: "/assets/works/video/aitland.mp4",
+    featured: true,
   },
   {
     slug: "music-video",
@@ -74,48 +79,27 @@ export const works: Work[] = [
     thumb: "/assets/works/09.png",
     featured: true,
   },
-
   {
-    slug: "live-stage",
-    title: "ライブステージ CG",
+    slug: "jojo-scene",
+    title: "『ジョジョ』カーズ ― 3Dシーン再現",
     category: "cg",
-    summary: "仮想のライブステージを題材にした空間演出のCG。",
+    summary: "『ジョジョの奇妙な冒険』第2部ラスト、宇宙へ飛ばされ“考えるのをやめた”カーズの場面を3Dで再現したオマージュ作品。",
+    goal: "原作の象徴的な“静寂”の場面を、宇宙空間のスケールで表現する。",
+    approach: "惑星や太陽を配した宇宙空間に究極生命体カーズを置き、永遠に閉じ込められた孤独と静けさが伝わるよう構図とライティングを調整した。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/02.png",
+    thumb: "/assets/works/04.png",
   },
   {
-    slug: "glossy-reflection",
-    title: "光沢反射のCG実験",
+    slug: "visualization",
+    title: "情報の可視化（ベクトル場）",
     category: "cg",
-    summary: "物理ベースのライティングと光沢反射を検証した習作。",
+    summary: "数値データを3Dのベクトル場として可視化。見えない流れや力の分布を、向きと色で直感的に見せる。",
+    goal: "「本来見えない情報を見えるようにする」可視化に取り組む。",
+    approach: "格子点ごとのベクトルを矢印群で描き、強さに応じて配色。うねる流れがエネルギーの分布として浮かび上がる。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/03.png",
+    thumb: "/assets/works/visualization.jpg",
+    video: "/assets/works/video/visualization.mp4",
   },
-  {
-    slug: "amusement-ride",
-    title: "遊園地アトラクション CG",
-    category: "cg",
-    summary: "動きとタイミングを合わせて表現したアトラクションのCG。",
-    tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/05.png",
-  },
-  {
-    slug: "sunrise-reflection",
-    title: "日の出と反射 CG",
-    category: "cg",
-    summary: "空と水面のグラデーション・反射を表現したCG。",
-    tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/06.png",
-  },
-  {
-    slug: "ground-expansion",
-    title: "地面の隆起・膨張 CG",
-    category: "cg",
-    summary: "操作に連動して地面が変化するインタラクティブなCG。",
-    tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/07.png",
-  },
-
   {
     slug: "mushiba-animals",
     title: "虫歯アニマルズ（東京ゲームショー出展）",
@@ -125,7 +109,7 @@ export const works: Work[] = [
     thumb: "/assets/works/mushiba.jpg",
   },
 
-  // ---- グラフィック・ロゴ ----
+  // ====================== グラフィック・ロゴ ======================
   {
     slug: "visible-light-poster",
     title: "可視光線ポスター「その光見えてる？」",
@@ -136,7 +120,17 @@ export const works: Work[] = [
     tools: ["Illustrator"],
     duration: "約5時間",
     thumb: "/assets/works/visible-light.png",
-    featured: true,
+  },
+  {
+    slug: "character-design",
+    title: "学科マスコット キャラクターデザイン",
+    category: "graphic",
+    summary: "メディア情報専攻のマスコット「メディーちゃん」「コンちゃん」を設計。",
+    goal: "学科の役割（情報サポート／分析・プログラミング）をキャラに落とし込む。",
+    approach: "各パーツに「情報処理」「トラブル対処」「発信力」を象徴するモチーフを配置。",
+    tools: ["Illustrator"],
+    duration: "約12時間",
+    thumb: "/assets/works/character.png",
   },
   {
     slug: "additive-color",
@@ -155,18 +149,6 @@ export const works: Work[] = [
     tools: ["Illustrator"],
     duration: "約3時間",
     thumb: "/assets/works/subtractive.png",
-  },
-  {
-    slug: "character-design",
-    title: "学科マスコット キャラクターデザイン",
-    category: "graphic",
-    summary: "メディア情報専攻のマスコット「メディーちゃん」「コンちゃん」を設計。",
-    goal: "学科の役割（情報サポート／分析・プログラミング）をキャラに落とし込む。",
-    approach: "各パーツに「情報処理」「トラブル対処」「発信力」を象徴するモチーフを配置。",
-    tools: ["Illustrator"],
-    duration: "約12時間",
-    thumb: "/assets/works/character.png",
-    featured: true,
   },
   {
     slug: "animal-logo",
@@ -188,16 +170,6 @@ export const works: Work[] = [
     thumb: "/assets/works/logo-meishi.png",
   },
   {
-    slug: "business-card",
-    title: "名刺デザイン",
-    category: "graphic",
-    summary: "自作ロゴを活かした名刺。緑の帯で情報を整理し、信頼感と親しみを両立。",
-    approach: "色とレイアウトで信頼感を演出し、裏面ではロゴと連動したブランド感を表現。",
-    tools: ["Illustrator"],
-    duration: "約1時間",
-    thumb: "/assets/works/business-card.png",
-  },
-  {
     slug: "club-poster",
     title: "サークル募集ポスター",
     category: "graphic",
@@ -208,7 +180,7 @@ export const works: Work[] = [
     thumb: "/assets/works/club-poster.png",
   },
 
-  // ---- 画像処理 / Computer Vision（3年・ディジタル映像処理／C++・OpenCV。研究室の専門に直結） ----
+  // ====================== 画像処理 / Computer Vision（3年・C++/OpenCV。研究室の専門に直結） ======================
   {
     slug: "optical-flow",
     title: "オプティカルフロー可視化",
@@ -254,28 +226,8 @@ export const works: Work[] = [
     thumb: "/assets/works/chroma-key.jpg",
     video: "/assets/works/video/chroma-key.mp4",
   },
-  {
-    slug: "shape-detection",
-    title: "図形・輪郭の検出",
-    category: "imaging",
-    summary: "映像から動く領域を取り出し、輪郭を検出して図形ごとに色分け表示する。",
-    goal: "画像の中から「もの」の領域と形を取り出す。",
-    approach: "背景差分で動いた領域を二値化し、findContours で輪郭を抽出。面積や円形度でノイズを除き、各図形を黒背景にその色で描画する。",
-    tools: ["C++", "OpenCV"],
-    thumb: "/assets/works/shape-detection.jpg",
-    video: "/assets/works/video/shape-detection.mp4",
-  },
-  {
-    slug: "image-processing",
-    title: "画像処理の基礎（Python・OpenCV）",
-    category: "imaging",
-    summary: "2年次にPython＋OpenCVで画像処理の基礎（二値化・フィルタ・色変換など）を学び、3年次のディジタル映像処理（C++）へと発展させた土台。",
-    goal: "研究室（CGメディア）の専門に直結する画像・動画処理の実装力をつける。",
-    tools: ["Python", "OpenCV"],
-    thumb: "/assets/works/imgproc.png",
-  },
 
-  // ---- Web ----
+  // ====================== Web・アプリ ======================
   {
     slug: "chuo-seisakusho",
     title: "中央製作所 採用サイト リデザイン",
@@ -301,23 +253,6 @@ export const works: Work[] = [
     featured: true,
   },
   {
-    slug: "web-programming",
-    title: "Webプログラミング作品集（JavaScript）",
-    category: "web",
-    summary: "授業で制作したインタラクティブなWeb作品集。疑似3Dレース・レイトレーシング・各種パズルなどをJavaScriptで実装。",
-    approach: "箱入り娘・ハノイの塔・ライツアウト・Hit&Blow・疑似3Dレース・簡易レイトレーシング・画像二値化ツールなど、アルゴリズムと描画をブラウザ上で実装した。",
-    tools: ["HTML", "CSS", "JavaScript"],
-    thumb: "/assets/works/webpro.jpg",
-  },
-  {
-    slug: "ceed-site",
-    title: "CEED 公式サイト",
-    category: "web",
-    summary: "所属サークル CEED（愛知工業大学マルチクリエイティブサークル）の公式サイト。WEB班として構築を進行中。",
-    tools: ["Webデザイン"],
-    status: "公開予定",
-  },
-  {
     slug: "yumiki-world",
     title: "推しサイト「YUMIKI WORLD」",
     category: "web",
@@ -328,15 +263,13 @@ export const works: Work[] = [
     featured: true,
     link: "/yumiki/",
   },
-
-  // ---- 制作中（枠組み・今後公開）----
   {
-    slug: "settlo",
-    title: "Settlo（割り勘アプリ）",
+    slug: "ceed-site",
+    title: "CEED 公式サイト",
     category: "web",
-    summary: "グループの支払いを記録し精算する割り勘Webアプリ。Vue 3 と Firebase で開発中。",
-    tools: ["Vue 3", "Firebase"],
-    status: "制作中",
+    summary: "所属サークル CEED（愛知工業大学マルチクリエイティブサークル）の公式サイト。WEB班として構築を進行中。",
+    tools: ["Webデザイン"],
+    status: "公開予定",
   },
   {
     slug: "toka-club",
@@ -344,6 +277,14 @@ export const works: Work[] = [
     category: "web",
     summary: "中学軟式野球チームの公式サイト。Astro で制作中のクライアント案件。",
     tools: ["Astro"],
+    status: "制作中",
+  },
+  {
+    slug: "settlo",
+    title: "Settlo（割り勘アプリ）",
+    category: "web",
+    summary: "グループの支払いを記録し精算する割り勘Webアプリ。Vue 3 と Firebase で開発中。",
+    tools: ["Vue 3", "Firebase"],
     status: "制作中",
   },
   {
