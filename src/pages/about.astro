@@ -26,11 +26,16 @@ const timeline = [
         <span class="line-mask"><span>大崎 稜馬</span></span>
         <span class="sub display">Osaki Ryoma</span>
       </h1>
-      <p class="lead reveal" data-delay="1">
-        愛知工業大学 情報科学部 メディア情報専攻の学生です。1年次はコンピューターシステム専攻に在籍し、
-        ものづくりへの興味からメディア情報専攻へ転専攻しました。現在は<span class="accent">水野慎士研究室（CGメディア）</span>に所属し、
-        CG・画像処理を軸に、手を動かしながら表現の幅を広げています。
-      </p>
+      <div class="about-hero-grid">
+        <p class="lead reveal" data-delay="1">
+          愛知工業大学 情報科学部 メディア情報専攻の学生です。1年次はコンピューターシステム専攻に在籍し、
+          ものづくりへの興味からメディア情報専攻へ転専攻しました。現在は<span class="accent">水野慎士研究室（CGメディア）</span>に所属し、
+          CG・画像処理を軸に、手を動かしながら表現の幅を広げています。
+        </p>
+        <div class="about-photo reveal" data-delay="2">
+          <img src="/assets/works/profile.jpg" alt="大崎稜馬" loading="lazy" />
+        </div>
+      </div>
     </div>
   </section>
 
@@ -86,6 +91,9 @@ const timeline = [
     .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1.3rem; }
     .sub { display: block; font-size: clamp(1rem, 2vw, 1.6rem); color: var(--muted); font-weight: 500; letter-spacing: 0.05em; margin-top: 0.4rem; }
     .lead { max-width: 60ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); }
+    .about-hero-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-top: 1.5rem; }
+    @media (min-width: 820px) { .about-hero-grid { grid-template-columns: 1.4fr 0.6fr; } }
+    .about-photo img { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
 
     .skills { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 540px) { .skills { grid-template-columns: 1fr; } }

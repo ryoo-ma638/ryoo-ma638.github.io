@@ -74,6 +74,47 @@ export const works: Work[] = [
     featured: true,
   },
 
+  {
+    slug: "live-stage",
+    title: "ライブステージ CG",
+    category: "cg",
+    summary: "仮想のライブステージを題材にした空間演出のCG。",
+    tools: ["C++", "OpenGL"],
+    thumb: "/assets/works/02.png",
+  },
+  {
+    slug: "glossy-reflection",
+    title: "光沢反射のCG実験",
+    category: "cg",
+    summary: "物理ベースのライティングと光沢反射を検証した習作。",
+    tools: ["C++", "OpenGL"],
+    thumb: "/assets/works/03.png",
+  },
+  {
+    slug: "amusement-ride",
+    title: "遊園地アトラクション CG",
+    category: "cg",
+    summary: "動きとタイミングを合わせて表現したアトラクションのCG。",
+    tools: ["C++", "OpenGL"],
+    thumb: "/assets/works/05.png",
+  },
+  {
+    slug: "sunrise-reflection",
+    title: "日の出と反射 CG",
+    category: "cg",
+    summary: "空と水面のグラデーション・反射を表現したCG。",
+    tools: ["C++", "OpenGL"],
+    thumb: "/assets/works/06.png",
+  },
+  {
+    slug: "ground-expansion",
+    title: "地面の隆起・膨張 CG",
+    category: "cg",
+    summary: "操作に連動して地面が変化するインタラクティブなCG。",
+    tools: ["C++", "OpenGL"],
+    thumb: "/assets/works/07.png",
+  },
+
   // ---- グラフィック・ロゴ ----
   {
     slug: "visible-light-poster",
@@ -135,6 +176,16 @@ export const works: Work[] = [
     approach: "モノクロで媒体を選ばない汎用性を確保。名刺は緑の帯で情報を整理し信頼感を演出。",
     tools: ["Illustrator"],
     thumb: "/assets/works/logo-meishi.png",
+  },
+  {
+    slug: "business-card",
+    title: "名刺デザイン",
+    category: "graphic",
+    summary: "自作ロゴを活かした名刺。緑の帯で情報を整理し、信頼感と親しみを両立。",
+    approach: "色とレイアウトで信頼感を演出し、裏面ではロゴと連動したブランド感を表現。",
+    tools: ["Illustrator"],
+    duration: "約1時間",
+    thumb: "/assets/works/business-card.png",
   },
   {
     slug: "club-poster",
