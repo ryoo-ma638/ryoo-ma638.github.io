@@ -143,8 +143,8 @@ export const gallery = {
     { label: "ヨリ", img: "namashashin_yori.jpg" },
     { label: "チュウ", img: "namashashin_chuu.jpg" },
     { label: "ヒキ", img: "namashashin_hiki.jpg" },
-    { label: "座りヨリ (レア)", img: "namashashin_suwariyori.jpg" },
-    { label: "座りチュウ (レア)", img: "namashashin_suwarichuu.jpg" },
+    { label: "座りヨリ", img: "namashashin_suwariyori.jpg", rare: true },
+    { label: "座りチュウ", img: "namashashin_suwarichuu.jpg", rare: true },
   ],
   favs: ["fav_shot_01.jpg","fav_shot_02.jpg","fav_shot_03.jpg","fav_shot_04.jpg","fav_shot_05.jpg","fav_shot_06.jpg","fav_shot_07.jpg","fav_shot_08.jpg"],
 };

@@ -54,7 +54,7 @@ const grouped = order.map((cat) => ({
                 aria-label={`${w.title} の詳細を見る`}
               >
                 {w.video
-                  ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
+                  ? <video src={w.video} poster={w.thumb} muted loop playsinline preload="none"></video>
                   : w.thumb
                     ? <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />
                     : <span class="media-ph">準備中</span>}

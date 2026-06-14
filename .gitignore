@@ -14,3 +14,6 @@ npm-debug.log*
 
 # macOS
 .DS_Store
+
+# 未使用アセットのローカル退避（デプロイ・追跡しない／git履歴が実バックアップ）
+_unused-assets/

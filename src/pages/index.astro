@@ -63,7 +63,7 @@ const kineticB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
           <a href={`/works#${w.slug}`} class="bento-card reveal" data-delay={(i % 3) + 1}>
             <div class="bento-media" style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}>
               {w.video
-                ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
+                ? <video src={w.video} poster={w.thumb} muted loop playsinline preload="none"></video>
                 : <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.bento-card').classList.add('noimg')" />}
             </div>
             <div class="bento-overlay">
