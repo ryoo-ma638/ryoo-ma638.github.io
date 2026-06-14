@@ -1,17 +1,14 @@
 ---
 import Base from "../layouts/Base.astro";
-import Marquee from "../components/Marquee.astro";
 import { featuredWorks, categoryLabels, works } from "../data/works.ts";
 
 const counts: Record<string, number> = {};
 for (const k of Object.keys(categoryLabels)) {
   counts[k] = works.filter((w) => w.category === k).length;
 }
-const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTION"];
-
-// 斜めに流れるビジュアル・ショーケース（作品サムネ）
-const diagA = ["01.png", "strikeout.jpg", "aitland.jpg", "death-comer.jpg", "shuwa-2.jpg", "optical-flow.jpg", "04.png"].map((f) => `/assets/works/${f}`);
-const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-poster.png", "character.png", "mushiba.jpg", "mm2-cinematography.jpg", "livestage.jpg"].map((f) => `/assets/works/${f}`);
+// 斜めに流れるキネティック・タイポグラフィ（作品サムネの重複を避け、言葉で魅せる）
+const diagA = ["CG", "VIDEO", "3DCG", "MOTION", "INTERACTION", "VISION"];
+const diagB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
 ---
 
 <Base>
@@ -38,11 +35,6 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     </div>
     <div class="hero-scroll" aria-hidden="true">SCROLL<span></span></div>
   </section>
-
-  <!-- ===== MARQUEE ===== -->
-  <div class="marquee-wrap">
-    <Marquee items={marquee} />
-  </div>
 
   <!-- ===== FEATURED (Bento) ===== -->
   <section class="section">
@@ -102,18 +94,17 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     </div>
   </section>
 
-  <!-- ===== DIAGONAL SHOWCASE（斜めに流れるビジュアル） ===== -->
+  <!-- ===== DIAGONAL KINETIC TYPE（斜めに流れる言葉） ===== -->
   <section class="diag-showcase">
-    <div class="container"><p class="eyebrow reveal">In Motion — 作品のかけら</p></div>
     <div class="diag-stage" aria-hidden="true">
       <div class="diag-row diag-row--a">
-        {[...diagA, ...diagA].map((src) => (
-          <div class="diag-item"><img src={src} alt="" loading="lazy" /></div>
+        {[...diagA, ...diagA, ...diagA].map((w, i) => (
+          <span class:list={["diag-word", { spectrum: i % 3 === 1 }]}>{w}<span class="diag-dot">✦</span></span>
         ))}
       </div>
       <div class="diag-row diag-row--b">
-        {[...diagB, ...diagB].map((src) => (
-          <div class="diag-item"><img src={src} alt="" loading="lazy" /></div>
+        {[...diagB, ...diagB, ...diagB].map((w, i) => (
+          <span class:list={["diag-word", "outline", { spectrum: i % 3 === 0 }]}>{w}<span class="diag-dot">✦</span></span>
         ))}
       </div>
     </div>
@@ -210,19 +201,19 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     .field a:hover .field-arrow { transform: translate(4px, -4px); color: var(--fg); }
     @media (max-width: 560px) { .field a { grid-template-columns: auto 1fr auto; gap: 0.8rem; } .field-arrow { display: none; } }
 
-    /* DIAGONAL SHOWCASE */
-    .diag-showcase { padding-block: var(--space-5); overflow: hidden; }
-    .diag-stage { display: grid; gap: 1.1rem; margin-top: var(--space-3); transform: rotate(-3.5deg) scale(1.07); }
-    .diag-row { display: flex; gap: 1.1rem; width: max-content; will-change: transform; }
-    .diag-row--a { animation: diagA 55s linear infinite; }
-    .diag-row--b { animation: diagB 66s linear infinite; }
-    .diag-showcase:hover .diag-row { animation-play-state: paused; }
-    .diag-item { flex: 0 0 auto; width: clamp(170px, 20vw, 280px); aspect-ratio: 16/10; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); }
-    .diag-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease), filter 0.5s var(--ease); filter: saturate(1.05); }
-    .diag-item:hover img { transform: scale(1.08); }
-    @keyframes diagA { to { transform: translateX(-50%); } }
-    @keyframes diagB { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-    @media (prefers-reduced-motion: reduce) { .diag-row { animation: none; } .diag-stage { transform: rotate(-3.5deg); } }
+    /* DIAGONAL KINETIC TYPE（斜めに流れる言葉） */
+    .diag-showcase { padding-block: var(--space-4); overflow: hidden; border-block: 1px solid var(--line); }
+    .diag-stage { display: grid; gap: 0.4rem; transform: rotate(-4deg) scale(1.08); }
+    .diag-row { display: flex; align-items: center; gap: 1.8rem; width: max-content; will-change: transform; }
+    .diag-row--a { animation: diagA 38s linear infinite; }
+    .diag-row--b { animation: diagB 30s linear infinite; }
+    .diag-word { display: inline-flex; align-items: center; gap: 1.8rem; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 5vw, 4rem); letter-spacing: -0.01em; line-height: 1; white-space: nowrap; color: var(--fg); }
+    .diag-word.outline { color: transparent; -webkit-text-stroke: 1.4px color-mix(in srgb, var(--fg) 32%, transparent); }
+    .diag-word.spectrum { background: var(--spectrum); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 0; background-size: 200% auto; animation: hue 8s linear infinite; }
+    .diag-dot { font-size: 0.45em; color: var(--accent-ink); -webkit-text-stroke: 0; -webkit-background-clip: border-box; background: none; }
+    @keyframes diagA { to { transform: translateX(-33.33%); } }
+    @keyframes diagB { from { transform: translateX(-33.33%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) { .diag-row { animation: none; } .diag-stage { transform: rotate(-4deg); } }
 
     /* ABOUT teaser */
     .center { text-align: center; }
@@ -234,19 +225,16 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     const fine = matchMedia("(pointer: fine)").matches;
     const okMotion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ヒーローのスクロール連動パララックス（見せ場の受け渡し）
+    // ヒーローのスクロール演出は背景グローのみ控えめに（本文はクリアに保つ）
     if (okMotion) {
-      const heroInner = document.querySelector<HTMLElement>(".hero-inner");
       const heroScroll = document.querySelector<HTMLElement>(".hero-scroll");
       const heroGlow = document.querySelector<HTMLElement>(".hero-glow");
       let ticking = false;
       const onHeroScroll = () => {
         const y = window.scrollY;
         if (y <= window.innerHeight) {
-          const f = y / window.innerHeight;
-          if (heroInner) { heroInner.style.transform = `translateY(${y * 0.28}px)`; heroInner.style.opacity = String(Math.max(0, 1 - f * 1.35)); }
-          if (heroScroll) heroScroll.style.opacity = String(Math.max(0, 1 - f * 4));
-          if (heroGlow) heroGlow.style.transform = `translateY(${y * 0.5}px)`;
+          if (heroScroll) heroScroll.style.opacity = String(Math.max(0, 1 - (y / window.innerHeight) * 4));
+          if (heroGlow) heroGlow.style.transform = `translateY(${y * 0.35}px)`;
         }
         ticking = false;
       };
