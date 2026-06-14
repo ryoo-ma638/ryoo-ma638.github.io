@@ -39,18 +39,19 @@ const data = works.map((w) => ({
 <style>
   .wm { position: fixed; inset: 0; z-index: 900; display: none; padding: clamp(0.5rem, 3vw, 2.5rem);
     background: color-mix(in srgb, #05050a 86%, transparent); backdrop-filter: blur(16px) saturate(120%);
-    opacity: 0; transition: opacity 0.4s var(--ease); overflow-y: auto; }
-  .wm.open { display: grid; place-items: start center; opacity: 1; }
-  .wm-panel { width: min(900px, 100%); background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
-    overflow: hidden; display: flex; flex-direction: column; max-height: 92vh; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-    transform: translateY(24px) scale(0.985); transition: transform 0.45s var(--ease); margin: auto; }
+    opacity: 0; transition: opacity 0.4s var(--ease); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  /* モーダル全体（.wm）を唯一のスクロール領域にし、パネルは自然な高さで丸ごとスクロール */
+  .wm.open { display: flex; justify-content: center; opacity: 1; }
+  .wm-panel { width: min(900px, 100%); margin: auto; background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    transform: translateY(24px) scale(0.985); transition: transform 0.45s var(--ease); }
   .wm.open .wm-panel { transform: none; }
 
   /* メディアは大きく・くっきり（ぼかし背景は使わない） */
   .wm-media { background: #0b0a12; display: grid; place-items: center; padding: 0.6rem; cursor: zoom-in; flex: 0 0 auto; }
-  .wm-media img, .wm-media video { width: auto; height: auto; max-width: 100%; max-height: min(56vh, 560px); object-fit: contain; border-radius: 6px; display: block; }
+  .wm-media img, .wm-media video { width: auto; height: auto; max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 6px; display: block; }
 
-  .wm-info { padding: clamp(1.4rem, 3vw, 2.2rem); overflow-y: auto; }
+  .wm-info { padding: clamp(1.4rem, 3vw, 2.2rem); }
   .wm-tags { display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.9rem; flex-wrap: wrap; }
   .wm-tag { font-size: 0.7rem; font-weight: 700; padding: 0.32rem 0.8rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
   .wm-status { font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 999px; color: var(--fg); border: 1.5px solid var(--line); }
