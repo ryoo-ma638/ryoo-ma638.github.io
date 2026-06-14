@@ -50,6 +50,17 @@
 .yumiki-bg::before { width: 42vw; height: 42vw; background: var(--y-pink); top: -8vw; right: -8vw; }
 .yumiki-bg::after { width: 38vw; height: 38vw; background: var(--y-sky); bottom: -10vw; left: -8vw; }
 
+/* 前景でやさしく瞬くキラキラ */
+.y-sparkles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+.y-sparkles span { position: absolute; font-size: 1.5rem; opacity: 0.45; color: var(--y-lav); animation: twinkle 3.2s ease-in-out infinite, floaty 8s ease-in-out infinite; }
+.y-sparkles span:nth-child(1) { color: var(--y-peach); }
+.y-sparkles span:nth-child(2) { color: var(--y-pink); animation-delay: 0.5s, 0.8s; }
+.y-sparkles span:nth-child(3) { color: var(--y-butter); animation-delay: 1s, 0.3s; font-size: 1.2rem; }
+.y-sparkles span:nth-child(4) { color: var(--y-mint); animation-delay: 1.4s, 1.1s; }
+.y-sparkles span:nth-child(5) { color: var(--y-sky); animation-delay: 0.8s, 1.6s; }
+.y-sparkles span:nth-child(6) { color: var(--y-lav); animation-delay: 1.8s, 0.6s; font-size: 1.1rem; }
+@media (prefers-reduced-motion: reduce) { .y-sparkles span { animation: none; } }
+
 .y-container { width: min(100% - 2rem, 1100px); margin-inline: auto; }
 .y-narrow { max-width: 780px; }
 .y-section { padding-block: 5rem; position: relative; }
