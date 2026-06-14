@@ -1,7 +1,11 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
+import Lightbox from "../../components/Lightbox.astro";
 import { gallery, img } from "../../data/yumiki.ts";
 const g = gallery;
+const pbImgs = [g.photobook.cover, ...g.photobook.offshots].map(img);
+const nsImgs = g.namashashin.map((n) => img(n.img));
+const favImgs = g.favs.map(img);
 ---
 <Yumiki title="写真 — YUMIKI WORLD">
   <section class="y-section">
@@ -13,7 +17,7 @@ const g = gallery;
 
       <!-- 写真集 -->
       <div class="y-pb y-reveal">
-        <div class="y-pb-cover y-card">
+        <div class="y-pb-cover y-card" data-gallery={JSON.stringify(pbImgs)} data-index="0" data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="写真集の画像を拡大">
           <img src={img(g.photobook.cover)} alt={g.photobook.title} onerror="this.src='/assets/yumiki/nao_photobook_cover.jpg'" />
         </div>
         <div class="y-pb-text">
@@ -24,7 +28,7 @@ const g = gallery;
       </div>
       <div class="y-offshots">
         {g.photobook.offshots.map((o, i) => (
-          <div class="y-off y-reveal" data-delay={(i % 3) + 1}><img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.y-off').style.display='none'" /></div>
+          <div class="y-off y-reveal" data-delay={(i % 3) + 1} data-gallery={JSON.stringify(pbImgs)} data-index={i + 1} data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="オフショットを拡大"><img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.y-off').style.display='none'" /></div>
         ))}
       </div>
     </div>
@@ -38,7 +42,7 @@ const g = gallery;
       <div class="y-namashashin">
         {g.namashashin.map((n, i) => (
           <figure class="y-ns y-reveal" data-delay={(i % 3) + 1}>
-            <div class="y-ns-img"><img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.y-ns-img').classList.add('noimg')" /></div>
+            <div class="y-ns-img" data-gallery={JSON.stringify(nsImgs)} data-index={i} data-caption="生写真コレクション" role="button" tabindex="0" aria-label={`${n.label} を拡大`}><img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.y-ns-img').classList.add('noimg')" /></div>
             <figcaption>{n.label}</figcaption>
           </figure>
         ))}
@@ -52,13 +56,15 @@ const g = gallery;
       <div class="y-head y-reveal"><span class="y-eyebrow">My Favorites</span><h2>♡ お気に入りショット</h2></div>
       <div class="y-fav-grid">
         {g.favs.map((f, i) => (
-          <a class="y-fav y-reveal" data-delay={(i % 3) + 1} href={img(f)} target="_blank" rel="noopener noreferrer">
+          <a class="y-fav y-reveal" data-delay={(i % 3) + 1} href={img(f)} data-gallery={JSON.stringify(favImgs)} data-index={i} data-caption="お気に入りショット" aria-label="お気に入りショットを拡大">
             <img src={img(f)} alt="お気に入りショット" loading="lazy" onerror="this.closest('.y-fav').style.display='none'" />
           </a>
         ))}
       </div>
     </div>
   </section>
+
+  <Lightbox />
 
   <style>
     .y-pb { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-bottom: 1.5rem; }

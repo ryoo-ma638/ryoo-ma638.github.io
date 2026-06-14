@@ -14,6 +14,13 @@ const cardColor: Record<string, string> = {
   "/yumiki/memory": "var(--y-mint)",
   "/yumiki/gallery": "var(--y-lav)",
 };
+// 今の弓木さん（最新トピックス・すべて事実）
+const now = [
+  { emoji: "📕", t: "初の写真集", d: "1st『天使だったのか』2024.7発売・オリコン書籍部門1位", c: "var(--y-peach)" },
+  { emoji: "⭐️", t: "初の福神", d: "35th『チャンスは平等』(2024.4)で初の福神入り", c: "var(--y-butter)" },
+  { emoji: "🎬", t: "初主演ドラマ", d: "『未恋』(2025.1)で初主演。繊細な演技が話題に", c: "var(--y-lav)" },
+  { emoji: "🎤", t: "選抜の常連へ", d: "最新シングルも選抜入り（10作連続）。グループに欠かせない存在に", c: "var(--y-mint)" },
+];
 ---
 <Yumiki>
   <!-- HERO -->
@@ -40,6 +47,25 @@ const cardColor: Record<string, string> = {
         <span class="y-blob y-blob--1">♡</span>
         <span class="y-blob y-blob--2">✦</span>
         <span class="y-blob y-blob--3">✿</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOW / 最新トピックス -->
+  <section class="y-section y-now-sec">
+    <div class="y-container">
+      <div class="y-head y-reveal">
+        <span class="y-eyebrow">Now</span>
+        <h2>✨ 今の<span class="wave">弓木さん</span></h2>
+      </div>
+      <div class="y-now-grid">
+        {now.map((n, i) => (
+          <div class="y-now-card y-card y-reveal" data-delay={(i % 4) + 1} style={`--cc:${n.c}`}>
+            <span class="y-now-emoji">{n.emoji}</span>
+            <h3>{n.t}</h3>
+            <p>{n.d}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -84,6 +110,14 @@ const cardColor: Record<string, string> = {
     .y-blob--1 { top: -6px; right: 6%; color: var(--y-peach); }
     .y-blob--2 { bottom: 12%; left: -10px; color: var(--y-butter); animation-delay: .6s; font-size: 2.6rem; }
     .y-blob--3 { bottom: -8px; right: 18%; color: var(--y-lav); animation-delay: 1.1s; }
+
+    .y-now-sec { padding-top: 0; }
+    .y-now-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 880px) { .y-now-grid { grid-template-columns: repeat(4, 1fr); } }
+    .y-now-card { padding: 1.5rem 1.3rem; border-top: 5px solid var(--cc); }
+    .y-now-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+    .y-now-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+    .y-now-card p { color: var(--y-ink-soft); font-size: 0.85rem; line-height: 1.6; }
 
     .y-cards { display: grid; gap: 1.4rem; grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 620px) { .y-cards { grid-template-columns: 1fr; } }
