@@ -55,6 +55,8 @@ export const timeline = [
   { date: "2024.7", text: "写真集「天使だったのか」発売／オリコン書籍部門1位" },
   { date: "2025.1", text: "ドラマ「未恋」で初主演" },
   { date: "2025.6", text: "39th「Same Numbers」に選抜入り（10作連続）" },
+  { date: "2026.4", text: "41st「最後に階段を駆け上がったのはいつだ？」に参加" },
+  { date: "2026.5", text: "「B.L.T. 2026年5月号」にグラビア掲載" },
 ];
 
 export const shows = [
