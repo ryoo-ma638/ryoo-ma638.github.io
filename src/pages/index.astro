@@ -8,6 +8,10 @@ for (const k of Object.keys(categoryLabels)) {
   counts[k] = works.filter((w) => w.category === k).length;
 }
 const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTION"];
+
+// 斜めに流れるビジュアル・ショーケース（作品サムネ）
+const diagA = ["01.png", "strikeout.jpg", "aitland.jpg", "death-comer.jpg", "shuwa-2.jpg", "optical-flow.jpg", "04.png"].map((f) => `/assets/works/${f}`);
+const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-poster.png", "character.png", "mushiba.jpg", "mm2-cinematography.jpg", "livestage.jpg"].map((f) => `/assets/works/${f}`);
 ---
 
 <Base>
@@ -95,6 +99,23 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
           </li>
         ))}
       </ul>
+    </div>
+  </section>
+
+  <!-- ===== DIAGONAL SHOWCASE（斜めに流れるビジュアル） ===== -->
+  <section class="diag-showcase">
+    <div class="container"><p class="eyebrow reveal">In Motion — 作品のかけら</p></div>
+    <div class="diag-stage" aria-hidden="true">
+      <div class="diag-row diag-row--a">
+        {[...diagA, ...diagA].map((src) => (
+          <div class="diag-item"><img src={src} alt="" loading="lazy" /></div>
+        ))}
+      </div>
+      <div class="diag-row diag-row--b">
+        {[...diagB, ...diagB].map((src) => (
+          <div class="diag-item"><img src={src} alt="" loading="lazy" /></div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -188,6 +209,20 @@ const marquee = ["CG", "VIDEO", "GRAPHIC", "INTERACTION", "WEB", "SLIDES", "MOTI
     .field-arrow { color: var(--muted); transition: transform 0.3s var(--ease), color 0.3s var(--ease); }
     .field a:hover .field-arrow { transform: translate(4px, -4px); color: var(--fg); }
     @media (max-width: 560px) { .field a { grid-template-columns: auto 1fr auto; gap: 0.8rem; } .field-arrow { display: none; } }
+
+    /* DIAGONAL SHOWCASE */
+    .diag-showcase { padding-block: var(--space-5); overflow: hidden; }
+    .diag-stage { display: grid; gap: 1.1rem; margin-top: var(--space-3); transform: rotate(-3.5deg) scale(1.07); }
+    .diag-row { display: flex; gap: 1.1rem; width: max-content; will-change: transform; }
+    .diag-row--a { animation: diagA 55s linear infinite; }
+    .diag-row--b { animation: diagB 66s linear infinite; }
+    .diag-showcase:hover .diag-row { animation-play-state: paused; }
+    .diag-item { flex: 0 0 auto; width: clamp(170px, 20vw, 280px); aspect-ratio: 16/10; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); }
+    .diag-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease), filter 0.5s var(--ease); filter: saturate(1.05); }
+    .diag-item:hover img { transform: scale(1.08); }
+    @keyframes diagA { to { transform: translateX(-50%); } }
+    @keyframes diagB { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) { .diag-row { animation: none; } .diag-stage { transform: rotate(-3.5deg); } }
 
     /* ABOUT teaser */
     .center { text-align: center; }
