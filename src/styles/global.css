@@ -47,8 +47,12 @@
   --fs-body: clamp(1rem, 1.05vw, 1.0625rem);
   --fs-small: 0.85rem;
 
-  /* Space */
-  --space-2: 1rem; --space-3: 1.5rem; --space-4: 2.5rem; --space-5: 4.5rem; --space-6: 8rem;
+  /* Space（モバイルで自動的に詰まる可変余白） */
+  --space-2: 1rem;
+  --space-3: clamp(1.1rem, 3vw, 1.5rem);
+  --space-4: clamp(1.5rem, 3.5vw, 2.5rem);
+  --space-5: clamp(2.2rem, 5.5vw, 4.5rem);
+  --space-6: clamp(3rem, 8vw, 8rem);
   --maxw: 1320px; --maxw-narrow: 820px;
   --radius: 20px; --radius-sm: 12px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);

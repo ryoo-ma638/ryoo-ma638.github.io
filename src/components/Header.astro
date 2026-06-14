@@ -38,7 +38,7 @@ const links = [
 <style>
   .site-header { position: fixed; inset: 0 0 auto 0; z-index: 100; transition: background 0.4s var(--ease); }
   .site-header.scrolled { background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: saturate(160%) blur(14px); }
-  .header-inner { display: flex; align-items: center; justify-content: space-between; height: 78px; }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; height: clamp(58px, 15vw, 78px); }
   .header-line { position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: var(--line); opacity: 0; transition: opacity 0.4s var(--ease); }
   .site-header.scrolled .header-line { opacity: 1; }
 
