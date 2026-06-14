@@ -329,8 +329,10 @@ export const works: Work[] = [
     status: "実物カード制作",
     thumb: "/assets/works/card-real.jpg",
     slideGroups: [
-      { title: "実物カード・パッケージ", images: ["/assets/works/card-real.jpg", "/assets/works/card-kagawa.jpg", "/assets/works/card-all.jpg", "/assets/works/card-case.jpg"] },
-      { title: "発表スライド（ルール・制作過程）", images: [1, 2, 3, 4, 5, 6, 7].map((n) => `/assets/works/card-slide-${n}.jpg`) },
+      { title: "どんなゲーム？（発表スライド）", images: [1, 2, 3, 4, 5, 6, 7].map((n) => `/assets/works/card-slide-${n}.jpg`) },
+      { title: "カードのデザイン（表・裏・全16枚・能力一覧）", images: ["/assets/works/card-kagawa.jpg", "/assets/works/card-back.jpg", "/assets/works/card-all.jpg", "/assets/works/card-abilities.jpg"] },
+      { title: "説明書（ルールブック）", images: ["/assets/works/card-manual-1.jpg", "/assets/works/card-manual-2.jpg"] },
+      { title: "カードケースのデザイン", images: ["/assets/works/card-case-front.jpg", "/assets/works/card-case-back.jpg"] },
     ],
   },
 
