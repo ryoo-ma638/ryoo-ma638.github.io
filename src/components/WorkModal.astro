@@ -1,0 +1,153 @@
+---
+// 作品の没入型ディテール・モーダル。任意要素に data-work="<slug>" を付けるとクリックで開く。
+import { works, categoryLabels } from "../data/works.ts";
+const data = works.map((w) => ({
+  slug: w.slug,
+  title: w.title,
+  cat: categoryLabels[w.category].ja,
+  color: categoryLabels[w.category].color,
+  status: w.status ?? null,
+  summary: w.summary,
+  goal: w.goal ?? null,
+  approach: w.approach ?? null,
+  tools: w.tools ?? [],
+  duration: w.duration ?? null,
+  thumb: w.thumb ?? null,
+  video: w.video ?? null,
+  gallery: w.gallery ?? null,
+  link: w.link ?? null,
+}));
+---
+
+<div id="workModal" class="wm" aria-hidden="true" role="dialog" aria-modal="true" aria-label="作品詳細">
+  <button class="wm-close" aria-label="閉じる">✕</button>
+  <div class="wm-panel" role="document">
+    <div class="wm-media" id="wmMedia"></div>
+    <div class="wm-info">
+      <div class="wm-tags"><span class="wm-tag" id="wmTag"></span><span class="wm-status" id="wmStatus"></span></div>
+      <h2 id="wmTitle" class="display"></h2>
+      <p class="wm-summary" id="wmSummary"></p>
+      <div class="wm-kv" id="wmGoal"><span>狙い</span><p></p></div>
+      <div class="wm-kv" id="wmApproach"><span>工夫</span><p></p></div>
+      <dl class="wm-meta" id="wmMeta"></dl>
+      <div class="wm-gallery" id="wmGallery" aria-label="関連画像"></div>
+      <a class="btn btn--primary wm-link" id="wmLink" href="#">サイトを見る →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wm { position: fixed; inset: 0; z-index: 900; display: none; padding: clamp(0.5rem, 3vw, 2.5rem);
+    background: color-mix(in srgb, #05050a 86%, transparent); backdrop-filter: blur(16px) saturate(120%);
+    opacity: 0; transition: opacity 0.4s var(--ease); overflow-y: auto; }
+  .wm.open { display: grid; place-items: start center; opacity: 1; }
+  .wm-panel { width: min(1080px, 100%); background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: grid; grid-template-columns: 1fr; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    transform: translateY(24px) scale(0.985); transition: transform 0.45s var(--ease); margin: auto; }
+  .wm.open .wm-panel { transform: none; }
+  @media (min-width: 860px) { .wm-panel { grid-template-columns: 1.1fr 0.9fr; align-items: stretch; } }
+
+  .wm-media { position: relative; background: var(--bg-3); min-height: 240px; display: grid; place-items: center; cursor: zoom-in; }
+  @media (min-width: 860px) { .wm-media { min-height: 420px; } }
+  .wm-media::before { content: ""; position: absolute; inset: 0; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(30px) brightness(0.5); z-index: 0; }
+  .wm-media img, .wm-media video { position: relative; z-index: 1; width: 100%; height: 100%; max-height: 70vh; object-fit: contain; }
+
+  .wm-info { padding: clamp(1.4rem, 3vw, 2.4rem); overflow-y: auto; }
+  .wm-tags { display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.9rem; flex-wrap: wrap; }
+  .wm-tag { font-size: 0.7rem; font-weight: 700; padding: 0.32rem 0.8rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
+  .wm-status { font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 999px; color: var(--fg); border: 1.5px solid var(--line); }
+  .wm-status:empty, .wm-tag:empty { display: none; }
+  .wm-info h2 { font-size: clamp(1.5rem, 3.4vw, 2.4rem); line-height: 1.1; margin-bottom: 0.9rem; }
+  .wm-summary { color: var(--fg); margin-bottom: 1.2rem; }
+  .wm-kv { display: grid; grid-template-columns: 3.5rem 1fr; gap: 0.7rem; color: var(--fg-soft); font-size: var(--fs-small); margin-bottom: 0.7rem; }
+  .wm-kv span { font-weight: 700; color: var(--fg); }
+  .wm-kv[hidden] { display: none; }
+  .wm-meta { display: flex; gap: 2rem; margin: 1.1rem 0; flex-wrap: wrap; }
+  .wm-meta div { display: grid; gap: 0.2rem; }
+  .wm-meta dt { font-family: var(--font-display); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .wm-meta dd { font-weight: 700; font-size: var(--fs-small); }
+  .wm-gallery { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  .wm-gallery img { width: 84px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; transition: transform 0.25s var(--ease), border-color 0.25s var(--ease); }
+  .wm-gallery img:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
+  .wm-link { margin-top: 1.4rem; }
+  .wm-link[hidden] { display: none; }
+
+  .wm-close { position: fixed; top: clamp(0.8rem, 2.5vw, 1.6rem); right: clamp(0.8rem, 2.5vw, 1.6rem); z-index: 901;
+    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 1.4rem;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(6px); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+  .wm-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.08); }
+  @media (prefers-reduced-motion: reduce) { .wm, .wm-panel { transition: none; } }
+</style>
+
+<script is:inline define:vars={{ data }}>
+  (() => {
+    const modal = document.getElementById("workModal");
+    if (!modal) return;
+    const byId = Object.fromEntries(data.map((w) => [w.slug, w]));
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s == null ? "" : s);
+
+    function open(slug) {
+      const w = byId[slug];
+      if (!w) return;
+      const media = $("wmMedia");
+      const lbList = w.gallery && w.gallery.length ? w.gallery : (w.thumb ? [w.thumb] : []);
+      media.style.setProperty("--mbg", w.thumb ? `url(${w.thumb})` : "none");
+      media.dataset.gallery = JSON.stringify(lbList);
+      media.dataset.caption = w.title;
+      if (w.video) media.innerHTML = `<video src="${w.video}" poster="${esc(w.thumb)}" autoplay muted loop playsinline></video>`;
+      else if (w.thumb) media.innerHTML = `<img src="${w.thumb}" alt="${esc(w.title)}">`;
+      else media.innerHTML = '<span style="position:relative;z-index:1;color:var(--muted)">準備中</span>';
+
+      $("wmTag").textContent = w.cat;
+      $("wmTag").style.setProperty("--c", w.color);
+      $("wmStatus").textContent = w.status || "";
+      $("wmTitle").textContent = w.title;
+      $("wmSummary").textContent = w.summary || "";
+
+      const goal = $("wmGoal"); goal.hidden = !w.goal; goal.querySelector("p").textContent = esc(w.goal);
+      const appr = $("wmApproach"); appr.hidden = !w.approach; appr.querySelector("p").textContent = esc(w.approach);
+
+      const meta = $("wmMeta"); meta.innerHTML = "";
+      if (w.tools && w.tools.length) meta.insertAdjacentHTML("beforeend", `<div><dt>使用ツール</dt><dd>${w.tools.join(" / ")}</dd></div>`);
+      if (w.duration) meta.insertAdjacentHTML("beforeend", `<div><dt>制作時間</dt><dd>${esc(w.duration)}</dd></div>`);
+
+      const gal = $("wmGallery"); gal.innerHTML = "";
+      if (w.gallery && w.gallery.length) {
+        w.gallery.forEach((src, i) => {
+          gal.insertAdjacentHTML("beforeend", `<img src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(w.gallery)}' data-index="${i}" data-caption="${esc(w.title)}">`);
+        });
+      }
+      const link = $("wmLink");
+      if (w.link) { link.hidden = false; link.href = w.link; } else link.hidden = true;
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      const v = modal.querySelector("video"); if (v) v.pause();
+    }
+
+    document.addEventListener("click", (e) => {
+      const t = e.target.closest("[data-work]");
+      if (t) { e.preventDefault(); open(t.dataset.work); }
+    });
+    document.addEventListener("keydown", (e) => {
+      const a = document.activeElement;
+      if ((e.key === "Enter" || e.key === " ") && a && a.hasAttribute && a.hasAttribute("data-work")) {
+        e.preventDefault(); a.click();
+      }
+    });
+    modal.querySelector(".wm-close").addEventListener("click", close);
+    modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+    document.addEventListener("keydown", (e) => {
+      // ライトボックスが開いている時はそちらを優先（lightbox 側で処理）
+      const lbOpen = document.getElementById("lightbox")?.classList.contains("open");
+      if (e.key === "Escape" && modal.classList.contains("open") && !lbOpen) close();
+    });
+  })();
+</script>

@@ -233,6 +233,26 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     // Bento カードの立体ホバー（fine pointer かつ motion 許可時のみ）
     const fine = matchMedia("(pointer: fine)").matches;
     const okMotion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ヒーローのスクロール連動パララックス（見せ場の受け渡し）
+    if (okMotion) {
+      const heroInner = document.querySelector<HTMLElement>(".hero-inner");
+      const heroScroll = document.querySelector<HTMLElement>(".hero-scroll");
+      const heroGlow = document.querySelector<HTMLElement>(".hero-glow");
+      let ticking = false;
+      const onHeroScroll = () => {
+        const y = window.scrollY;
+        if (y <= window.innerHeight) {
+          const f = y / window.innerHeight;
+          if (heroInner) { heroInner.style.transform = `translateY(${y * 0.28}px)`; heroInner.style.opacity = String(Math.max(0, 1 - f * 1.35)); }
+          if (heroScroll) heroScroll.style.opacity = String(Math.max(0, 1 - f * 4));
+          if (heroGlow) heroGlow.style.transform = `translateY(${y * 0.5}px)`;
+        }
+        ticking = false;
+      };
+      addEventListener("scroll", () => { if (!ticking) { requestAnimationFrame(onHeroScroll); ticking = true; } }, { passive: true });
+    }
+
     if (fine && okMotion) {
       document.querySelectorAll<HTMLElement>(".bento-card").forEach((card) => {
         let raf = 0;

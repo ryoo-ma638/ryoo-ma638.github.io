@@ -1,26 +1,37 @@
 ---
 // マウス追従のカスタムカーソル（PC/fine pointer のみ表示）
 ---
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
 <script>
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const dot = document.getElementById("cursorDot");
   const ring = document.getElementById("cursorRing");
+  const glow = document.getElementById("cursorGlow");
   if (fine && dot && ring) {
     let mx = innerWidth / 2, my = innerHeight / 2;
     let rx = mx, ry = my;
+    let gx = mx, gy = my;
+    let glowOn = false;
 
     addEventListener("mousemove", (e) => {
       mx = e.clientX; my = e.clientY;
       dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+      if (glow && !reduce && !glowOn) { glow.classList.add("on"); glowOn = true; }
     });
 
     const loop = () => {
       rx += (mx - rx) * 0.18;
       ry += (my - ry) * 0.18;
       ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      if (glow && !reduce) {
+        gx += (mx - gx) * 0.09;
+        gy += (my - gy) * 0.09;
+        glow.style.transform = `translate(${gx}px, ${gy}px)`;
+      }
       requestAnimationFrame(loop);
     };
     loop();
@@ -32,7 +43,7 @@
     });
 
     addEventListener("mouseout", (e) => {
-      if (!e.relatedTarget) { dot.style.opacity = "0"; ring.style.opacity = "0"; }
+      if (!e.relatedTarget) { dot.style.opacity = "0"; ring.style.opacity = "0"; glow?.classList.remove("on"); glowOn = false; }
     });
     addEventListener("mouseover", () => { dot.style.opacity = "1"; ring.style.opacity = "1"; });
   }

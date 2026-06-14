@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Lightbox from "../../components/Lightbox.astro";
+import WorkModal from "../../components/WorkModal.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
 
 const order: Category[] = ["cg", "graphic", "imaging", "planning", "web"];
@@ -40,25 +41,24 @@ const grouped = order.map((cat) => ({
 
         <div class="work-list">
           {g.items.map((w, i) => {
-            const lb = !w.video ? (w.gallery ?? (w.thumb ? [w.thumb] : null)) : null;
+            const galCount = w.gallery?.length;
             return (
             <article class="work-row reveal" id={w.slug}>
               <span class="work-index display">{String(i + 1).padStart(2, "0")}</span>
               <div
-                class:list={["work-media", { "is-zoom": !!lb }]}
+                class="work-media is-zoom"
                 style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}
-                data-gallery={lb ? JSON.stringify(lb) : undefined}
-                data-caption={lb ? w.title : undefined}
-                role={lb ? "button" : undefined}
-                tabindex={lb ? "0" : undefined}
-                aria-label={lb ? `${w.title} の画像を拡大（${lb.length}枚）` : undefined}
+                data-work={w.slug}
+                role="button"
+                tabindex="0"
+                aria-label={`${w.title} の詳細を見る`}
               >
                 {w.video
                   ? <video src={w.video} poster={w.thumb} autoplay muted loop playsinline preload="metadata"></video>
                   : w.thumb
                     ? <img src={w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.work-media').classList.add('noimg')" />
                     : <span class="media-ph">準備中</span>}
-                {lb && <span class="zoom-hint">{w.gallery ? `＋${w.gallery.length}枚 見る` : "拡大"}<span aria-hidden="true"> ⤢</span></span>}
+                <span class="zoom-hint">詳しく見る{galCount ? `（＋${galCount}枚）` : ""}<span aria-hidden="true"> ↗</span></span>
               </div>
               <div class="work-info">
                 <span class="tags-row">
@@ -82,6 +82,7 @@ const grouped = order.map((cat) => ({
     </section>
   ))}
 
+  <WorkModal />
   <Lightbox />
 
   <style>

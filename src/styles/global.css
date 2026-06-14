@@ -218,6 +218,20 @@ html.intro body { overflow: hidden; }
 @keyframes introTag { to { opacity: 1; } }
 @keyframes introWipe { to { transform: translateY(-101%); pointer-events: none; } }
 
+/* ---------- カーソル追従グロー（スペクトラムの光が遊ぶ） ---------- */
+.cursor-glow {
+  position: fixed; top: 0; left: 0; z-index: 40; width: 520px; height: 520px; margin: -260px 0 0 -260px;
+  border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: 0; will-change: transform, opacity;
+  transition: opacity 0.5s var(--ease);
+  background: radial-gradient(circle, color-mix(in srgb, var(--c-violet) 32%, transparent), color-mix(in srgb, var(--c-cyan) 16%, transparent) 42%, transparent 66%);
+  filter: blur(34px);
+}
+.cursor-glow.on { opacity: 0.5; }
+:root[data-theme="light"] .cursor-glow { mix-blend-mode: multiply; opacity: 0; }
+:root[data-theme="light"] .cursor-glow.on { opacity: 0.3; }
+@media (hover: none), (pointer: coarse) { .cursor-glow { display: none; } }
+@media (prefers-reduced-motion: reduce) { .cursor-glow { display: none !important; } }
+
 /* ---------- Custom cursor（fine pointer のみ） ---------- */
 .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; border-radius: 50%; mix-blend-mode: difference; will-change: transform; }
 .cursor-dot { width: 8px; height: 8px; background: #fff; transform: translate(-50%, -50%); }
