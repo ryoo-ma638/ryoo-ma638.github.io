@@ -9,6 +9,10 @@ for (const k of Object.keys(categoryLabels)) {
 // 斜めに流れる作品サムネ・ショーケース
 const diagA = ["01.png", "strikeout.jpg", "aitland.jpg", "death-comer.jpg", "shuwa-2.jpg", "optical-flow.jpg", "04.png"].map((f) => `/assets/works/${f}`);
 const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-poster.png", "character.png", "mushiba.jpg", "mm2-cinematography.jpg", "livestage.jpg"].map((f) => `/assets/works/${f}`);
+
+// 斜めに流れるキネティック・タイポ（トップ上部・試験導入）
+const kineticA = ["CG", "VIDEO", "3DCG", "MOTION", "INTERACTION", "VISION"];
+const kineticB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
 ---
 
 <Base>
@@ -34,6 +38,22 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
       </div>
     </div>
     <div class="hero-scroll" aria-hidden="true">SCROLL<span></span></div>
+  </section>
+
+  <!-- ===== KINETIC TYPE（斜めに流れる言葉・トップ上部に試験導入） ===== -->
+  <section class="kt-band">
+    <div class="kt-stage" aria-hidden="true">
+      <div class="kt-row kt-row--a">
+        {[...kineticA, ...kineticA, ...kineticA].map((w, i) => (
+          <span class:list={["kt-word", { spectrum: i % 3 === 1 }]}>{w}<span class="kt-dot">✦</span></span>
+        ))}
+      </div>
+      <div class="kt-row kt-row--b">
+        {[...kineticB, ...kineticB, ...kineticB].map((w, i) => (
+          <span class:list={["kt-word", "outline", { spectrum: i % 3 === 0 }]}>{w}<span class="kt-dot">✦</span></span>
+        ))}
+      </div>
+    </div>
   </section>
 
   <!-- ===== FEATURED (Bento) ===== -->
@@ -201,6 +221,21 @@ const diagB = ["chuo-seisakusho.jpg", "drone.jpg", "yumiki.png", "visible-light-
     .field-arrow { color: var(--muted); transition: transform 0.3s var(--ease), color 0.3s var(--ease); }
     .field a:hover .field-arrow { transform: translate(4px, -4px); color: var(--fg); }
     @media (max-width: 560px) { .field a { grid-template-columns: auto 1fr auto; gap: 0.8rem; } .field-arrow { display: none; } }
+
+    /* KINETIC TYPE（斜めに流れる言葉・トップ上部） */
+    .kt-band { padding-block: var(--space-3); overflow: hidden; border-block: 1px solid var(--line); }
+    .kt-stage { display: grid; gap: 0.3rem; transform: rotate(-4deg) scale(1.08); }
+    .kt-row { display: flex; align-items: center; gap: 1.8rem; width: max-content; will-change: transform; }
+    .kt-row--a { animation: ktA 38s linear infinite; }
+    .kt-row--b { animation: ktB 30s linear infinite; }
+    .kt-band:hover .kt-row { animation-play-state: paused; }
+    .kt-word { display: inline-flex; align-items: center; gap: 1.8rem; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 4.5vw, 3.4rem); letter-spacing: -0.01em; line-height: 1; white-space: nowrap; color: var(--fg); }
+    .kt-word.outline { color: transparent; -webkit-text-stroke: 1.3px color-mix(in srgb, var(--fg) 30%, transparent); }
+    .kt-word.spectrum { background: var(--spectrum); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 0; background-size: 200% auto; animation: hue 8s linear infinite; }
+    .kt-dot { font-size: 0.4em; color: var(--accent-ink); -webkit-text-stroke: 0; background: none; }
+    @keyframes ktA { to { transform: translateX(-33.33%); } }
+    @keyframes ktB { from { transform: translateX(-33.33%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) { .kt-row { animation: none; } .kt-stage { transform: rotate(-4deg); } }
 
     /* DIAGONAL SHOWCASE（斜めに流れる作品ビジュアル） */
     .diag-showcase { padding-block: var(--space-5); overflow: hidden; }
