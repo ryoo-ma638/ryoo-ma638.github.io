@@ -4,7 +4,7 @@
 // ※虚偽厳禁。「授業でやっただけ」の習作は載せず、見せられるものだけを厳選する方針。
 // =========================================================
 
-export type Category = "graphic" | "cg" | "imaging" | "web" | "planning";
+export type Category = "graphic" | "cg" | "imaging" | "web" | "planning" | "sound";
 
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
   graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
@@ -12,6 +12,7 @@ export const categoryLabels: Record<Category, { ja: string; en: string; color: s
   imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--accent-3)" },
   web:      { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
   planning: { ja: "企画・発表",         en: "Planning & Slides", color: "var(--c-green)" },
+  sound:    { ja: "サウンド・音楽",      en: "Sound & Music", color: "var(--c-violet)" },
 };
 
 export interface Work {
@@ -26,6 +27,7 @@ export interface Work {
   thumb?: string;         // サムネイル画像パス
   video?: string;         // ループ再生する軽量mp4（任意）
   gallery?: string[];     // 複数画像（ライトボックスで拡大閲覧。スライド資料・スクショ等）
+  audio?: { title: string; src: string; note?: string }[]; // 試聴用の音源（モーダルにプレイヤー表示）
   featured?: boolean;     // トップのBentoで大きく見せる
   link?: string;          // 外部/別サイトへのリンク（Web作品など）
   status?: string;        // 進行中・公開予定・出展 などのバッジ（任意）
@@ -320,6 +322,24 @@ export const works: Work[] = [
     status: "実物カード制作",
     thumb: "/assets/works/card-real.jpg",
     gallery: ["/assets/works/card-real.jpg", "/assets/works/card-kagawa.jpg", "/assets/works/card-all.jpg", "/assets/works/card-case.jpg"],
+  },
+
+  // ====================== サウンド・音楽（DTM／アレンジ） ======================
+  {
+    slug: "sound-arrange",
+    title: "楽曲アレンジ（DTM・GarageBand）",
+    category: "sound",
+    summary: "好きなアイドル楽曲を GarageBand で耳コピ・アレンジしたDTM作品。ピアノ・ストリングス・サックス・ギター・ドラムを重ね、原曲の雰囲気を残しつつ自分なりの編曲に仕上げた。（原曲の著作権は各権利者に帰属／学習目的の非商用アレンジ）",
+    goal: "原曲を聴き取って各パートを打ち込み直し、“伝わる”アレンジに再構成する。",
+    approach: "コード進行とメロディを耳コピし、ピアノロールで各楽器を打ち込み。テンポ・音色・ミックスを調整して、原曲の良さを保ちながら自分の解釈を加えた。",
+    tools: ["GarageBand", "DTM・打ち込み"],
+    thumb: "/assets/works/sound-garageband.jpg",
+    gallery: ["/assets/works/sound-garageband.jpg"],
+    audio: [
+      { title: "君にDitto", src: "/assets/audio/arrange-kimi-ni-ditto.mp3", note: "乃木坂46 楽曲のアレンジ" },
+      { title: "条件反射で泣けてくる", src: "/assets/audio/arrange-jokenhansha.mp3", note: "櫻坂46 楽曲のアレンジ" },
+    ],
+    status: "アレンジ音源",
   },
 ];
 

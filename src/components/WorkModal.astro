@@ -15,6 +15,7 @@ const data = works.map((w) => ({
   thumb: w.thumb ?? null,
   video: w.video ?? null,
   gallery: w.gallery ?? null,
+  audio: w.audio ?? null,
   link: w.link ?? null,
 }));
 ---
@@ -27,6 +28,7 @@ const data = works.map((w) => ({
       <div class="wm-tags"><span class="wm-tag" id="wmTag"></span><span class="wm-status" id="wmStatus"></span></div>
       <h2 id="wmTitle" class="display"></h2>
       <p class="wm-summary" id="wmSummary"></p>
+      <div class="wm-audio" id="wmAudio" aria-label="試聴"></div>
       <div class="wm-kv" id="wmGoal"><span>狙い</span><p></p></div>
       <div class="wm-kv" id="wmApproach"><span>工夫</span><p></p></div>
       <dl class="wm-meta" id="wmMeta"></dl>
@@ -65,6 +67,14 @@ const data = works.map((w) => ({
   .wm-meta div { display: grid; gap: 0.2rem; }
   .wm-meta dt { font-family: var(--font-display); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .wm-meta dd { font-weight: 700; font-size: var(--fs-small); }
+  .wm-audio { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.4rem 0 0.2rem; }
+  .wm-audio[hidden] { display: none; }
+  .wm-track { background: var(--bg-3); border: 1px solid var(--line); border-radius: 12px; padding: 0.7rem 0.85rem; }
+  .wm-track-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .wm-track-ic { color: var(--c-violet); font-size: 1.1rem; line-height: 1; }
+  .wm-track-title { font-weight: 700; font-size: 0.98rem; }
+  .wm-track-note { font-size: 0.74rem; color: var(--muted); }
+  .wm-track audio { width: 100%; height: 36px; display: block; }
   .wm-gallery { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
   .wm-gallery img { width: 84px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; transition: transform 0.25s var(--ease), border-color 0.25s var(--ease); }
   .wm-gallery img:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
@@ -104,6 +114,15 @@ const data = works.map((w) => ({
       $("wmTitle").textContent = w.title;
       $("wmSummary").textContent = w.summary || "";
 
+      const au = $("wmAudio"); au.innerHTML = "";
+      if (w.audio && w.audio.length) {
+        w.audio.forEach((t) => {
+          au.insertAdjacentHTML("beforeend",
+            `<div class="wm-track"><div class="wm-track-head"><span class="wm-track-ic" aria-hidden="true">♪</span><span class="wm-track-title">${esc(t.title)}</span>${t.note ? `<span class="wm-track-note">${esc(t.note)}</span>` : ""}</div><audio controls preload="none" src="${esc(t.src)}"></audio></div>`);
+        });
+        au.hidden = false;
+      } else au.hidden = true;
+
       const goal = $("wmGoal"); goal.hidden = !w.goal; goal.querySelector("p").textContent = esc(w.goal);
       const appr = $("wmApproach"); appr.hidden = !w.approach; appr.querySelector("p").textContent = esc(w.approach);
 
@@ -129,6 +148,7 @@ const data = works.map((w) => ({
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
       const v = modal.querySelector("video"); if (v) v.pause();
+      modal.querySelectorAll("audio").forEach((a) => a.pause());
     }
 
     document.addEventListener("click", (e) => {

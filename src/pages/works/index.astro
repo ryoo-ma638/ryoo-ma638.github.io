@@ -4,7 +4,7 @@ import Lightbox from "../../components/Lightbox.astro";
 import WorkModal from "../../components/WorkModal.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
 
-const order: Category[] = ["cg", "graphic", "imaging", "planning", "web"];
+const order: Category[] = ["cg", "graphic", "imaging", "planning", "web", "sound"];
 const grouped = order.map((cat) => ({
   cat,
   label: categoryLabels[cat],
