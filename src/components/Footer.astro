@@ -8,6 +8,8 @@ const socials = [
 ];
 ---
 <footer class="site-footer">
+  <div class="footer-glow" aria-hidden="true"></div>
+  <span class="footer-mark display" aria-hidden="true">OSAKI</span>
   <div class="container">
     <span class="spectrum-bar reveal"></span>
 
@@ -16,6 +18,7 @@ const socials = [
       <a href="/contact" class="cta-big display">
         LET’S<br /><span class="spectrum-text">CREATE.</span>
       </a>
+      <p class="cta-sub">何かをつくりたい、その入口になれたら。</p>
     </div>
 
     <div class="footer-grid">
@@ -46,11 +49,20 @@ const socials = [
 </footer>
 
 <style>
-  .site-footer { padding-block: var(--space-5) var(--space-3); margin-top: var(--space-6); border-top: 1px solid var(--line); background: var(--bg-2); }
+  .site-footer { position: relative; padding-block: var(--space-5) var(--space-3); margin-top: var(--space-6); border-top: 1px solid var(--line); background: var(--bg-2); overflow: hidden; }
+  .footer-glow { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(60% 70% at 15% 120%, color-mix(in srgb, var(--c-violet) 22%, transparent), transparent 60%),
+      radial-gradient(50% 60% at 95% 0%, color-mix(in srgb, var(--c-cyan) 16%, transparent), transparent 60%);
+    filter: blur(20px); }
+  .footer-mark { position: absolute; left: 50%; bottom: -0.18em; transform: translateX(-50%); z-index: 0; pointer-events: none;
+    font-size: clamp(5rem, 26vw, 22rem); font-weight: 700; line-height: 1; letter-spacing: -0.04em; white-space: nowrap;
+    color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 8%, transparent); opacity: 0.6; }
+  .site-footer .container { position: relative; z-index: 1; }
   .spectrum-bar { margin-bottom: var(--space-5); }
   .cta { margin-bottom: var(--space-5); }
   .cta-big { display: inline-block; font-size: var(--fs-mega); font-weight: 700; line-height: 0.92; letter-spacing: -0.03em; margin-top: 0.6rem; transition: transform 0.4s var(--ease); }
   .cta-big:hover { transform: translateX(0.6rem); }
+  .cta-sub { margin-top: 1.2rem; color: var(--fg-soft); font-size: var(--fs-small); }
 
   .footer-grid { display: grid; gap: var(--space-4); grid-template-columns: 1fr; padding-block: var(--space-4); border-top: 1px solid var(--line); }
   @media (min-width: 760px) { .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; } }
