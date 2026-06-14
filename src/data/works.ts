@@ -103,8 +103,11 @@ export const works: Work[] = [
     goal: "物体移動アニメーションを使って、ライブのクライマックスの高揚感を作り出す。",
     approach: "大量の紙吹雪に一つずつ速度と回転を与えて舞い落とし、色とりどりに散らす。ステージ・花道・客席を配置し、上空からの構図でスケール感を出した。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/livestage.jpg",
+    thumb: "/assets/works/ls-render-1.jpg",
     video: "/assets/works/video/livestage.mp4",
+    slideGroups: [
+      { title: "完成レンダリング（こんな感じです）", images: ["/assets/works/ls-render-1.jpg", "/assets/works/ls-render-2.jpg", "/assets/works/ls-render-3.jpg"] },
+    ],
   },
   {
     slug: "mushiba-animals",
