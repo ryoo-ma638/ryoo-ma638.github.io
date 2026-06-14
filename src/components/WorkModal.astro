@@ -72,9 +72,9 @@ const data = works.map((w) => ({
   .wm-link[hidden] { display: none; }
 
   .wm-close { position: fixed; top: clamp(0.8rem, 2.5vw, 1.6rem); right: clamp(0.8rem, 2.5vw, 1.6rem); z-index: 901;
-    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 1.4rem;
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(6px); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
-  .wm-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.08); }
+    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; color: #0b0a12; font-size: 1.5rem; font-weight: 700;
+    background: #fff; border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.45); transition: transform 0.3s var(--ease), background 0.25s var(--ease); }
+  .wm-close:hover { transform: scale(1.1) rotate(90deg); background: var(--accent-ink); color: #fff; }
   @media (prefers-reduced-motion: reduce) { .wm, .wm-panel { transition: none; } }
 </style>
 

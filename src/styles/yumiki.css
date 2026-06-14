@@ -63,7 +63,7 @@
 
 .y-container { width: min(100% - 2rem, 1100px); margin-inline: auto; }
 .y-narrow { max-width: 780px; }
-.y-section { padding-block: 5rem; position: relative; }
+.y-section { padding-block: clamp(2.5rem, 7vw, 5rem); position: relative; }
 
 /* セクション見出し */
 .y-head { text-align: center; margin-bottom: 3rem; }
