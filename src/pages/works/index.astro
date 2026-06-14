@@ -46,7 +46,7 @@ const grouped = order.map((cat) => ({
             <article class="work-row reveal" id={w.slug}>
               <span class="work-index display">{String(i + 1).padStart(2, "0")}</span>
               <div
-                class="work-media is-zoom"
+                class={`work-media is-zoom${w.category === "graphic" ? " is-poster" : ""}`}
                 style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}
                 data-work={w.slug}
                 role="button"
@@ -114,6 +114,8 @@ const grouped = order.map((cat) => ({
     @media (max-width: 879px) { .work-index { top: -2rem; left: auto; right: 0; font-size: 2.4rem; } }
 
     .work-media { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); display: grid; place-items: center; }
+    /* グラフィック作品（縦長ポスター）はメディア枠を縦長にして全体を大きく見せる */
+    .work-media.is-poster { aspect-ratio: 4/5; max-width: 460px; justify-self: center; width: 100%; }
     /* 縦長画像も見切れないよう、ぼかした同画像を背景に敷き本体は全体表示 */
     .work-media::before { content: ""; position: absolute; inset: -8%; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(26px) brightness(0.5) saturate(1.3); z-index: 0; }
     .work-media img, .work-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }

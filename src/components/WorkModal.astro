@@ -15,6 +15,7 @@ const data = works.map((w) => ({
   thumb: w.thumb ?? null,
   video: w.video ?? null,
   gallery: w.gallery ?? null,
+  slideGroups: w.slideGroups ?? null,
   audio: w.audio ?? null,
   link: w.link ?? null,
 }));
@@ -33,6 +34,7 @@ const data = works.map((w) => ({
       <div class="wm-kv" id="wmApproach"><span>工夫</span><p></p></div>
       <dl class="wm-meta" id="wmMeta"></dl>
       <div class="wm-gallery" id="wmGallery" aria-label="関連画像"></div>
+      <div class="wm-slides" id="wmSlides" aria-label="スライド・資料"></div>
       <a class="btn btn--primary wm-link" id="wmLink" href="#">サイトを見る →</a>
     </div>
   </div>
@@ -78,6 +80,17 @@ const data = works.map((w) => ({
   .wm-gallery { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
   .wm-gallery img { width: 84px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; transition: transform 0.25s var(--ease), border-color 0.25s var(--ease); }
   .wm-gallery img:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
+
+  /* 横スクロールのスライドグループ（発表資料・カード等を発表/種類ごとに分けて閲覧） */
+  .wm-slides { display: flex; flex-direction: column; gap: 1.1rem; margin-top: 0.6rem; }
+  .wm-slides:empty { display: none; }
+  .wm-sgroup-title { font-size: 0.92rem; font-weight: 700; margin: 0 0 0.55rem; display: flex; align-items: baseline; gap: 0.6rem; }
+  .wm-sgroup-title span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+  .wm-strip { display: flex; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.6rem; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  .wm-strip::-webkit-scrollbar { height: 7px; }
+  .wm-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .wm-slide { flex: 0 0 auto; width: clamp(240px, 72%, 420px); aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
+  .wm-slide:hover { border-color: var(--accent-ink); }
   .wm-link { margin-top: 1.4rem; }
   .wm-link[hidden] { display: none; }
 
@@ -86,6 +99,28 @@ const data = works.map((w) => ({
     background: #fff; border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.45); transition: transform 0.3s var(--ease), background 0.25s var(--ease); }
   .wm-close:hover { transform: scale(1.1) rotate(90deg); background: var(--accent-ink); color: #fff; }
   @media (prefers-reduced-motion: reduce) { .wm, .wm-panel { transition: none; } }
+</style>
+
+<!-- JSで動的生成される要素（gallery/audio/slide）はAstroのスコープ付きCSSが効かないため、
+     #workModal 配下に限定したグローバルCSSで確実にスタイルを当てる -->
+<style is:global>
+  #workModal .wm-gallery img { width: 84px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; transition: transform 0.25s var(--ease), border-color 0.25s var(--ease); }
+  #workModal .wm-gallery img:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
+
+  #workModal .wm-track { background: var(--bg-3); border: 1px solid var(--line); border-radius: 12px; padding: 0.7rem 0.85rem; }
+  #workModal .wm-track-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  #workModal .wm-track-ic { color: var(--c-violet); font-size: 1.1rem; line-height: 1; }
+  #workModal .wm-track-title { font-weight: 700; font-size: 0.98rem; }
+  #workModal .wm-track-note { font-size: 0.74rem; color: var(--muted); }
+  #workModal .wm-track audio { width: 100%; height: 36px; display: block; }
+
+  #workModal .wm-sgroup-title { font-size: 0.92rem; font-weight: 700; margin: 0 0 0.55rem; display: flex; align-items: baseline; gap: 0.6rem; }
+  #workModal .wm-sgroup-title span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+  #workModal .wm-strip { display: flex; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.6rem; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  #workModal .wm-strip::-webkit-scrollbar { height: 7px; }
+  #workModal .wm-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  #workModal .wm-slide { flex: 0 0 auto; width: clamp(240px, 72%, 420px); aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
+  #workModal .wm-slide:hover { border-color: var(--accent-ink); }
 </style>
 
 <script is:inline define:vars={{ data }}>
@@ -134,6 +169,16 @@ const data = works.map((w) => ({
       if (w.gallery && w.gallery.length) {
         w.gallery.forEach((src, i) => {
           gal.insertAdjacentHTML("beforeend", `<img src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(w.gallery)}' data-index="${i}" data-caption="${esc(w.title)}">`);
+        });
+      }
+
+      const sg = $("wmSlides"); sg.innerHTML = "";
+      if (w.slideGroups && w.slideGroups.length) {
+        w.slideGroups.forEach((grp) => {
+          const imgs = grp.images.map((src, i) =>
+            `<img class="wm-slide" src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(grp.images)}' data-index="${i}" data-caption="${esc(grp.title)}">`).join("");
+          sg.insertAdjacentHTML("beforeend",
+            `<div class="wm-sgroup"><h4 class="wm-sgroup-title">${esc(grp.title)}<span>${grp.images.length}枚 ・ 横スクロール →</span></h4><div class="wm-strip">${imgs}</div></div>`);
         });
       }
       const link = $("wmLink");

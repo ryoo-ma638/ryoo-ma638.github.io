@@ -28,6 +28,7 @@ export interface Work {
   video?: string;         // ループ再生する軽量mp4（任意）
   gallery?: string[];     // 複数画像（ライトボックスで拡大閲覧。スライド資料・スクショ等）
   audio?: { title: string; src: string; note?: string }[]; // 試聴用の音源（モーダルにプレイヤー表示）
+  slideGroups?: { title: string; images: string[] }[];     // 発表/種類ごとに分けた横スクロールのスライド群
   featured?: boolean;     // トップのBentoで大きく見せる
   link?: string;          // 外部/別サイトへのリンク（Web作品など）
   status?: string;        // 進行中・公開予定・出展 などのバッジ（任意）
@@ -43,7 +44,7 @@ export const works: Work[] = [
     goal: "実在の風景を題材に、空間スケールと光のリアリティを出す。",
     approach: "建物配置と人流のスケール感、ライティングで都市の空気感を再現。",
     tools: ["C++", "OpenGL / GLUT"],
-    thumb: "/assets/works/01.png",
+    thumb: "/assets/works/shibuya-cg.jpg",
     video: "/assets/works/video/shibuya.mp4",
     featured: true,
   },
@@ -197,7 +198,10 @@ export const works: Work[] = [
     approach: "MediaPipe の Hands / Face Mesh で指・顔の特徴点を取得し、各手話のポーズを判定するロジックを実装。初級（単音）・中級（フレーズ）・上級（ヒントなし）の難易度、ライブカメラへのランドマーク描画、制限時間とスコア、学習モード・手話辞典・成績確認（苦手な手話の集計）まで作り込んだ。実装とプレゼン資料を主に担当。",
     tools: ["Python", "MediaPipe", "OpenCV", "FreeSimpleGUI"],
     thumb: "/assets/works/shuwa-app-1.jpg",
-    gallery: ["/assets/works/shuwa-slide.jpg", "/assets/works/shuwa-app-1.jpg", "/assets/works/shuwa-app-2.jpg", "/assets/works/shuwa-app-3.jpg", "/assets/works/shuwa-app-4.jpg"],
+    slideGroups: [
+      { title: "アプリの画面", images: ["/assets/works/shuwa-app-1.jpg", "/assets/works/shuwa-app-2.jpg", "/assets/works/shuwa-app-3.jpg", "/assets/works/shuwa-app-4.jpg"] },
+      { title: "開発レポート（発表スライド）", images: ["/assets/works/shuwa-rep-1.jpg", "/assets/works/shuwa-rep-2.jpg", "/assets/works/shuwa-rep-3.jpg", "/assets/works/shuwa-rep-4.jpg", "/assets/works/shuwa-rep-5.jpg"] },
+    ],
     featured: true,
   },
   {
@@ -304,24 +308,30 @@ export const works: Work[] = [
     slug: "presentation-slides",
     title: "プレゼン・スライド制作",
     category: "planning",
-    summary: "事業発表やサークルの場で、伝わるスライドを数多く制作・登壇。情報の優先順位と見せ方を設計し、ストーリーで聴衆を引き込むことを重視している。",
+    summary: "発表やサークルの場で制作・登壇したスライド。ここでは代表的な2つ ―『CEED新入生説明会』と『Amazon Prime CM分析ワークショップ』― を、発表ごとに分けて横スクロールで紹介する。情報の優先順位と見せ方を設計し、ストーリーで聴衆を引き込むことを重視。",
     goal: "「何を・どの順で・どう見せるか」を設計し、内容の価値が伝わる発表にする。",
-    approach: "CEEDの新入生向けプレゼンを一から制作したり、ワークショップ（Amazon Prime のCM構成分析など）の資料をデザイン。配色・余白・図解で視認性と説得力を両立させる。",
+    approach: "『新入生説明会』は活動の魅力が一番に伝わる構成を一から設計。『ワークショップ』はAmazon PrimeのCM構成を分析するテーマで、配色・余白・図解を整理。いずれも視認性と説得力の両立を狙った。",
     tools: ["Keynote", "PowerPoint", "デザイン"],
     thumb: "/assets/works/ceed-slides.jpg",
-    gallery: [...[1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/nyu-${n}.jpg`), ...[1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/ws-${n}.jpg`)],
+    slideGroups: [
+      { title: "CEED 新入生説明会", images: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/nyu-${n}.jpg`) },
+      { title: "Amazon Prime CM分析ワークショップ", images: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/ws-${n}.jpg`) },
+    ],
   },
   {
     slug: "todofuken-battle",
     title: "都道府県バトル（教育カードゲーム）",
     category: "planning",
-    summary: "実在の統計データ（経済力・面積・観光力）を強さに変換した2人対戦型の教育カードゲーム。実際にカード・説明書・パッケージまで印刷し、製品として形にしたチーム制作。",
-    goal: "遊びながら日本の地理・経済を体感的に学べるコンテンツを、実際に手に取って遊べる形にする。",
-    approach: "発表スライドとプレゼン構成、ルール改定・各都道府県の特殊能力設計、データ処理のPythonを担当（カードのグラフィックデザインは他メンバーが担当）。「運ゲー」から心理戦へとゲームバランスを再構築。各県のG（経済力）・M（面積）・K（観光力）を★で表し、名物にちなんだ特殊能力を設定。カード・説明書・ケースまで印刷して実物に仕上げた。",
-    tools: ["Python", "プレゼン設計", "ゲーム企画"],
+    summary: "日本の都道府県を題材にした2人対戦型の教育カードゲーム（チーム名「ビタミンB」4人で制作）。各県の経済力・面積・観光力を実在データから★に変換し、特殊能力で駆け引きする。カード・説明書・ケースまで印刷し、製品として完成させた。",
+    goal: "遊びながら地理・経済・観光を学べて、しかも運任せでなく“戦略”で勝てるゲームにする。",
+    approach: "全7ラウンド制で、毎ラウンド G（経済力）・M（面積）・K（観光力）のどれで勝負するかを“前ラウンドの敗者”が選べる読み合いが核。16県それぞれに「愛知＝ものづくり一筋」「京都＝古都の風格」など土地にちなんだ特殊能力を設定した。初期版は運要素が強く能力も複雑だったため、1カード1能力への統一・カードを10→16枚へ拡張・テストプレイ反復でバランスを再構築。僕は発表資料／プレゼン構成と各県の特殊能力の設計＋データ処理を担当（カードのグラフィックは他メンバー）。",
+    tools: ["プレゼン設計", "ゲーム企画", "Python"],
     status: "実物カード制作",
     thumb: "/assets/works/card-real.jpg",
-    gallery: ["/assets/works/card-real.jpg", "/assets/works/card-kagawa.jpg", "/assets/works/card-all.jpg", "/assets/works/card-case.jpg"],
+    slideGroups: [
+      { title: "実物カード・パッケージ", images: ["/assets/works/card-real.jpg", "/assets/works/card-kagawa.jpg", "/assets/works/card-all.jpg", "/assets/works/card-case.jpg"] },
+      { title: "発表スライド（ルール・制作過程）", images: [1, 2, 3, 4, 5, 6, 7].map((n) => `/assets/works/card-slide-${n}.jpg`) },
+    ],
   },
 
   // ====================== サウンド・音楽（DTM／アレンジ） ======================
