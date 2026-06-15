@@ -8,7 +8,9 @@ const socials = [
   { label: "Email", href: "mailto:ryoma630@gmail.com" },
 ];
 // Let's Create 背景：作品サムネを斜め2行・逆方向に流すショーケース
-const showcase = works.filter((w) => w.thumb);
+// 専用の極小サムネ(assets/works/footer/*.jpg)を使い、全ページでの読み込みを軽量化
+const footerThumb = (t: string) => "/assets/works/footer/" + t.split("/").pop()!.replace(/\.[^.]+$/, ".jpg");
+const showcase = works.filter((w) => w.thumb).map((w) => footerThumb(w.thumb!));
 const rowA = showcase.filter((_, i) => i % 2 === 0);
 const rowB = showcase.filter((_, i) => i % 2 === 1);
 ---
@@ -23,10 +25,10 @@ const rowB = showcase.filter((_, i) => i % 2 === 1);
       <div class="cta-bg" aria-hidden="true">
         <div class="footer-showcase">
           <div class="fs-row fs-row--a">
-            {[...rowA, ...rowA].map((w) => (<span class="fs-card"><img src={w.thumb} alt="" loading="lazy" decoding="async" /></span>))}
+            {[...rowA, ...rowA].map((w) => (<span class="fs-card"><img src={w} alt="" loading="lazy" decoding="async" /></span>))}
           </div>
           <div class="fs-row fs-row--b">
-            {[...rowB, ...rowB].map((w) => (<span class="fs-card"><img src={w.thumb} alt="" loading="lazy" decoding="async" /></span>))}
+            {[...rowB, ...rowB].map((w) => (<span class="fs-card"><img src={w} alt="" loading="lazy" decoding="async" /></span>))}
           </div>
         </div>
         <span class="cta-scrim"></span>

@@ -99,7 +99,7 @@ const grouped = order.map((cat) => ({
     .cat-section { padding-block: var(--space-5); border-top: 1px solid var(--line); }
     .cat-head { display: flex; align-items: center; gap: 1.2rem; margin-bottom: var(--space-4); }
     .cat-no { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 700; line-height: 1; opacity: 0.9; }
-    .cat-head h2 { font-size: var(--fs-h2); }
+    .cat-head h2 { font-size: var(--fs-h2); word-break: keep-all; }
 
     .work-list { display: grid; gap: var(--space-6); }
     .work-row { display: grid; gap: 1rem 2rem; grid-template-columns: 1fr; align-items: start; scroll-margin-top: 96px; position: relative; }
@@ -131,7 +131,7 @@ const grouped = order.map((cat) => ({
     .tags-row { display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; }
     .tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
     .status-pill { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 0.28rem 0.7rem; border-radius: 999px; color: var(--fg); border: 1.5px solid var(--line); background: var(--bg-3); }
-    .work-info h3 { font-size: clamp(1.5rem, 3vw, 2.3rem); margin-bottom: 0.7rem; }
+    .work-info h3 { font-size: clamp(1.5rem, 3vw, 2.3rem); margin-bottom: 0.7rem; word-break: keep-all; overflow-wrap: anywhere; }
     .work-summary { color: var(--fg); margin-bottom: 1rem; }
     .kv { color: var(--fg-soft); font-size: var(--fs-small); margin-bottom: 0.5rem; display: grid; grid-template-columns: 3.5rem 1fr; gap: 0.6rem; }
     .kv span { font-weight: 700; color: var(--fg); }
