@@ -21,3 +21,6 @@ _unused-assets/
 # 引き継ぎメモ・プロジェクト詳細メモ（ローカル専用・公開リポジトリには載せない）
 HANDOFF.md
 NOTES.local.md
+
+# 更新用スラッシュコマンド（Skills・ローカル専用）
+.assistant/
