@@ -1,6 +1,6 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
-import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
+import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.ts";
 ---
 <Yumiki title="プロフィール — YUMIKI WORLD">
   <section class="y-section">
@@ -36,6 +36,28 @@ import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
           <li><span class="y-t-date">{t.date}</span><span class="y-t-dot"></span><span class="y-t-text">{t.text}</span></li>
         ))}
       </ol>
+    </div>
+  </section>
+
+  <section class="y-section" style="padding-top:0">
+    <div class="y-container">
+      <div class="y-head y-reveal"><span class="y-eyebrow">Discography</span><h2>💿 参加<span class="wave">シングル</span></h2></div>
+      <p class="y-disco-note y-reveal">2020年に乃木坂46へ配属。アンダー期を経て <b>30thで初選抜</b>、<b>35thで初福神</b>。以降もずっと選抜入りを続けています。</p>
+      <div class="y-disco">
+        {singles.map((s, i) => (
+          <article class="y-single y-reveal" data-delay={(i % 3) + 1}>
+            <div class="y-single-cover">
+              <img src={`/assets/yumiki/singles/${s.no}.jpg`} alt={`${s.no}thシングル「${s.title}」`} loading="lazy" onerror="this.closest('.y-single-cover').classList.add('noimg')" />
+              <span class="y-single-no">{s.no}<small>th</small></span>
+              {s.pos !== "選抜" && <span class={`y-single-pos${s.pos === "初福神" ? " is-fukujin" : ""}`}>{s.pos}</span>}
+            </div>
+            <div class="y-single-info">
+              <h3>{s.title}</h3>
+              <span class="y-single-date">{s.date}</span>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -92,5 +114,28 @@ import { profile, timeline, shows, sns, img } from "../../data/yumiki.ts";
     .y-show:nth-child(5n) { border-left-color: var(--y-pink); }
     .y-show h3 { font-size: 1.2rem; margin-bottom: 0.3rem; }
     .y-show p { color: var(--y-ink-soft); font-size: 0.9rem; }
+
+    /* ディスコグラフィー（参加シングル） */
+    .y-disco-note { text-align: center; color: var(--y-ink-soft); font-size: 0.92rem; max-width: 52ch; margin: 0 auto 1.8rem; line-height: 1.8; }
+    .y-disco-note b { color: var(--y-peach); }
+    .y-disco { display: grid; gap: 1.4rem 1.1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 620px) { .y-disco { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 920px) { .y-disco { grid-template-columns: repeat(4, 1fr); } }
+    .y-single { text-align: center; transition: transform 0.3s var(--y-ease); }
+    .y-single:nth-child(odd) { transform: rotate(-1deg); }
+    .y-single:nth-child(even) { transform: rotate(1deg); }
+    .y-single:hover { transform: rotate(0) translateY(-5px); }
+    .y-single-cover { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--y-cream-2); border: 4px solid #fff; box-shadow: var(--y-shadow-sm); }
+    .y-single-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .y-single-cover.noimg { display: grid; place-items: center; background: linear-gradient(135deg, color-mix(in srgb, var(--y-pink) 22%, #fff), color-mix(in srgb, var(--y-lav) 22%, #fff)); }
+    .y-single-cover.noimg img { display: none; }
+    .y-single-cover.noimg::after { content: "♪"; font-size: 2rem; color: var(--y-peach); opacity: 0.7; }
+    .y-single-no { position: absolute; top: 8px; left: 8px; font-family: var(--y-font-en); font-weight: 700; font-size: 0.92rem; color: var(--y-ink); background: rgba(255,255,255,0.92); padding: 0.12rem 0.5rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); }
+    .y-single-no small { font-size: 0.62em; }
+    .y-single-pos { position: absolute; bottom: 8px; right: 8px; font-weight: 700; font-size: 0.64rem; color: #fff; background: var(--y-sky); padding: 0.2rem 0.5rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); }
+    .y-single-pos.is-fukujin { background: var(--y-peach); }
+    .y-single-info { margin-top: 0.6rem; }
+    .y-single-info h3 { font-size: 0.9rem; line-height: 1.45; margin-bottom: 0.1rem; }
+    .y-single-date { font-family: var(--y-font-en); font-weight: 700; font-size: 0.72rem; color: var(--y-muted); }
   </style>
 </Yumiki>

@@ -59,6 +59,23 @@ export const timeline = [
   { date: "2026.5", text: "「B.L.T. 2026年5月号」にグラビア掲載" },
 ];
 
+// 参加シングル（30thで初選抜、以降ずっと選抜入り）。画像は /assets/yumiki/singles/{no}.jpg を後日追加。
+// タイトル・発売時期は公開情報。立ち位置は 30th=初選抜 / 35th=初福神 / 以降=選抜継続。
+export const singles = [
+  { no: 30, title: "好きというのはロックだぜ！", date: "2022.8", pos: "初選抜" },
+  { no: 31, title: "ここにはないもの", date: "2022.12", pos: "選抜" },
+  { no: 32, title: "人は夢を二度見る", date: "2023.3", pos: "選抜" },
+  { no: 33, title: "おひとりさま天国", date: "2023.8", pos: "選抜" },
+  { no: 34, title: "Monopoly", date: "2023.12", pos: "選抜" },
+  { no: 35, title: "チャンスは平等", date: "2024.4", pos: "初福神" },
+  { no: 36, title: "チートデイ", date: "2024.8", pos: "選抜" },
+  { no: 37, title: "歩道橋", date: "2024.12", pos: "選抜" },
+  { no: 38, title: "ネーブルオレンジ", date: "2025.3", pos: "選抜" },
+  { no: 39, title: "Same numbers", date: "2025.7", pos: "選抜" },
+  { no: 40, title: "ビリヤニ", date: "2025.11", pos: "選抜" },
+  { no: 41, title: "最後に階段を駆け上がったのはいつだ？", date: "2026.4", pos: "選抜" },
+];
+
 export const shows = [
   { name: "乃木坂工事中", desc: "グループの冠番組で天然トークが炸裂" },
   { name: "沈黙の金曜日", desc: "アルコ&ピース酒井とMC。鋭いツッコミも話題" },
