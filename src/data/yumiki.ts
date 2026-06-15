@@ -279,3 +279,28 @@ export const gallery = {
   ],
   favs: ["fav_shot_01.jpg","fav_shot_02.jpg","fav_shot_03.jpg","fav_shot_04.jpg","fav_shot_05.jpg","fav_shot_06.jpg","fav_shot_07.jpg","fav_shot_08.jpg"],
 };
+
+// 動画で知る弓木さん（魅力ページ）
+// ★必ず「公式チャンネルのembed可能な動画」だけを入れること。動画IDは実在＆公式を確認したもののみ
+//   （oEmbedが返る＝公開・埋め込み可）。乃木坂工事中などの非公式アップロードは入れない。
+//   id を足すだけでカードが自動で増える（サムネは i.ytimg.com から自動取得）。
+export const charmVideos = [
+  {
+    id: "pcaiA5X_10Q",
+    title: "個人PV「アンガーマネジメント」予告編",
+    channel: "乃木坂46 公式",
+    note: "27thシングルの個人PV予告編。弓木さんの世界観がぎゅっと詰まった一本。",
+  },
+  {
+    id: "ppTh5O4aOCk",
+    title: "弓木奈於のシンデレラチャレンジ！",
+    channel: "乃木坂配信中（公式）",
+    note: "『乃木坂46時間TV』電視台の企画。天真爛漫さ全開で、見ていると元気をもらえる回。",
+  },
+  {
+    id: "gd5dorFjl5s",
+    title: "弓木奈於の「奇妙な案」",
+    channel: "東京パソコンクラブ（公式）",
+    note: "乃木坂46の公式ゲーム番組。独特な発想力でメンバーを沸かせる“弓木ワールド”が楽しめる。",
+  },
+];

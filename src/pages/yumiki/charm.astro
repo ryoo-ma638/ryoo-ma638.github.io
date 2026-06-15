@@ -1,6 +1,6 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
-import { charms, img } from "../../data/yumiki.ts";
+import { charms, charmVideos, img } from "../../data/yumiki.ts";
 // 最後の1つ（まとめ）は特別な締めカードとして別扱い
 const features = charms.slice(0, -1);
 const summary = charms[charms.length - 1];
@@ -43,6 +43,31 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
           );
         })}
       </div>
+
+      <!-- 動画で知る弓木さん（すべて公式チャンネルのembed可能な動画） -->
+      <section class="cm-movies y-reveal">
+        <div class="cm-mv-head">
+          <span class="cm-mv-eyebrow">MOVIE ✦</span>
+          <h3>動画で見る<span class="wave">弓木さん</span></h3>
+          <p>公式チャンネルの動画で、天真爛漫な“弓木ワールド”を。<small>サムネイルをタップすると再生します ▶</small></p>
+        </div>
+        <div class="cm-mv-grid">
+          {charmVideos.map((v) => (
+            <article class="cm-mv-card" data-yt={v.id}>
+              <button class="cm-mv-thumb" type="button" aria-label={`再生：${v.title}`}>
+                <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt={v.title} loading="lazy" width="480" height="360" />
+                <span class="cm-mv-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="cm-mv-meta">
+                <span class="cm-mv-ch">{v.channel}</span>
+                <h4 class="cm-mv-title">{v.title}</h4>
+                <p class="cm-mv-note">{v.note}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="cm-mv-foot">※ 公式チャンネルの動画を埋め込み表示しています。著作権は各権利者に帰属します。</p>
+      </section>
 
       <!-- 締め：ファンからの“まとめ” -->
       <article class="cm-sum y-reveal">
@@ -123,6 +148,57 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
     .cm-sum p { color: var(--y-ink-soft); max-width: 54ch; margin: 0 auto 0.9rem; line-height: 1.95; }
     .cm-sum-btn { margin-top: 1.4rem; }
 
+    /* ===== 動画で知る弓木さん ===== */
+    .cm-movies { margin-top: clamp(3.5rem, 9vw, 6rem); }
+    .cm-mv-head { text-align: center; margin-bottom: clamp(1.6rem, 4vw, 2.4rem); }
+    .cm-mv-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .18em; font-size: .72rem; color: var(--y-peach); }
+    .cm-mv-head h3 { font-size: clamp(1.5rem, 4vw, 2.1rem); margin: .3rem 0 .55rem; }
+    .cm-mv-head p { color: var(--y-ink-soft); font-size: .92rem; }
+    .cm-mv-head small { display: block; color: var(--y-muted); font-size: .8rem; margin-top: .25rem; }
+    .cm-mv-grid { display: grid; gap: 1.6rem 1.4rem; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); }
+    .cm-mv-card { background: #fff; border: 2px solid var(--y-line); border-radius: 16px; overflow: hidden; box-shadow: var(--y-shadow-sm);
+      transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .cm-mv-card:nth-child(odd) { transform: rotate(-.8deg); }
+    .cm-mv-card:nth-child(even) { transform: rotate(.8deg); }
+    .cm-mv-card:hover { transform: rotate(0) translateY(-5px); box-shadow: var(--y-shadow); }
+    .cm-mv-thumb { display: block; position: relative; width: 100%; padding: 0; border: 0; cursor: pointer; background: #000; aspect-ratio: 16/9; overflow: hidden; }
+    .cm-mv-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--y-ease), opacity .3s; }
+    .cm-mv-thumb:hover img { transform: scale(1.05); opacity: .85; }
+    .cm-mv-play { position: absolute; inset: 0; margin: auto; width: 58px; height: 58px; display: grid; place-items: center; border-radius: 50%;
+      background: color-mix(in srgb, var(--y-peach) 88%, #fff); color: #fff; font-size: 1.25rem; padding-left: 4px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.3); transition: transform .3s var(--y-ease); }
+    .cm-mv-thumb:hover .cm-mv-play { transform: scale(1.12); }
+    .cm-mv-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+    .cm-mv-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .cm-mv-meta { padding: 1rem 1.1rem 1.2rem; }
+    .cm-mv-ch { display: inline-block; font-family: var(--y-font-en); font-weight: 700; font-size: .68rem; letter-spacing: .04em; color: var(--y-ink-soft);
+      background: var(--y-cream-2); border-radius: 999px; padding: .25rem .7rem; margin-bottom: .55rem; }
+    .cm-mv-title { font-size: 1.02rem; line-height: 1.5; margin-bottom: .4rem; }
+    .cm-mv-note { color: var(--y-ink-soft); font-size: .85rem; line-height: 1.7; }
+    .cm-mv-foot { text-align: center; color: var(--y-muted); font-size: .76rem; margin-top: 1.4rem; }
+
     @media (prefers-reduced-motion: reduce) { .cm-doodle { animation: none; } }
   </style>
+
+  <script>
+    // 動画サムネをクリックしたら、その場で YouTube（プライバシー強化モード）を再生。
+    // 初期表示はサムネ画像だけ＝iframeは押すまで読み込まないので軽い（lite-youtube方式）。
+    document.querySelectorAll(".cm-mv-card").forEach((card) => {
+      const btn = card.querySelector(".cm-mv-thumb");
+      const id = card.getAttribute("data-yt");
+      if (!btn || !id) return;
+      btn.addEventListener("click", () => {
+        const frame = document.createElement("div");
+        frame.className = "cm-mv-frame";
+        const iframe = document.createElement("iframe");
+        iframe.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+        iframe.title = "YouTube 動画プレイヤー";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.loading = "lazy";
+        frame.appendChild(iframe);
+        btn.replaceWith(frame);
+      }, { once: true });
+    });
+  </script>
 </Yumiki>
