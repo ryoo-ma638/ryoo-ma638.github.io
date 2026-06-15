@@ -1,57 +1,123 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
 import { charms, img } from "../../data/yumiki.ts";
-const colors = ["var(--y-pink)", "var(--y-sky)", "var(--y-mint)", "var(--y-butter)"];
+// 最後の1つ（まとめ）は特別な締めカードとして別扱い
+const features = charms.slice(0, -1);
+const summary = charms[charms.length - 1];
+const accents = ["var(--y-peach)", "var(--y-sky)", "var(--y-mint)"];
+const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
 ---
 <Yumiki title="魅力 — YUMIKI WORLD">
-  <section class="y-section">
+  <section class="y-section cm-sec">
     <div class="y-container">
       <div class="y-head y-reveal">
-        <span class="y-eyebrow">Charm</span>
-        <h2>✿ 弓木奈於の<span class="wave">魅力</span></h2>
+        <span class="y-eyebrow">Her Charm</span>
+        <h2>弓木奈於の<span class="wave">魅力</span>、語らせて。</h2>
+        <p class="cm-intro">知れば知るほど好きになる。彼女の“ずるい”魅力を、ファン目線でめいっぱい。</p>
       </div>
 
-      <div class="y-charms">
-        {charms.map((c, i) => (
-          <article class={`y-charm y-reveal ${i % 2 ? "rev" : ""}`} style={`--cc:${colors[i % colors.length]}`}>
-            <div class="y-charm-photo">
-              <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.y-charm-photo').classList.add('noimg')" />
-              <span class="y-charm-tag y-tag">{c.tag}</span>
-            </div>
-            <div class="y-charm-body">
-              <span class="y-charm-no">0{i + 1}</span>
-              <h3>{c.title}</h3>
-              {c.body.map((p) => <p>{p}</p>)}
-            </div>
-          </article>
-        ))}
+      <div class="cm-list">
+        {features.map((c, i) => {
+          const lead = c.body[0];
+          const rest = c.body.slice(1);
+          return (
+            <article class={`cm y-reveal ${i % 2 ? "cm--rev" : ""}`} style={`--ac:${accents[i % 3]};--tape:${tapes[i % 3]}`}>
+              <span class="cm-num" aria-hidden="true">0{i + 1}</span>
+              <span class="cm-doodle cm-doodle--1" aria-hidden="true">{["♡", "✦", "✿"][i % 3]}</span>
+
+              <div class="cm-photo">
+                <span class="cm-tape" aria-hidden="true"></span>
+                <div class="cm-photo-inner">
+                  <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.cm-photo-inner').classList.add('noimg')" />
+                </div>
+                <span class="cm-cap">{c.tag}</span>
+              </div>
+
+              <div class="cm-body">
+                <span class="cm-kicker">POINT 0{i + 1}</span>
+                <h3 class="cm-title">{c.title}</h3>
+                <p class="cm-lead"><span class="cm-q" aria-hidden="true">❝</span>{lead}</p>
+                {rest.map((p) => <p class="cm-p">{p}</p>)}
+              </div>
+            </article>
+          );
+        })}
       </div>
 
-      <div class="y-cta y-card y-reveal">
-        <p>もっと知りたくなったら…</p>
-        <a href="/yumiki/memory" class="y-btn y-btn--peach">思い出ページへ ♡</a>
-      </div>
+      <!-- 締め：ファンからの“まとめ” -->
+      <article class="cm-sum y-reveal">
+        <span class="cm-sum-deco" aria-hidden="true">♡</span>
+        <span class="y-tag cm-sum-tag" style="background:var(--y-peach)">{summary.tag}</span>
+        <h3 class="cm-sum-title"><span class="wave">{summary.title}</span></h3>
+        {summary.body.map((p) => <p>{p}</p>)}
+        <a href="/yumiki/memory" class="y-btn y-btn--peach cm-sum-btn">推しとの思い出を見る ♡</a>
+      </article>
     </div>
   </section>
 
   <style>
-    .y-charms { display: grid; gap: 3rem; }
-    .y-charm { display: grid; gap: 1.5rem; grid-template-columns: 1fr; align-items: center; }
-    @media (min-width: 860px) {
-      .y-charm { grid-template-columns: 1fr 1fr; gap: 3rem; }
-      .y-charm.rev .y-charm-photo { order: 2; }
-    }
-    .y-charm-photo { position: relative; border-radius: var(--y-radius); overflow: hidden; aspect-ratio: 4/3; background: var(--y-cream-2); border: 5px solid #fff; box-shadow: var(--y-shadow-sm); }
-    .y-charm-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--y-ease); }
-    .y-charm:hover .y-charm-photo img { transform: scale(1.05); }
-    .y-charm-photo.noimg img { display: none; }
-    .y-charm-photo.noimg::after { content: "📷"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 2.5rem; opacity: 0.4; }
-    .y-charm-tag { position: absolute; top: 1rem; left: 1rem; background: var(--cc); }
-    .y-charm-no { font-family: var(--y-font-en); font-weight: 700; font-size: 2.4rem; color: var(--cc); line-height: 1; }
-    .y-charm-body h3 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 0.3rem 0 1rem; }
-    .y-charm-body p { color: var(--y-ink-soft); margin-bottom: 0.8rem; }
+    .cm-sec { position: relative; }
+    .y-head h2 { line-height: 1.35; }
+    .cm-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 40ch; margin-inline: auto; }
 
-    .y-cta { text-align: center; padding: 2.5rem; margin-top: 3.5rem; }
-    .y-cta p { margin-bottom: 1rem; color: var(--y-ink-soft); font-weight: 700; }
+    .cm-list { display: flex; flex-direction: column; gap: clamp(3.5rem, 9vw, 6rem); margin-top: clamp(2rem, 6vw, 3.5rem); }
+
+    /* 1つの魅力 = 雑誌の見開き風（写真＝ポラロイド、本文＝やわらかカード） */
+    .cm { position: relative; display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 880px) {
+      .cm { grid-template-columns: 0.92fr 1.08fr; gap: clamp(2rem, 4vw, 3.4rem); }
+      .cm--rev .cm-photo { order: 2; }
+    }
+
+    /* 大きな通し番号（背景の飾り） */
+    .cm-num { position: absolute; top: -2.4rem; left: -0.5rem; z-index: 0; font-family: var(--y-font-en); font-weight: 700;
+      font-size: clamp(5rem, 16vw, 9rem); line-height: 1; color: transparent;
+      -webkit-text-stroke: 2px color-mix(in srgb, var(--ac) 45%, transparent); opacity: 0.5; pointer-events: none; }
+    .cm--rev .cm-num { left: auto; right: -0.5rem; }
+
+    .cm-doodle { position: absolute; z-index: 2; font-size: 1.8rem; color: var(--ac); pointer-events: none;
+      animation: twinkle 3s ease-in-out infinite, floaty 7s ease-in-out infinite; }
+    .cm-doodle--1 { top: -1rem; right: 8%; }
+    .cm--rev .cm-doodle--1 { right: auto; left: 8%; }
+
+    /* ポラロイド写真 */
+    .cm-photo { position: relative; z-index: 1; justify-self: center; width: min(86vw, 380px);
+      background: #fff; padding: 12px 12px 46px; border-radius: 8px; box-shadow: 0 16px 36px rgba(120,90,80,0.18);
+      transform: rotate(-3deg); transition: transform 0.4s var(--y-ease); }
+    .cm--rev .cm-photo { transform: rotate(3deg); }
+    .cm:hover .cm-photo { transform: rotate(0) scale(1.02); }
+    .cm-photo-inner { aspect-ratio: 4/5; border-radius: 4px; overflow: hidden; background: var(--y-cream-2); }
+    .cm-photo-inner img { width: 100%; height: 100%; object-fit: cover; }
+    .cm-photo-inner.noimg img { display: none; }
+    .cm-photo-inner.noimg::after { content: "📷"; display: grid; place-items: center; height: 100%; font-size: 2.4rem; opacity: 0.4; }
+    /* マスキングテープ */
+    .cm-tape { position: absolute; top: -14px; left: 50%; width: 108px; height: 30px; transform: translateX(-50%) rotate(-4deg);
+      background: color-mix(in srgb, var(--tape) 78%, transparent); box-shadow: 0 2px 6px rgba(120,90,80,0.12);
+      -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 6px, transparent 6px 8px); mask-image: repeating-linear-gradient(90deg, #000 0 6px, transparent 6px 8px); opacity: 0.85; }
+    /* 手書き風キャプション */
+    .cm-cap { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-family: var(--y-font-jp);
+      font-weight: 700; font-size: 1.05rem; color: var(--y-ink); letter-spacing: 0.02em; }
+    .cm-cap::before { content: "♡ "; color: var(--ac); }
+
+    /* 本文 */
+    .cm-body { position: relative; z-index: 1; }
+    .cm-kicker { font-family: var(--y-font-en); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.18em; color: var(--ac); }
+    .cm-title { font-size: clamp(1.45rem, 3.4vw, 2.05rem); line-height: 1.4; margin: 0.4rem 0 1rem;
+      background: linear-gradient(transparent 66%, color-mix(in srgb, var(--ac) 40%, transparent) 66%); display: inline; padding-inline: 0.05em; }
+    .cm-lead { position: relative; font-size: 1.06rem; font-weight: 700; line-height: 1.95; color: var(--y-ink); margin: 1rem 0 0.9rem; padding-left: 1.4rem; }
+    .cm-q { position: absolute; left: -0.1rem; top: -0.5rem; font-size: 2.2rem; color: var(--ac); opacity: 0.6; line-height: 1; }
+    .cm-p { color: var(--y-ink-soft); margin-bottom: 0.8rem; line-height: 1.9; font-size: 0.95rem; }
+
+    /* 締めカード（まとめ） */
+    .cm-sum { position: relative; overflow: hidden; margin-top: clamp(3.5rem, 9vw, 6rem); text-align: center;
+      background: linear-gradient(160deg, #fff, var(--y-cream-2)); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
+      padding: clamp(2.2rem, 6vw, 3.6rem) clamp(1.3rem, 5vw, 3rem); box-shadow: var(--y-shadow-sm); }
+    .cm-sum-deco { position: absolute; top: -1.5rem; right: -1.5rem; font-size: 8rem; color: var(--y-pink); opacity: 0.25; pointer-events: none; }
+    .cm-sum-tag { color: #fff; }
+    .cm-sum-title { font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 0.8rem 0 1.2rem; }
+    .cm-sum p { color: var(--y-ink-soft); max-width: 54ch; margin: 0 auto 0.9rem; line-height: 1.95; }
+    .cm-sum-btn { margin-top: 1.4rem; }
+
+    @media (prefers-reduced-motion: reduce) { .cm-doodle { animation: none; } }
   </style>
 </Yumiki>
