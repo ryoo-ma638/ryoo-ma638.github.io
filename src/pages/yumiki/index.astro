@@ -180,18 +180,25 @@ const now = [
     .y-now-sec { padding-top: 0; }
     .y-now-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(2, 1fr); }
     @media (min-width: 880px) { .y-now-grid { grid-template-columns: repeat(4, 1fr); } }
-    .y-now-card { padding: 1.5rem 1.3rem; border-top: 5px solid var(--cc); }
-    .y-now-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
-    .y-now-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
-    .y-now-card p { color: var(--y-ink-soft); font-size: 0.85rem; line-height: 1.6; }
+    .y-now-card { position: relative; padding: 1.5rem 1.3rem 1.4rem; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .y-now-card:hover { transform: translateY(-5px); box-shadow: var(--y-shadow); }
+    .y-now-emoji { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; font-size: 1.45rem; margin-bottom: 0.75rem;
+      background: color-mix(in srgb, var(--cc) 32%, #fff); box-shadow: 0 5px 14px color-mix(in srgb, var(--cc) 42%, transparent); }
+    .y-now-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .y-now-card p { color: var(--y-ink-soft); font-size: 0.85rem; line-height: 1.7; }
 
     .y-cards { display: grid; gap: 1.4rem; grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 620px) { .y-cards { grid-template-columns: 1fr; } }
-    .y-nav-card { padding: 2rem 1.6rem; border-top: 6px solid var(--cc); transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
-    .y-nav-card:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: var(--y-shadow); }
-    .y-nav-emoji { font-size: 2.4rem; display: block; margin-bottom: 0.6rem; }
-    .y-nav-card h3 { font-size: 1.4rem; margin-bottom: 0.4rem; }
-    .y-nav-card p { color: var(--y-ink-soft); font-size: 0.9rem; margin-bottom: 1rem; }
-    .y-nav-go { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); }
+    .y-nav-card { position: relative; overflow: hidden; padding: 2.1rem 1.7rem; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .y-nav-card::after { content: ""; position: absolute; right: -26px; bottom: -26px; width: 88px; height: 88px; border-radius: 50%; background: color-mix(in srgb, var(--cc) 22%, transparent); transition: transform .45s var(--y-ease); }
+    .y-nav-card:hover { transform: translateY(-7px) rotate(-1.2deg); box-shadow: var(--y-shadow); }
+    .y-nav-card:hover::after { transform: scale(1.6); }
+    .y-nav-emoji { position: relative; z-index: 1; display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; font-size: 2rem; margin-bottom: 0.8rem;
+      background: color-mix(in srgb, var(--cc) 34%, #fff); box-shadow: 0 6px 16px color-mix(in srgb, var(--cc) 45%, transparent); }
+    .y-nav-card h3 { position: relative; z-index: 1; font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .y-nav-card p { position: relative; z-index: 1; color: var(--y-ink-soft); font-size: 0.9rem; margin-bottom: 1rem; }
+    .y-nav-go { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--y-font-en); font-weight: 700; color: var(--y-ink);
+      background: color-mix(in srgb, var(--cc) 30%, #fff); padding: 0.4rem 0.95rem; border-radius: 999px; transition: gap .3s var(--y-ease); }
+    .y-nav-card:hover .y-nav-go { gap: 0.6rem; }
   </style>
 </Yumiki>
