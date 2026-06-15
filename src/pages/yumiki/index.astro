@@ -77,6 +77,21 @@ const now = [
     </div>
   </div>
 
+  <!-- お誕生日カウントダウン（2/3・クライアント側で毎日自動更新） -->
+  <section class="y-bday-sec">
+    <div class="y-container">
+      <div class="y-bday y-reveal" id="y-bday">
+        <span class="y-bday-tape" aria-hidden="true"></span>
+        <span class="y-bday-cake" aria-hidden="true">🎂</span>
+        <p class="y-bday-msg" id="y-bday-msg">弓木さんのお誕生日は <b>2月3日</b></p>
+        <p class="y-bday-count" id="y-bday-count">もうすぐ ♡</p>
+        <span class="y-bday-deco y-bday-deco--1" aria-hidden="true">✦</span>
+        <span class="y-bday-deco y-bday-deco--2" aria-hidden="true">♡</span>
+        <span class="y-bday-deco y-bday-deco--3" aria-hidden="true">✿</span>
+      </div>
+    </div>
+  </section>
+
   <!-- NOW / 最新トピックス -->
   <section class="y-section y-now-sec">
     <div class="y-container">
@@ -208,5 +223,61 @@ const now = [
     .y-nav-go { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--y-font-en); font-weight: 700; color: var(--y-ink);
       background: color-mix(in srgb, var(--cc) 30%, #fff); padding: 0.4rem 0.95rem; border-radius: 999px; transition: gap .3s var(--y-ease); }
     .y-nav-card:hover .y-nav-go { gap: 0.6rem; }
+
+    /* ===== お誕生日カウントダウン（スクラップブック風） ===== */
+    .y-bday-sec { padding: clamp(1.2rem, 3vw, 1.8rem) 0 0; }
+    .y-bday { position: relative; max-width: 520px; margin-inline: auto; text-align: center;
+      background: color-mix(in srgb, var(--y-pink) 16%, #fff);
+      border: 2px solid color-mix(in srgb, var(--y-pink) 34%, #fff);
+      border-radius: 18px; padding: 1.5rem 1.4rem 1.35rem; box-shadow: var(--y-shadow-sm);
+      transform: rotate(-1deg); }
+    .y-bday-tape { position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(2deg); width: 92px; height: 24px; opacity: .85;
+      background: color-mix(in srgb, var(--y-butter) 78%, transparent); box-shadow: 0 2px 5px rgba(120,90,80,.12);
+      -webkit-mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); }
+    .y-bday-cake { font-size: 2.2rem; line-height: 1; display: block; animation: wobble 5s ease-in-out infinite; }
+    .y-bday-msg { color: var(--y-ink-soft); font-size: .9rem; font-weight: 700; margin: .55rem 0 .25rem; }
+    .y-bday-msg b { color: var(--y-peach); }
+    .y-bday-count { font-size: clamp(1.35rem, 5vw, 1.95rem); font-weight: 900; color: var(--y-ink); line-height: 1.2; }
+    .y-bday-count b { font-family: var(--y-font-en); color: var(--y-peach); font-size: 1.45em; padding: 0 .08em; }
+    .y-bday-sub { color: var(--y-muted); font-size: .8rem; font-weight: 700; margin-top: .3rem; }
+    .y-bday.is-today { background: color-mix(in srgb, var(--y-butter) 22%, #fff); border-color: color-mix(in srgb, var(--y-peach) 48%, #fff); }
+    .y-bday-deco { position: absolute; font-size: 1.3rem; pointer-events: none; animation: twinkle 2.6s ease-in-out infinite; }
+    .y-bday-deco--1 { top: -7px; right: 16px; color: var(--y-sky); }
+    .y-bday-deco--2 { bottom: -9px; left: 20px; color: var(--y-peach); animation-delay: .7s; }
+    .y-bday-deco--3 { bottom: 8px; right: -6px; color: var(--y-mint); animation-delay: 1.2s; }
+    @media (prefers-reduced-motion: reduce) { .y-bday-cake, .y-bday-deco { animation: none; } }
   </style>
+
+  <script>
+    // 弓木奈於さんのお誕生日（2月3日）までのカウントダウン。
+    // SSG（ビルド時に固定）ではなく、閲覧者のブラウザで毎日正しく表示されるようクライアント側で計算する。
+    (function () {
+      const BIRTH_YEAR = 1999, BIRTH_MONTH = 2, BIRTH_DAY = 3;
+      const box = document.getElementById("y-bday");
+      const msg = document.getElementById("y-bday-msg");
+      const count = document.getElementById("y-bday-count");
+      if (!box || !msg || !count) return;
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let next = new Date(today.getFullYear(), BIRTH_MONTH - 1, BIRTH_DAY);
+      if (next < today) next = new Date(today.getFullYear() + 1, BIRTH_MONTH - 1, BIRTH_DAY);
+      const days = Math.round((next - today) / 86400000);
+      const age = next.getFullYear() - BIRTH_YEAR;
+      if (days === 0) {
+        box.classList.add("is-today");
+        msg.innerHTML = "🎉 お誕生日 おめでとうございます！";
+        count.innerHTML = "弓木さん <b>" + age + "</b> 歳 ♡";
+      } else if (days === 1) {
+        msg.innerHTML = "弓木さんのお誕生日（<b>2月3日</b>）は";
+        count.innerHTML = "あした！ ♡";
+      } else {
+        msg.innerHTML = "弓木さんのお誕生日（<b>2月3日</b>）まで";
+        count.innerHTML = "あと <b>" + days + "</b> 日";
+        const sub = document.createElement("p");
+        sub.className = "y-bday-sub";
+        sub.textContent = "今度のお誕生日で " + age + " 歳になります 🎂";
+        count.insertAdjacentElement("afterend", sub);
+      }
+    })();
+  </script>
 </Yumiki>
