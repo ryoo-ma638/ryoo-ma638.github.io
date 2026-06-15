@@ -1,4 +1,5 @@
 ---
+import { works } from "../data/works.ts";
 const year = new Date().getFullYear();
 // 既定: 本垢Instagram / GitHub / Email。裏垢は非掲載。
 const socials = [
@@ -6,10 +7,24 @@ const socials = [
   { label: "GitHub", href: "https://github.com/ryoo-ma638" },
   { label: "Email", href: "mailto:ryoma630@gmail.com" },
 ];
+// Let's Create 背景：作品サムネを斜め2行・逆方向に流すショーケース
+const showcase = works.filter((w) => w.thumb);
+const rowA = showcase.filter((_, i) => i % 2 === 0);
+const rowB = showcase.filter((_, i) => i % 2 === 1);
 ---
 <footer class="site-footer">
   <div class="footer-glow" aria-hidden="true"></div>
   <span class="footer-mark display" aria-hidden="true">OSAKI</span>
+
+  <div class="footer-showcase" aria-hidden="true">
+    <div class="fs-row fs-row--a">
+      {[...rowA, ...rowA].map((w) => (<span class="fs-card"><img src={w.thumb} alt="" loading="lazy" decoding="async" /></span>))}
+    </div>
+    <div class="fs-row fs-row--b">
+      {[...rowB, ...rowB].map((w) => (<span class="fs-card"><img src={w.thumb} alt="" loading="lazy" decoding="async" /></span>))}
+    </div>
+  </div>
+
   <div class="container">
     <span class="spectrum-bar reveal"></span>
 
@@ -58,6 +73,24 @@ const socials = [
     font-size: clamp(5rem, 26vw, 22rem); font-weight: 700; line-height: 1; letter-spacing: -0.04em; white-space: nowrap;
     color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 8%, transparent); opacity: 0.6; }
   .site-footer .container { position: relative; z-index: 1; }
+
+  /* Let's Create：作品サムネを斜め2行・逆方向に流すショーケース */
+  .footer-showcase { position: relative; z-index: 1; display: flex; flex-direction: column;
+    gap: clamp(0.55rem, 1.4vw, 0.9rem); margin-bottom: var(--space-5); padding-block: clamp(0.4rem, 2vw, 1.1rem);
+    transform: rotate(-3.5deg) scale(1.08); transform-origin: center;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+  .fs-row { display: flex; gap: clamp(0.55rem, 1.4vw, 0.9rem); width: max-content; will-change: transform; }
+  .fs-row--a { animation: fs-left 55s linear infinite; }
+  .fs-row--b { animation: fs-right 70s linear infinite; }
+  .fs-card { flex: 0 0 auto; width: clamp(116px, 15vw, 178px); aspect-ratio: 16 / 10;
+    border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+  .fs-card img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.82; transition: opacity 0.3s var(--ease); }
+  .footer-showcase:hover .fs-card img { opacity: 0.96; }
+  @keyframes fs-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes fs-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { .fs-row--a, .fs-row--b { animation: none; } }
+
   .spectrum-bar { margin-bottom: var(--space-5); }
   .cta { margin-bottom: var(--space-5); }
   .cta-big { display: inline-block; font-size: var(--fs-mega); font-weight: 700; line-height: 0.92; letter-spacing: -0.03em; margin-top: 0.6rem; transition: transform 0.4s var(--ease); }
