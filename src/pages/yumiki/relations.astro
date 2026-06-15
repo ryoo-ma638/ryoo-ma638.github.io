@@ -1,0 +1,99 @@
+---
+import Yumiki from "../../layouts/Yumiki.astro";
+import { unit, relations } from "../../data/yumiki.ts";
+---
+<Yumiki title="つながり — YUMIKI WORLD">
+  <section class="y-section">
+    <div class="y-container">
+      <div class="y-head y-reveal">
+        <span class="y-eyebrow">Connections</span>
+        <h2>🤝 弓木さんの<span class="wave">つながり</span></h2>
+        <p class="rel-intro">軍団「首ンセス」のなかまや、番組でお世話になっている方々。弓木さんの周りには、いつも温かい人たちがいます。</p>
+      </div>
+
+      <!-- 軍団 首ンセス -->
+      <article class="unit y-reveal">
+        <span class="unit-deco" aria-hidden="true">♛</span>
+        <div class="unit-head">
+          <span class="unit-badge">弓木 奈於 率いる軍団</span>
+          <h3 class="unit-name">{unit.name}<small>（{unit.reading}）</small></h3>
+          <p class="unit-meta">{unit.formed} 結成 ／ {unit.song}</p>
+          <p class="unit-origin">{unit.origin}</p>
+        </div>
+        <div class="unit-members">
+          <div class="unit-m unit-m--leader">
+            <span class="unit-m-role">{unit.leader.role}</span>
+            <span class="unit-m-name">{unit.leader.name}</span>
+            <span class="unit-m-gen">{unit.leader.gen}</span>
+          </div>
+          {unit.members.map((m) => (
+            <div class="unit-m">
+              <span class="unit-m-name">{m.name}</span>
+              <span class="unit-m-gen">{m.gen}</span>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <!-- 人物相関 -->
+      <div class="rel-groups">
+        {relations.map((g, gi) => (
+          <div class="rel-group y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+            <h3 class="rel-group-title">{g.group}</h3>
+            <div class="rel-people">
+              {g.people.map((p) => (
+                <article class="rel-card">
+                  <h4 class="rel-name">{p.name}</h4>
+                  <span class="rel-role">{p.role}</span>
+                  {p.note && <p class="rel-note">{p.note}</p>}
+                </article>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="rel-foot y-reveal">※ 番組での共演など、公開されている情報をもとにファンがまとめたものです。</p>
+    </div>
+  </section>
+</Yumiki>
+
+<style>
+  .rel-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 46ch; margin-inline: auto; line-height: 1.8; }
+
+  /* 軍団 首ンセス */
+  .unit { position: relative; overflow: hidden; margin-bottom: clamp(2.6rem, 8vw, 4.5rem); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
+    padding: clamp(1.7rem, 5vw, 2.8rem); box-shadow: var(--y-shadow-sm);
+    background: linear-gradient(150deg, color-mix(in srgb, var(--y-lav) 20%, #fff), color-mix(in srgb, var(--y-sky) 18%, #fff)); }
+  .unit-deco { position: absolute; top: -1rem; right: 0.4rem; font-size: 6rem; color: var(--y-butter); opacity: 0.35; pointer-events: none; }
+  .unit-head { text-align: center; margin-bottom: 1.6rem; position: relative; z-index: 1; }
+  .unit-badge { display: inline-block; font-weight: 700; font-size: 0.74rem; color: #fff; background: var(--y-peach); padding: 0.32rem 0.95rem; border-radius: 999px; }
+  .unit-name { font-size: clamp(1.9rem, 6vw, 2.8rem); margin: 0.65rem 0 0.3rem; }
+  .unit-name small { font-size: 0.42em; color: var(--y-muted); font-weight: 500; }
+  .unit-meta { font-family: var(--y-font-en); font-weight: 700; font-size: 0.82rem; color: var(--y-peach); }
+  .unit-origin { color: var(--y-ink-soft); font-size: 0.9rem; max-width: 52ch; margin: 0.9rem auto 0; line-height: 1.85; }
+  .unit-members { position: relative; z-index: 1; display: grid; gap: 0.9rem; grid-template-columns: repeat(2, 1fr); max-width: 640px; margin: 0 auto; }
+  @media (min-width: 760px) { .unit-members { grid-template-columns: repeat(5, 1fr); } }
+  .unit-m { background: #fff; border-radius: 16px; padding: 1.1rem 0.7rem; text-align: center; box-shadow: var(--y-shadow-sm); display: flex; flex-direction: column; gap: 0.25rem; align-items: center; justify-content: center;
+    transition: transform .3s var(--y-ease); }
+  .unit-m:hover { transform: translateY(-4px); }
+  .unit-m--leader { grid-column: 1 / -1; border: 2px solid var(--y-peach); background: color-mix(in srgb, var(--y-peach) 12%, #fff); }
+  @media (min-width: 760px) { .unit-m--leader { grid-column: auto; } }
+  .unit-m-role { font-size: 0.64rem; font-weight: 700; color: #fff; background: var(--y-peach); border-radius: 999px; padding: 0.12rem 0.6rem; }
+  .unit-m-name { font-weight: 700; font-size: 1.02rem; }
+  .unit-m-gen { font-size: 0.72rem; color: var(--y-muted); }
+
+  /* 人物相関 */
+  .rel-groups { display: grid; gap: clamp(2rem, 6vw, 3.2rem); }
+  .rel-group-title { font-size: 1.2rem; margin-bottom: 1.2rem; display: inline-block; padding: 0 0.4em 0.12em; border-radius: 3px;
+    background: linear-gradient(transparent 60%, color-mix(in srgb, var(--gc) 52%, transparent) 60%); }
+  .rel-people { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); }
+  .rel-card { background: var(--y-card); border: 2px solid #fff; border-left: 6px solid var(--gc); border-radius: var(--y-radius-sm);
+    padding: 1.3rem 1.4rem; box-shadow: var(--y-shadow-sm); transition: transform .3s var(--y-ease), box-shadow .3s var(--y-ease); }
+  .rel-card:hover { transform: translateY(-4px); box-shadow: var(--y-shadow); }
+  .rel-name { font-size: 1.15rem; margin-bottom: 0.4rem; }
+  .rel-role { display: inline-block; font-size: 0.68rem; font-weight: 700; color: var(--y-ink); background: color-mix(in srgb, var(--gc) 28%, #fff); padding: 0.2rem 0.6rem; border-radius: 999px; }
+  .rel-note { color: var(--y-ink-soft); font-size: 0.86rem; line-height: 1.8; margin-top: 0.7rem; }
+
+  .rel-foot { text-align: center; color: var(--y-muted); font-size: 0.74rem; margin-top: clamp(2rem, 6vw, 3rem); }
+</style>

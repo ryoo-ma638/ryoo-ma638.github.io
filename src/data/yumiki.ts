@@ -11,6 +11,7 @@ export const nav = [
   { href: "/yumiki/profile", label: "プロフィール", emoji: "📖" },
   { href: "/yumiki/charm", label: "魅力", emoji: "✿" },
   { href: "/yumiki/memory", label: "思い出", emoji: "💭" },
+  { href: "/yumiki/relations", label: "つながり", emoji: "🤝" },
   { href: "/yumiki/gallery", label: "写真", emoji: "📷" },
 ];
 
@@ -74,6 +75,44 @@ export const singles = [
   { no: 39, title: "Same numbers", date: "2025.7", pos: "選抜" },
   { no: 40, title: "ビリヤニ", date: "2025.11", pos: "選抜" },
   { no: 41, title: "最後に階段を駆け上がったのはいつだ？", date: "2026.4", pos: "選抜" },
+];
+
+// 軍団「首ンセス（くびんせす）」：2024年7月『乃木坂工事中』の新軍団ドラフトバトルで結成。軍団長＝弓木。
+export const unit = {
+  name: "首ンセス",
+  reading: "くびんせす",
+  formed: "2024年7月",
+  origin: "『乃木坂工事中』の企画「新軍団ドラフトバトル」で結成された3軍団のひとつ。軍団長は弓木奈於。",
+  song: "ユニット曲『君にDitto』（36thシングル『チートデイ』収録）",
+  leader: { name: "弓木 奈於", role: "軍団長", gen: "4期生" },
+  members: [
+    { name: "筒井 あやめ", gen: "4期生" },
+    { name: "五百城 茉央", gen: "5期生" },
+    { name: "奥田 いろは", gen: "5期生" },
+    { name: "川﨑 桜", gen: "5期生" },
+  ],
+};
+
+// 人物相関：弓木さんがお世話になっている・共演している方々（公開情報ベース）
+export const relations = [
+  {
+    group: "番組でお世話になっている方々",
+    color: "var(--y-peach)",
+    people: [
+      { name: "バナナマン", role: "乃木坂工事中 MC", note: "グループの冠番組。天然トークで何度も場を沸かせている。" },
+      { name: "川島 明（麒麟）", role: "ラヴィット！ MC", note: "金曜レギュラーとして共演。予測不能な言動に的確なツッコミを入れつつ、コメント力を高く評価。" },
+      { name: "アルコ&ピース 酒井 健太", role: "沈黙の金曜日 MC", note: "弓木とMCを担当。テンポのよい掛け合いが魅力。" },
+    ],
+  },
+  {
+    group: "ラヴィット！でお世話になっている先輩",
+    color: "var(--y-sky)",
+    people: [
+      { name: "近藤 千尋", role: "ラヴィット！ 先輩", note: "明るい先輩方に可愛がられ、のびのびと共演している。" },
+      { name: "若槻 千夏", role: "ラヴィット！ 先輩", note: "" },
+      { name: "丸山 桂里奈", role: "ラヴィット！ 先輩", note: "" },
+    ],
+  },
 ];
 
 export const shows = [

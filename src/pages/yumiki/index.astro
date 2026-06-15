@@ -3,15 +3,17 @@ import Yumiki from "../../layouts/Yumiki.astro";
 import { profile, nav, sns, img } from "../../data/yumiki.ts";
 const cards = nav.filter((n) => n.href !== "/yumiki/");
 const cardDesc: Record<string, string> = {
-  "/yumiki/profile": "生年月日・経歴・出演番組・家族のこと",
+  "/yumiki/profile": "生年月日・経歴・参加シングル・出演番組",
   "/yumiki/charm": "弓木ワールド・会話力・努力家・まとめ",
   "/yumiki/memory": "ライブ・ミーグリ・イベントの思い出",
+  "/yumiki/relations": "首ンセス（軍団）・お世話になっている方々",
   "/yumiki/gallery": "写真集・生写真・お気に入りショット",
 };
 const cardColor: Record<string, string> = {
   "/yumiki/profile": "var(--y-sky)",
   "/yumiki/charm": "var(--y-pink)",
   "/yumiki/memory": "var(--y-mint)",
+  "/yumiki/relations": "var(--y-butter)",
   "/yumiki/gallery": "var(--y-lav)",
 };
 const heroLead =
