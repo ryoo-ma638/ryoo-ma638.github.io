@@ -2,6 +2,7 @@
 import Yumiki from "../../layouts/Yumiki.astro";
 import { unit, relations } from "../../data/yumiki.ts";
 const { generations, groups } = relations;
+const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
 ---
 <Yumiki title="つながり — YUMIKI WORLD">
   <section class="y-section">
@@ -10,6 +11,7 @@ const { generations, groups } = relations;
         <span class="y-eyebrow">Connections</span>
         <h2>🤝 弓木さんの<span class="wave">つながり</span></h2>
         <p class="rel-intro">同じグループの仲間から、番組でお世話になっている方々まで。弓木さんを中心にした“つながりの地図”です。</p>
+        <p class="rel-hint"><span class="rel-hint-dot" aria-hidden="true">♡</span> マークのついた人は、<b>タップでエピソード</b>が見られます</p>
       </div>
 
       <!-- 軍団 首ンセス -->
@@ -21,22 +23,9 @@ const { generations, groups } = relations;
           <p class="unit-meta">{unit.formed} 結成 ／ {unit.song}</p>
           <p class="unit-origin">{unit.origin}</p>
         </div>
-        <div class="unit-members">
-          <div class="unit-m unit-m--leader">
-            <span class="unit-m-role">{unit.leader.role}</span>
-            <span class="unit-m-name">{unit.leader.name}</span>
-            <span class="unit-m-gen">{unit.leader.gen}</span>
-          </div>
-          {unit.members.map((m) => (
-            <div class="unit-m">
-              <span class="unit-m-name">{m.name}</span>
-              <span class="unit-m-gen">{m.gen}</span>
-            </div>
-          ))}
-        </div>
       </article>
 
-      <!-- 相関図：弓木さんを中心に -->
+      <!-- 相関図 -->
       <div class="rel-map">
         <div class="rel-hub y-reveal">
           <div class="rel-hub-photo"><img src="/assets/yumiki/yumiki-main.jpg" alt="弓木奈於さん" loading="lazy" onerror="this.src='/assets/yumiki/nao_main.jpg'" /></div>
@@ -44,42 +33,48 @@ const { generations, groups } = relations;
           <span class="rel-hub-sub">を中心としたつながり</span>
         </div>
 
-        <!-- 世代別の現役メンバー -->
         <h3 class="rel-sec-title y-reveal">同じ時代を生きる乃木坂46の仲間</h3>
         <div class="gen-grid">
-          {generations.map((g, gi) => {
-            const bonded = g.members.filter((m) => m.bond);
-            return (
-              <div class="gen-cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
-                <h4 class="gen-title">{g.gen}<small>現役 {g.members.length}名</small></h4>
-                <div class="gen-chips">
-                  {g.members.map((m) => (
-                    <span class={`chip${m.bond ? " chip--bond" : ""}`}>{m.bond && <i aria-hidden="true">♡</i>}{m.name}</span>
-                  ))}
-                </div>
-                {bonded.length > 0 && (
-                  <ul class="gen-bonds">
-                    {bonded.map((m) => (<li><b>{m.name}</b>{m.bond}</li>))}
-                  </ul>
-                )}
+          {generations.map((g, gi) => (
+            <div class="cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+              <h4 class="cluster-title">{g.gen}<small>現役 {g.members.length}名</small></h4>
+              <div class="nodes">
+                {g.members.map((m) => (
+                  m.bond ? (
+                    <button class="node node--link" data-name={m.name} data-sub={g.gen} data-note={m.bond} style={`--gc:${g.color}`}>
+                      <span class="node-av">{initial(m.name)}<span class="node-badge" aria-hidden="true">♡</span></span>
+                      <span class="node-name">{m.name}</span>
+                    </button>
+                  ) : (
+                    <span class="node">
+                      <span class="node-av node-av--plain" style={`--gc:${g.color}`}>{initial(m.name)}</span>
+                      <span class="node-name">{m.name}</span>
+                    </span>
+                  )
+                ))}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        <!-- 別枠：卒業生・他グループ・番組 -->
         <h3 class="rel-sec-title y-reveal">弓木さんを支える、まわりの人々</h3>
-        <div class="rel-groups">
+        <div class="grp-grid">
           {groups.map((g, gi) => (
-            <div class="rel-group y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 3) + 1}>
-              <h4 class="rel-group-title">{g.group}</h4>
-              <div class="rel-people">
+            <div class="cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 3) + 1}>
+              <h4 class="cluster-title cluster-title--sm">{g.group}</h4>
+              <div class="nodes">
                 {g.people.map((p) => (
-                  <article class="rel-card">
-                    <h5 class="rel-name">{p.name}</h5>
-                    <span class="rel-role">{p.role}</span>
-                    {p.note && <p class="rel-note">{p.note}</p>}
-                  </article>
+                  p.note ? (
+                    <button class="node node--link" data-name={p.name} data-sub={p.role} data-note={p.note} style={`--gc:${g.color}`}>
+                      <span class="node-av">{initial(p.name)}<span class="node-badge" aria-hidden="true">♡</span></span>
+                      <span class="node-name">{p.name}</span>
+                    </button>
+                  ) : (
+                    <span class="node">
+                      <span class="node-av node-av--plain" style={`--gc:${g.color}`}>{initial(p.name)}</span>
+                      <span class="node-name">{p.name}</span>
+                    </span>
+                  )
                 ))}
               </div>
             </div>
@@ -90,78 +85,124 @@ const { generations, groups } = relations;
       <p class="rel-foot y-reveal">※ メンバー在籍は2026年6月時点。番組での共演など、公開されている情報をもとにファンが作成したものです。</p>
     </div>
   </section>
+
+  <!-- メンバー詳細ポップアップ -->
+  <div id="ymem" class="ymem" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="ymem-x" aria-label="閉じる">✕</button>
+    <div class="ymem-card" role="document">
+      <span class="ymem-av" id="ymemAv"></span>
+      <h3 class="ymem-name" id="ymemName"></h3>
+      <span class="ymem-sub" id="ymemSub"></span>
+      <p class="ymem-note" id="ymemNote"></p>
+    </div>
+  </div>
 </Yumiki>
 
 <style>
   .rel-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 48ch; margin-inline: auto; line-height: 1.8; }
+  .rel-hint { margin-top: 0.7rem; font-size: 0.82rem; color: var(--y-ink-soft); background: #fff; border: 1.5px dashed var(--y-line); border-radius: 999px; padding: 0.4rem 1rem; display: inline-block; }
+  .rel-hint-dot { color: var(--y-peach); }
 
   /* 軍団 首ンセス */
-  .unit { position: relative; overflow: hidden; margin-bottom: clamp(2.6rem, 8vw, 4.5rem); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
-    padding: clamp(1.7rem, 5vw, 2.8rem); box-shadow: var(--y-shadow-sm);
+  .unit { position: relative; overflow: hidden; margin-bottom: clamp(2.4rem, 7vw, 4rem); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
+    padding: clamp(1.6rem, 5vw, 2.6rem); box-shadow: var(--y-shadow-sm); text-align: center;
     background: linear-gradient(150deg, color-mix(in srgb, var(--y-lav) 20%, #fff), color-mix(in srgb, var(--y-sky) 18%, #fff)); }
   .unit-deco { position: absolute; top: -1rem; right: 0.4rem; font-size: 6rem; color: var(--y-butter); opacity: 0.35; pointer-events: none; }
-  .unit-head { text-align: center; margin-bottom: 1.6rem; position: relative; z-index: 1; }
+  .unit-head { position: relative; z-index: 1; }
   .unit-badge { display: inline-block; font-weight: 700; font-size: 0.74rem; color: #fff; background: var(--y-peach); padding: 0.32rem 0.95rem; border-radius: 999px; }
-  .unit-name { font-size: clamp(1.9rem, 6vw, 2.8rem); margin: 0.65rem 0 0.3rem; }
+  .unit-name { font-size: clamp(1.8rem, 6vw, 2.6rem); margin: 0.6rem 0 0.3rem; }
   .unit-name small { font-size: 0.42em; color: var(--y-muted); font-weight: 500; }
   .unit-meta { font-family: var(--y-font-en); font-weight: 700; font-size: 0.82rem; color: var(--y-peach); }
-  .unit-origin { color: var(--y-ink-soft); font-size: 0.9rem; max-width: 52ch; margin: 0.9rem auto 0; line-height: 1.85; }
-  .unit-members { position: relative; z-index: 1; display: grid; gap: 0.9rem; grid-template-columns: repeat(2, 1fr); max-width: 640px; margin: 0 auto; }
-  @media (min-width: 760px) { .unit-members { grid-template-columns: repeat(5, 1fr); } }
-  .unit-m { background: #fff; border-radius: 16px; padding: 1.1rem 0.7rem; text-align: center; box-shadow: var(--y-shadow-sm); display: flex; flex-direction: column; gap: 0.25rem; align-items: center; justify-content: center; transition: transform .3s var(--y-ease); }
-  .unit-m:hover { transform: translateY(-4px); }
-  .unit-m--leader { grid-column: 1 / -1; border: 2px solid var(--y-peach); background: color-mix(in srgb, var(--y-peach) 12%, #fff); }
-  @media (min-width: 760px) { .unit-m--leader { grid-column: auto; } }
-  .unit-m-role { font-size: 0.64rem; font-weight: 700; color: #fff; background: var(--y-peach); border-radius: 999px; padding: 0.12rem 0.6rem; }
-  .unit-m-name { font-weight: 700; font-size: 1.02rem; }
-  .unit-m-gen { font-size: 0.72rem; color: var(--y-muted); }
+  .unit-origin { color: var(--y-ink-soft); font-size: 0.9rem; max-width: 52ch; margin: 0.8rem auto 0; line-height: 1.85; }
 
-  /* 相関図：中心ハブ */
+  /* 中心ハブ */
   .rel-map { position: relative; }
   .rel-hub { position: relative; z-index: 2; width: fit-content; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center;
-    background: #fff; border: 3px solid var(--y-peach); border-radius: var(--y-radius); padding: 1.3rem 2.2rem 1.4rem; box-shadow: var(--y-shadow); }
-  .rel-hub::after { content: ""; position: absolute; left: 50%; bottom: -2.6rem; transform: translateX(-50%); width: 3px; height: 2.6rem;
+    background: #fff; border: 3px solid var(--y-peach); border-radius: var(--y-radius); padding: 1.2rem 2.2rem 1.3rem; box-shadow: var(--y-shadow); }
+  .rel-hub::after { content: ""; position: absolute; left: 50%; bottom: -2.4rem; transform: translateX(-50%); width: 3px; height: 2.4rem;
     background: repeating-linear-gradient(var(--y-peach) 0 6px, transparent 6px 11px); }
-  .rel-hub-photo { width: 92px; height: 92px; border-radius: 50%; overflow: hidden; border: 3px solid var(--y-pink); margin-bottom: 0.6rem; box-shadow: var(--y-shadow-sm); }
+  .rel-hub-photo { width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 3px solid var(--y-pink); margin-bottom: 0.6rem; box-shadow: var(--y-shadow-sm); }
   .rel-hub-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-  .rel-hub-name { font-size: 1.45rem; font-weight: 700; }
+  .rel-hub-name { font-size: 1.4rem; font-weight: 700; }
   .rel-hub-sub { font-size: 0.82rem; color: var(--y-ink-soft); }
 
-  .rel-sec-title { text-align: center; font-size: 1.1rem; margin: clamp(2.6rem, 6vw, 3.4rem) 0 1.4rem; position: relative; }
+  .rel-sec-title { text-align: center; font-size: 1.1rem; margin: clamp(2.4rem, 6vw, 3.2rem) 0 1.4rem; }
   .rel-sec-title::before { content: "♡"; color: var(--y-peach); margin-right: 0.4rem; }
 
-  /* 世代クラスター */
-  .gen-grid { display: grid; gap: clamp(1.2rem, 3.5vw, 1.8rem); grid-template-columns: 1fr; }
-  @media (min-width: 760px) { .gen-grid { grid-template-columns: repeat(2, 1fr); } }
-  .gen-cluster { position: relative; border-radius: var(--y-radius); padding: 1.5rem 1.4rem 1.4rem;
-    background: color-mix(in srgb, var(--gc) 12%, #fff); border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); }
-  .gen-cluster::before { content: "♡"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; display: grid; place-items: center;
-    border-radius: 50%; background: var(--gc); color: #fff; font-size: 0.8rem; box-shadow: var(--y-shadow-sm); }
-  .gen-title { font-size: 1.15rem; margin-bottom: 0.9rem; display: flex; align-items: baseline; gap: 0.6rem; }
-  .gen-title small { font-size: 0.72rem; font-weight: 500; color: var(--y-ink-soft); }
-  .gen-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .chip { display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.82rem; font-weight: 500; padding: 0.34rem 0.75rem; border-radius: 999px;
-    background: #fff; border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); color: var(--y-ink); }
-  .chip--bond { font-weight: 700; background: color-mix(in srgb, var(--gc) 30%, #fff); border-color: var(--gc); }
-  .chip--bond i { color: color-mix(in srgb, var(--y-ink) 55%, var(--gc)); font-style: normal; }
-  .gen-bonds { list-style: none; margin: 1rem 0 0; padding: 0.9rem 0 0; border-top: 1.5px dashed color-mix(in srgb, var(--gc) 35%, #fff); display: grid; gap: 0.5rem; }
-  .gen-bonds li { font-size: 0.82rem; color: var(--y-ink-soft); line-height: 1.7; }
-  .gen-bonds b { color: var(--y-ink); margin-right: 0.4rem; }
-  .gen-bonds b::before { content: "♡ "; color: var(--gc); }
+  /* クラスター共通 */
+  .gen-grid, .grp-grid { display: grid; gap: clamp(1.1rem, 3vw, 1.6rem); grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .gen-grid { grid-template-columns: repeat(2, 1fr); } .grp-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1040px) { .grp-grid { grid-template-columns: repeat(4, 1fr); } }
+  .cluster { position: relative; border-radius: var(--y-radius); padding: 1.5rem 1.1rem 1.3rem;
+    background: color-mix(in srgb, var(--gc) 11%, #fff); border: 1.5px solid color-mix(in srgb, var(--gc) 28%, #fff); }
+  .cluster::before { content: "♡"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--gc); color: #fff; font-size: 0.78rem; box-shadow: var(--y-shadow-sm); }
+  .cluster-title { font-size: 1.12rem; margin-bottom: 1rem; text-align: center; display: flex; align-items: baseline; justify-content: center; gap: 0.5rem; }
+  .cluster-title--sm { font-size: 0.98rem; line-height: 1.4; }
+  .cluster-title small { font-size: 0.7rem; font-weight: 500; color: var(--y-ink-soft); }
 
-  /* 別枠グループ */
-  .rel-groups { display: grid; gap: clamp(1.2rem, 3.5vw, 1.8rem); grid-template-columns: 1fr; }
-  @media (min-width: 720px) { .rel-groups { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1040px) { .rel-groups { grid-template-columns: repeat(4, 1fr); } }
-  .rel-group { position: relative; border-radius: var(--y-radius); padding: 1.4rem 1.2rem;
-    background: color-mix(in srgb, var(--gc) 11%, #fff); border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); }
-  .rel-group-title { font-size: 0.98rem; margin-bottom: 1rem; line-height: 1.4; }
-  .rel-people { display: grid; gap: 0.8rem; }
-  .rel-card { background: #fff; border-radius: 12px; border-left: 5px solid var(--gc); padding: 0.9rem 1rem; box-shadow: var(--y-shadow-sm); transition: transform .25s var(--y-ease); }
-  .rel-card:hover { transform: translateX(4px); }
-  .rel-name { font-size: 1rem; margin-bottom: 0.28rem; }
-  .rel-role { display: inline-block; font-size: 0.62rem; font-weight: 700; color: var(--y-ink); background: color-mix(in srgb, var(--gc) 26%, #fff); padding: 0.16rem 0.55rem; border-radius: 999px; }
-  .rel-note { color: var(--y-ink-soft); font-size: 0.8rem; line-height: 1.7; margin-top: 0.5rem; }
+  /* メンバーノード（アバター＋名前） */
+  .nodes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem 0.55rem; }
+  .node { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; width: 4.7rem; padding: 0; border: none; background: none; }
+  .node-av { position: relative; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 1.15rem; color: #fff;
+    background: var(--gc); box-shadow: var(--y-shadow-sm); }
+  .node-av--plain { background: color-mix(in srgb, var(--gc) 40%, #fff); color: color-mix(in srgb, var(--y-ink) 70%, var(--gc)); }
+  .node-name { font-size: 0.74rem; font-weight: 700; color: var(--y-ink); line-height: 1.3; text-align: center; }
+  .node-badge { position: absolute; right: -3px; bottom: -3px; width: 19px; height: 19px; border-radius: 50%; background: #fff; color: var(--y-peach); font-size: 0.62rem; display: grid; place-items: center; box-shadow: var(--y-shadow-sm); }
+  /* クリックできる人＝立体的に・押せる合図 */
+  .node--link { cursor: pointer; transition: transform .25s var(--y-ease); }
+  .node--link .node-av { box-shadow: 0 6px 16px color-mix(in srgb, var(--gc) 50%, transparent); outline: 2px solid #fff; outline-offset: 2px; }
+  .node--link:hover { transform: translateY(-4px); }
+  .node--link:hover .node-name { color: var(--y-peach); }
+  .node--link:focus-visible { outline: 3px solid var(--y-peach); outline-offset: 3px; border-radius: 12px; }
 
   .rel-foot { text-align: center; color: var(--y-muted); font-size: 0.74rem; margin-top: clamp(2rem, 6vw, 3rem); }
+
+  /* メンバー詳細ポップアップ */
+  .ymem { position: fixed; inset: 0; z-index: 1000; display: none; place-items: center; padding: 1.2rem;
+    background: color-mix(in srgb, var(--y-ink) 45%, transparent); backdrop-filter: blur(4px); }
+  .ymem.open { display: grid; }
+  .ymem-card { position: relative; background: #fff; border-radius: var(--y-radius); padding: 2rem 1.6rem 1.8rem; max-width: 380px; width: 100%; text-align: center;
+    box-shadow: var(--y-shadow); border: 3px solid var(--y-pink); animation: ymem-pop .3s var(--y-ease); }
+  @keyframes ymem-pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .ymem-av { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 1.8rem; color: #fff; margin: 0 auto 0.8rem; box-shadow: var(--y-shadow-sm); }
+  .ymem-name { font-size: 1.4rem; margin-bottom: 0.3rem; }
+  .ymem-sub { display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--y-ink); background: var(--y-cream-2); padding: 0.2rem 0.7rem; border-radius: 999px; }
+  .ymem-note { margin-top: 1rem; color: var(--y-ink-soft); font-size: 0.92rem; line-height: 1.9; }
+  .ymem-x { position: fixed; top: clamp(1rem, 4vw, 2rem); right: clamp(1rem, 4vw, 2rem); width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--y-ink); font-size: 1.2rem; box-shadow: var(--y-shadow); display: grid; place-items: center; }
+
+  @media (prefers-reduced-motion: reduce) { .ymem-card { animation: none; } }
 </style>
+
+<script>
+  const modal = document.getElementById("ymem");
+  if (modal) {
+    const av = document.getElementById("ymemAv")!;
+    const nm = document.getElementById("ymemName")!;
+    const sub = document.getElementById("ymemSub")!;
+    const note = document.getElementById("ymemNote")!;
+    const open = (btn: HTMLElement) => {
+      const name = btn.dataset.name || "";
+      const gc = btn.style.getPropertyValue("--gc") || "var(--y-peach)";
+      av.textContent = name.replace(/[\s　]/g, "").charAt(0);
+      (av as HTMLElement).style.background = gc;
+      nm.textContent = name;
+      sub.textContent = btn.dataset.sub || "";
+      note.textContent = btn.dataset.note || "";
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    };
+    const close = () => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    };
+    document.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest(".node--link") as HTMLElement | null;
+      if (btn) { open(btn); return; }
+      if (e.target === modal || (e.target as HTMLElement).classList.contains("ymem-x")) close();
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  }
+</script>
