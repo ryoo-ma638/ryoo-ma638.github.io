@@ -1,6 +1,7 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
 import { unit, relations } from "../../data/yumiki.ts";
+const { generations, groups } = relations;
 ---
 <Yumiki title="つながり — YUMIKI WORLD">
   <section class="y-section">
@@ -8,7 +9,7 @@ import { unit, relations } from "../../data/yumiki.ts";
       <div class="y-head y-reveal">
         <span class="y-eyebrow">Connections</span>
         <h2>🤝 弓木さんの<span class="wave">つながり</span></h2>
-        <p class="rel-intro">軍団「首ンセス」のなかまや、番組でお世話になっている方々。弓木さんの周りには、いつも温かい人たちがいます。</p>
+        <p class="rel-intro">同じグループの仲間から、番組でお世話になっている方々まで。弓木さんを中心にした“つながりの地図”です。</p>
       </div>
 
       <!-- 軍団 首ンセス -->
@@ -35,21 +36,47 @@ import { unit, relations } from "../../data/yumiki.ts";
         </div>
       </article>
 
-      <!-- 人物相関図（弓木さんを中心に） -->
+      <!-- 相関図：弓木さんを中心に -->
       <div class="rel-map">
         <div class="rel-hub y-reveal">
           <div class="rel-hub-photo"><img src="/assets/yumiki/yumiki-main.jpg" alt="弓木奈於さん" loading="lazy" onerror="this.src='/assets/yumiki/nao_main.jpg'" /></div>
           <span class="rel-hub-name">弓木 奈於</span>
           <span class="rel-hub-sub">を中心としたつながり</span>
         </div>
+
+        <!-- 世代別の現役メンバー -->
+        <h3 class="rel-sec-title y-reveal">同じ時代を生きる乃木坂46の仲間</h3>
+        <div class="gen-grid">
+          {generations.map((g, gi) => {
+            const bonded = g.members.filter((m) => m.bond);
+            return (
+              <div class="gen-cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+                <h4 class="gen-title">{g.gen}<small>現役 {g.members.length}名</small></h4>
+                <div class="gen-chips">
+                  {g.members.map((m) => (
+                    <span class={`chip${m.bond ? " chip--bond" : ""}`}>{m.bond && <i aria-hidden="true">♡</i>}{m.name}</span>
+                  ))}
+                </div>
+                {bonded.length > 0 && (
+                  <ul class="gen-bonds">
+                    {bonded.map((m) => (<li><b>{m.name}</b>{m.bond}</li>))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- 別枠：卒業生・他グループ・番組 -->
+        <h3 class="rel-sec-title y-reveal">弓木さんを支える、まわりの人々</h3>
         <div class="rel-groups">
-          {relations.map((g, gi) => (
+          {groups.map((g, gi) => (
             <div class="rel-group y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 3) + 1}>
-              <h3 class="rel-group-title">{g.group}</h3>
+              <h4 class="rel-group-title">{g.group}</h4>
               <div class="rel-people">
                 {g.people.map((p) => (
                   <article class="rel-card">
-                    <h4 class="rel-name">{p.name}</h4>
+                    <h5 class="rel-name">{p.name}</h5>
                     <span class="rel-role">{p.role}</span>
                     {p.note && <p class="rel-note">{p.note}</p>}
                   </article>
@@ -60,13 +87,13 @@ import { unit, relations } from "../../data/yumiki.ts";
         </div>
       </div>
 
-      <p class="rel-foot y-reveal">※ 番組での共演など、公開されている情報をもとにファンがまとめたものです。</p>
+      <p class="rel-foot y-reveal">※ メンバー在籍は2026年6月時点。番組での共演など、公開されている情報をもとにファンが作成したものです。</p>
     </div>
   </section>
 </Yumiki>
 
 <style>
-  .rel-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 46ch; margin-inline: auto; line-height: 1.8; }
+  .rel-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 48ch; margin-inline: auto; line-height: 1.8; }
 
   /* 軍団 首ンセス */
   .unit { position: relative; overflow: hidden; margin-bottom: clamp(2.6rem, 8vw, 4.5rem); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
@@ -81,8 +108,7 @@ import { unit, relations } from "../../data/yumiki.ts";
   .unit-origin { color: var(--y-ink-soft); font-size: 0.9rem; max-width: 52ch; margin: 0.9rem auto 0; line-height: 1.85; }
   .unit-members { position: relative; z-index: 1; display: grid; gap: 0.9rem; grid-template-columns: repeat(2, 1fr); max-width: 640px; margin: 0 auto; }
   @media (min-width: 760px) { .unit-members { grid-template-columns: repeat(5, 1fr); } }
-  .unit-m { background: #fff; border-radius: 16px; padding: 1.1rem 0.7rem; text-align: center; box-shadow: var(--y-shadow-sm); display: flex; flex-direction: column; gap: 0.25rem; align-items: center; justify-content: center;
-    transition: transform .3s var(--y-ease); }
+  .unit-m { background: #fff; border-radius: 16px; padding: 1.1rem 0.7rem; text-align: center; box-shadow: var(--y-shadow-sm); display: flex; flex-direction: column; gap: 0.25rem; align-items: center; justify-content: center; transition: transform .3s var(--y-ease); }
   .unit-m:hover { transform: translateY(-4px); }
   .unit-m--leader { grid-column: 1 / -1; border: 2px solid var(--y-peach); background: color-mix(in srgb, var(--y-peach) 12%, #fff); }
   @media (min-width: 760px) { .unit-m--leader { grid-column: auto; } }
@@ -90,33 +116,52 @@ import { unit, relations } from "../../data/yumiki.ts";
   .unit-m-name { font-weight: 700; font-size: 1.02rem; }
   .unit-m-gen { font-size: 0.72rem; color: var(--y-muted); }
 
-  /* 人物相関図：弓木を中心ハブに、各グループへ枝分かれ */
+  /* 相関図：中心ハブ */
   .rel-map { position: relative; }
-  .rel-hub { position: relative; z-index: 2; width: fit-content; margin: 0 auto clamp(2.2rem, 6vw, 3.4rem);
-    display: flex; flex-direction: column; align-items: center; text-align: center;
+  .rel-hub { position: relative; z-index: 2; width: fit-content; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center;
     background: #fff; border: 3px solid var(--y-peach); border-radius: var(--y-radius); padding: 1.3rem 2.2rem 1.4rem; box-shadow: var(--y-shadow); }
-  .rel-hub::after { content: ""; position: absolute; left: 50%; bottom: calc(-1 * clamp(2.2rem, 6vw, 3.4rem)); transform: translateX(-50%);
-    width: 3px; height: clamp(2.2rem, 6vw, 3.4rem); background: linear-gradient(var(--y-peach), var(--y-line)); }
-  .rel-hub-photo { width: 88px; height: 88px; border-radius: 50%; overflow: hidden; border: 3px solid var(--y-pink); margin-bottom: 0.6rem; box-shadow: var(--y-shadow-sm); }
+  .rel-hub::after { content: ""; position: absolute; left: 50%; bottom: -2.6rem; transform: translateX(-50%); width: 3px; height: 2.6rem;
+    background: repeating-linear-gradient(var(--y-peach) 0 6px, transparent 6px 11px); }
+  .rel-hub-photo { width: 92px; height: 92px; border-radius: 50%; overflow: hidden; border: 3px solid var(--y-pink); margin-bottom: 0.6rem; box-shadow: var(--y-shadow-sm); }
   .rel-hub-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
   .rel-hub-name { font-size: 1.45rem; font-weight: 700; }
   .rel-hub-sub { font-size: 0.82rem; color: var(--y-ink-soft); }
 
-  .rel-groups { display: grid; gap: clamp(1.4rem, 4vw, 2rem); grid-template-columns: 1fr; }
+  .rel-sec-title { text-align: center; font-size: 1.1rem; margin: clamp(2.6rem, 6vw, 3.4rem) 0 1.4rem; position: relative; }
+  .rel-sec-title::before { content: "♡"; color: var(--y-peach); margin-right: 0.4rem; }
+
+  /* 世代クラスター */
+  .gen-grid { display: grid; gap: clamp(1.2rem, 3.5vw, 1.8rem); grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .gen-grid { grid-template-columns: repeat(2, 1fr); } }
+  .gen-cluster { position: relative; border-radius: var(--y-radius); padding: 1.5rem 1.4rem 1.4rem;
+    background: color-mix(in srgb, var(--gc) 12%, #fff); border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); }
+  .gen-cluster::before { content: "♡"; position: absolute; top: -13px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--gc); color: #fff; font-size: 0.8rem; box-shadow: var(--y-shadow-sm); }
+  .gen-title { font-size: 1.15rem; margin-bottom: 0.9rem; display: flex; align-items: baseline; gap: 0.6rem; }
+  .gen-title small { font-size: 0.72rem; font-weight: 500; color: var(--y-ink-soft); }
+  .gen-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.82rem; font-weight: 500; padding: 0.34rem 0.75rem; border-radius: 999px;
+    background: #fff; border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); color: var(--y-ink); }
+  .chip--bond { font-weight: 700; background: color-mix(in srgb, var(--gc) 30%, #fff); border-color: var(--gc); }
+  .chip--bond i { color: color-mix(in srgb, var(--y-ink) 55%, var(--gc)); font-style: normal; }
+  .gen-bonds { list-style: none; margin: 1rem 0 0; padding: 0.9rem 0 0; border-top: 1.5px dashed color-mix(in srgb, var(--gc) 35%, #fff); display: grid; gap: 0.5rem; }
+  .gen-bonds li { font-size: 0.82rem; color: var(--y-ink-soft); line-height: 1.7; }
+  .gen-bonds b { color: var(--y-ink); margin-right: 0.4rem; }
+  .gen-bonds b::before { content: "♡ "; color: var(--gc); }
+
+  /* 別枠グループ */
+  .rel-groups { display: grid; gap: clamp(1.2rem, 3.5vw, 1.8rem); grid-template-columns: 1fr; }
   @media (min-width: 720px) { .rel-groups { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1040px) { .rel-groups { grid-template-columns: repeat(3, 1fr); } }
-  .rel-group { position: relative; border-radius: var(--y-radius); padding: 1.4rem 1.2rem 1.4rem;
+  @media (min-width: 1040px) { .rel-groups { grid-template-columns: repeat(4, 1fr); } }
+  .rel-group { position: relative; border-radius: var(--y-radius); padding: 1.4rem 1.2rem;
     background: color-mix(in srgb, var(--gc) 11%, #fff); border: 1.5px solid color-mix(in srgb, var(--gc) 30%, #fff); }
-  .rel-group::before { content: ""; position: absolute; top: -8px; left: 22px; width: 14px; height: 14px; border-radius: 50%;
-    background: var(--gc); border: 2px solid #fff; box-shadow: var(--y-shadow-sm); }
-  .rel-group-title { font-size: 1.04rem; margin-bottom: 1rem; }
+  .rel-group-title { font-size: 0.98rem; margin-bottom: 1rem; line-height: 1.4; }
   .rel-people { display: grid; gap: 0.8rem; }
-  .rel-card { background: #fff; border-radius: 12px; border-left: 5px solid var(--gc); padding: 0.95rem 1.05rem; box-shadow: var(--y-shadow-sm);
-    transition: transform .25s var(--y-ease); }
+  .rel-card { background: #fff; border-radius: 12px; border-left: 5px solid var(--gc); padding: 0.9rem 1rem; box-shadow: var(--y-shadow-sm); transition: transform .25s var(--y-ease); }
   .rel-card:hover { transform: translateX(4px); }
-  .rel-name { font-size: 1.02rem; margin-bottom: 0.28rem; }
-  .rel-role { display: inline-block; font-size: 0.64rem; font-weight: 700; color: var(--y-ink); background: color-mix(in srgb, var(--gc) 26%, #fff); padding: 0.16rem 0.55rem; border-radius: 999px; }
-  .rel-note { color: var(--y-ink-soft); font-size: 0.82rem; line-height: 1.72; margin-top: 0.5rem; }
+  .rel-name { font-size: 1rem; margin-bottom: 0.28rem; }
+  .rel-role { display: inline-block; font-size: 0.62rem; font-weight: 700; color: var(--y-ink); background: color-mix(in srgb, var(--gc) 26%, #fff); padding: 0.16rem 0.55rem; border-radius: 999px; }
+  .rel-note { color: var(--y-ink-soft); font-size: 0.8rem; line-height: 1.7; margin-top: 0.5rem; }
 
   .rel-foot { text-align: center; color: var(--y-muted); font-size: 0.74rem; margin-top: clamp(2rem, 6vw, 3rem); }
 </style>
