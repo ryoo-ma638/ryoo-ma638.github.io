@@ -47,6 +47,9 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
       <!-- 締め：ファンからの“まとめ” -->
       <article class="cm-sum y-reveal">
         <span class="cm-sum-deco" aria-hidden="true">♡</span>
+        <div class="cm-sum-photo">
+          <img src={img(summary.img)} alt={summary.title} loading="lazy" onerror="this.closest('.cm-sum-photo').style.display='none'" />
+        </div>
         <span class="y-tag cm-sum-tag" style="background:var(--y-peach)">{summary.tag}</span>
         <h3 class="cm-sum-title"><span class="wave">{summary.title}</span></h3>
         {summary.body.map((p) => <p>{p}</p>)}
@@ -86,7 +89,7 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
       transform: rotate(-3deg); transition: transform 0.4s var(--y-ease); }
     .cm--rev .cm-photo { transform: rotate(3deg); }
     .cm:hover .cm-photo { transform: rotate(0) scale(1.02); }
-    .cm-photo-inner { aspect-ratio: 4/5; border-radius: 4px; overflow: hidden; background: var(--y-cream-2); }
+    .cm-photo-inner { aspect-ratio: 3/2; border-radius: 4px; overflow: hidden; background: var(--y-cream-2); }
     .cm-photo-inner img { width: 100%; height: 100%; object-fit: cover; }
     .cm-photo-inner.noimg img { display: none; }
     .cm-photo-inner.noimg::after { content: "📷"; display: grid; place-items: center; height: 100%; font-size: 2.4rem; opacity: 0.4; }
@@ -113,6 +116,8 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
       background: linear-gradient(160deg, #fff, var(--y-cream-2)); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
       padding: clamp(2.2rem, 6vw, 3.6rem) clamp(1.3rem, 5vw, 3rem); box-shadow: var(--y-shadow-sm); }
     .cm-sum-deco { position: absolute; top: -1.5rem; right: -1.5rem; font-size: 8rem; color: var(--y-pink); opacity: 0.25; pointer-events: none; }
+    .cm-sum-photo { width: min(78vw, 360px); margin: 0 auto 1.4rem; background: #fff; padding: 10px 10px 10px; border-radius: 8px; box-shadow: 0 14px 32px rgba(120,90,80,0.16); transform: rotate(-2deg); }
+    .cm-sum-photo img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 4px; }
     .cm-sum-tag { color: #fff; }
     .cm-sum-title { font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 0.8rem 0 1.2rem; }
     .cm-sum p { color: var(--y-ink-soft); max-width: 54ch; margin: 0 auto 0.9rem; line-height: 1.95; }
