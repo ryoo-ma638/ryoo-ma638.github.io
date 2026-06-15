@@ -33,6 +33,12 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
 
       <!-- ★ 中心相関図（縁の深い人を線でつなぐ） -->
       <h3 class="rel-sec-title y-reveal">弓木さんと、特に縁の深い人たち</h3>
+      <div class="cor-legend y-reveal">
+        <span class="cor-leg" style="--gc:var(--y-pink)"><i></i>同期</span>
+        <span class="cor-leg" style="--gc:var(--y-mint)"><i></i>後輩</span>
+        <span class="cor-leg" style="--gc:var(--y-butter)"><i></i>先輩</span>
+        <span class="cor-leg" style="--gc:var(--y-lav)"><i></i>高校</span>
+      </div>
       <div class="cor y-reveal" id="cor">
         <svg class="cor-svg" id="corSvg" aria-hidden="true" preserveAspectRatio="none"></svg>
         <div class="cor-grid">
@@ -161,10 +167,15 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   .rel-sec-title { text-align: center; font-size: 1.12rem; margin: clamp(2.4rem, 6vw, 3.4rem) 0 1.4rem; }
   .rel-sec-title::before { content: "♡"; color: var(--y-peach); margin-right: 0.4rem; }
 
+  /* 色の凡例 */
+  .cor-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.45rem 0.9rem; margin: -0.4rem auto 1.2rem; }
+  .cor-leg { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.76rem; font-weight: 700; color: var(--y-ink-soft); }
+  .cor-leg i { width: 13px; height: 13px; border-radius: 50%; background: var(--gc); box-shadow: var(--y-shadow-sm); }
+
   /* ===== 中心相関図 ===== */
-  .cor { position: relative; max-width: 760px; margin: 0 auto clamp(1rem, 4vw, 2rem); }
+  .cor { position: relative; max-width: 780px; margin: 0 auto clamp(1rem, 4vw, 2rem); }
   .cor-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
-  .cor-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.55rem, 2.2vw, 1.2rem); align-items: stretch; }
+  .cor-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.8rem, 3vw, 1.7rem); align-items: stretch; }
 
   .cor-hub { display: grid; place-content: center; justify-items: center; gap: 0.2rem; text-align: center;
     background: #fff; border: 3px solid var(--y-peach); border-radius: var(--y-radius); padding: 0.7rem 0.5rem; box-shadow: var(--y-shadow); }
@@ -278,42 +289,53 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
 
   // ── 中心相関図：ハブから各ノードへ“線”をSVGで描く（レスポンシブ再計算） ──
   const SVGNS = "http://www.w3.org/2000/svg";
+  // 矩形の中心(cx,cy・幅w/高h)から目標(tx,ty)方向に伸ばした時の、矩形の枠との交点
+  function edgePoint(cx: number, cy: number, w: number, h: number, tx: number, ty: number) {
+    const dx = tx - cx, dy = ty - cy;
+    if (!dx && !dy) return { x: cx, y: cy };
+    const sx = dx !== 0 ? (w / 2) / Math.abs(dx) : Infinity;
+    const sy = dy !== 0 ? (h / 2) / Math.abs(dy) : Infinity;
+    const s = Math.min(sx, sy);
+    return { x: cx + dx * s, y: cy + dy * s };
+  }
   function drawCor() {
     const cor = document.getElementById("cor");
     const svg = document.getElementById("corSvg");
     const hub = document.getElementById("corHub");
     if (!cor || !svg || !hub) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
     // モバイル（SVG非表示）は描かない
-    if (getComputedStyle(svg).display === "none") { svg.innerHTML = ""; return; }
+    if (getComputedStyle(svg).display === "none") return;
     const cr = cor.getBoundingClientRect();
     svg.setAttribute("viewBox", `0 0 ${cr.width} ${cr.height}`);
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
     const hb = hub.getBoundingClientRect();
     const hx = hb.left - cr.left + hb.width / 2;
     const hy = hb.top - cr.top + hb.height / 2;
-    const nodes = cor.querySelectorAll<HTMLElement>(".cor-node");
-    nodes.forEach((node) => {
+    cor.querySelectorAll<HTMLElement>(".cor-node").forEach((node) => {
       const nb = node.getBoundingClientRect();
       const nx = nb.left - cr.left + nb.width / 2;
       const ny = nb.top - cr.top + nb.height / 2;
       const gc = node.style.getPropertyValue("--gc") || "var(--y-peach)";
+      // ハブの枠 → ノードの枠 を結ぶ（カードの間の隙間にだけ線が出るのではっきり見える）
+      const p1 = edgePoint(hx, hy, hb.width, hb.height, nx, ny);
+      const p2 = edgePoint(nx, ny, nb.width, nb.height, hx, hy);
       const line = document.createElementNS(SVGNS, "line");
-      line.setAttribute("x1", String(hx));
-      line.setAttribute("y1", String(hy));
-      line.setAttribute("x2", String(nx));
-      line.setAttribute("y2", String(ny));
+      line.setAttribute("x1", String(p1.x));
+      line.setAttribute("y1", String(p1.y));
+      line.setAttribute("x2", String(p2.x));
+      line.setAttribute("y2", String(p2.y));
       line.style.stroke = gc;
-      line.setAttribute("stroke-width", "2.4");
+      line.setAttribute("stroke-width", "2.6");
       line.setAttribute("stroke-linecap", "round");
-      line.setAttribute("stroke-dasharray", "2 7");
-      line.setAttribute("opacity", "0.75");
+      line.setAttribute("stroke-dasharray", "2 6");
+      line.setAttribute("opacity", "0.9");
       svg.appendChild(line);
       const heart = document.createElementNS(SVGNS, "text");
-      heart.setAttribute("x", String((hx + nx) / 2));
-      heart.setAttribute("y", String((hy + ny) / 2));
+      heart.setAttribute("x", String((p1.x + p2.x) / 2));
+      heart.setAttribute("y", String((p1.y + p2.y) / 2));
       heart.setAttribute("text-anchor", "middle");
       heart.setAttribute("dominant-baseline", "central");
-      heart.setAttribute("font-size", "12");
+      heart.setAttribute("font-size", "13");
       heart.style.fill = gc;
       heart.textContent = "♡";
       svg.appendChild(heart);
