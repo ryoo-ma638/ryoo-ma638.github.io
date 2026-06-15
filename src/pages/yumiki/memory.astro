@@ -70,7 +70,8 @@ const othersImgs = memories.others.map((m) => img(m.img));
   <Lightbox />
 
   <style>
-    .y-sub { font-size: 1.4rem; margin: 2.5rem 0 1.3rem; }
+    .y-sub { font-size: 1.4rem; margin: 2.8rem 0 1.4rem; display: inline-block; padding: 0 0.3em 0.12em; border-radius: 3px;
+      background: linear-gradient(transparent 60%, color-mix(in srgb, var(--y-butter) 58%, transparent) 60%); }
 
     /* タイムライン（コンパクト） */
     .y-tl { position: relative; padding-left: 2.2rem; max-width: 760px; }
@@ -80,7 +81,9 @@ const othersImgs = memories.others.map((m) => img(m.img));
 
     /* 写真＋本文を横並び（コンパクト）。写真は縦でも全体表示 */
     .y-mem { overflow: hidden; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
-    .y-mem:hover { transform: translateY(-4px); box-shadow: var(--y-shadow); }
+    .y-tl-item:nth-child(odd) .y-mem, .y-mem-grid > .y-mem:nth-child(odd) { transform: rotate(-1deg); }
+    .y-tl-item:nth-child(even) .y-mem, .y-mem-grid > .y-mem:nth-child(even) { transform: rotate(1deg); }
+    .y-mem:hover { transform: rotate(0) translateY(-4px) !important; box-shadow: var(--y-shadow); position: relative; z-index: 1; }
     .y-tl .y-mem, .y-mem--row { display: grid; grid-template-columns: 130px 1fr; align-items: stretch; }
     @media (min-width: 600px) { .y-tl .y-mem, .y-mem--row { grid-template-columns: 180px 1fr; } }
 
