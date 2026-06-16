@@ -63,8 +63,10 @@ export const timeline = [
 
 // 参加シングル（30thで初選抜、以降ずっと選抜入り）。画像は /assets/yumiki/singles/{no}.jpg を後日追加。
 // タイトル・発売時期は公開情報。立ち位置は 30th=初選抜 / 35th=初福神 / 以降=選抜継続。
-// desc=そのシングルの思い出・特徴の文章 / jacket=弓木さんが写っているジャケ写 / mv=MVで写っているカット（いずれも任意・後から追加）
-export const singles: { no: number; title: string; date: string; pos: string; desc?: string; jacket?: string; mv?: string }[] = [
+// desc=そのシングルの思い出・特徴の文章（任意・後から追加）。
+// 画像(ジャケット/アー写/MV)は public/assets/yumiki/singles/{no}-{cover|photo|mv}.jpg に置けば自動表示
+// （profile.astro が号番号で解決。無い枠は自動で省略）。
+export const singles: { no: number; title: string; date: string; pos: string; desc?: string }[] = [
   { no: 30, title: "好きというのはロックだぜ！", date: "2022.8", pos: "初選抜" },
   { no: 31, title: "ここにはないもの", date: "2022.12", pos: "選抜" },
   { no: 32, title: "人は夢を二度見る", date: "2023.3", pos: "選抜" },

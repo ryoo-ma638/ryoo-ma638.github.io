@@ -2,6 +2,12 @@
 import Yumiki from "../../layouts/Yumiki.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.ts";
+import fs from "node:fs";
+
+// 各シングルの画像（public/assets/yumiki/singles/{no}-{cover|photo|mv}.jpg）が
+// 存在すれば解決、無ければ空文字。号番号で対応するので、素材を足すだけで自動反映される。
+const sImg = (no: number, kind: "cover" | "photo" | "mv") =>
+  fs.existsSync(`public/assets/yumiki/singles/${no}-${kind}.jpg`) ? img(`singles/${no}-${kind}.jpg`) : "";
 
 // 付箋に回す差し色（順番に巡回）
 const stickyColors = [
@@ -166,13 +172,20 @@ const spineColors = [
             data-date={s.date}
             data-pos={s.pos}
             data-desc={s.desc ?? ""}
-            data-jacket={s.jacket ? img(s.jacket) : ""}
-            data-mv={s.mv ? img(s.mv) : ""}
+            data-cover={sImg(s.no, "cover")}
+            data-photo={sImg(s.no, "photo")}
+            data-mv={sImg(s.no, "mv")}
           >
-            <div class="pf-rec-cover" aria-hidden="true">
-              <span class="pf-rec-disc"></span>
-              <span class="pf-rec-no sb-num" style={`--cc:${spineColors[i % spineColors.length]}`}>{s.no}<small>th</small></span>
-              {s.pos === "初福神" && <span class="pf-rec-heart">♡</span>}
+            <div class:list={["pf-rec-cover", { "has-img": !!sImg(s.no, "cover") }]}>
+              {sImg(s.no, "cover") ? (
+                <img class="pf-rec-img" src={sImg(s.no, "cover")} alt={`${s.title}（ジャケット）`} loading="lazy" />
+              ) : (
+                <>
+                  <span class="pf-rec-disc" aria-hidden="true"></span>
+                  <span class="pf-rec-no sb-num" style={`--cc:${spineColors[i % spineColors.length]}`} aria-hidden="true">{s.no}<small>th</small></span>
+                </>
+              )}
+              {s.pos === "初福神" && <span class="pf-rec-heart" aria-hidden="true">♡</span>}
             </div>
             <div class="pf-rec-info">
               <h3>{s.title}</h3>
@@ -184,7 +197,7 @@ const spineColors = [
           </article>
         ))}
       </div>
-      <p class="sb-note pf-shelf-note">※ジャケットはイメージ（番号で並べた“弓木さんのレコード棚”）。押すと詳細（思い出・ジャケ写・MVカット）— 素材は順次追加します。</p>
+      <p class="sb-note pf-shelf-note">ジャケットを押すと詳細（ジャケット・弓木さんのアー写・MVカット）。※一部の号はアー写が未掲載です。</p>
     </div>
 
     <!-- シングル詳細モーダル（クリックで開く：思い出＋ジャケ写＋MVカットの2枚） -->
@@ -197,15 +210,20 @@ const spineColors = [
         <p class="sgl-sub"><span class="sgl-date" id="sglDate"></span><span class="sgl-pos sb-stamp" id="sglPos"></span></p>
         <p class="sgl-desc" id="sglDesc"></p>
         <div class="sgl-imgs">
-          <figure class="sgl-shot">
-            <figcaption class="sgl-shot-label">📀 ジャケ写</figcaption>
-            <div class="sgl-shot-box" id="sglJacket"></div>
+          <figure class="sgl-shot" id="sglCoverFig">
+            <figcaption class="sgl-shot-label">📀 ジャケット</figcaption>
+            <div class="sgl-shot-box" id="sglCover"></div>
           </figure>
-          <figure class="sgl-shot">
+          <figure class="sgl-shot" id="sglPhotoFig">
+            <figcaption class="sgl-shot-label">📸 弓木さんのアー写</figcaption>
+            <div class="sgl-shot-box" id="sglPhoto"></div>
+          </figure>
+          <figure class="sgl-shot" id="sglMvFig">
             <figcaption class="sgl-shot-label">🎬 MVカット</figcaption>
             <div class="sgl-shot-box" id="sglMv"></div>
           </figure>
         </div>
+        <p class="sgl-allsoon" id="sglAllSoon">この号の画像は準備中です。</p>
       </div>
     </div>
   </section>
@@ -340,6 +358,8 @@ const spineColors = [
         color-mix(in srgb, var(--cc, var(--y-pink)) 14%, #fff));
       border: 4px solid #fff; box-shadow: var(--y-shadow-sm); display: grid; place-items: center;
     }
+    .pf-rec-cover.has-img { background: none; }
+    .pf-rec-img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .pf-rec-disc {
       position: absolute; width: 64%; aspect-ratio: 1; border-radius: 50%;
       background: radial-gradient(circle, #fff 16%, transparent 17%),
@@ -354,8 +374,9 @@ const spineColors = [
     .pf-rec.is-debut .pf-rec-cover { border-color: color-mix(in srgb, var(--y-sky) 50%, #fff); }
     .pf-rec.is-fukujin { transform: rotate(-1deg) scale(1.06) !important; z-index: 2; }
     .pf-rec.is-fukujin .pf-rec-cover { border: 5px solid var(--y-peach); box-shadow: 0 14px 30px rgba(255, 120, 150, .28); }
-    .pf-rec-heart { position: absolute; inset: 0; display: grid; place-items: center; font-size: clamp(2.4rem, 9vw, 3.4rem);
-      color: var(--y-peach); z-index: 2; pointer-events: none; filter: drop-shadow(0 3px 6px rgba(255,120,150,.4)); animation: floaty 6s ease-in-out infinite; }
+    /* 35th(初福神)ジャケットで“左下にいる弓木さん”をピックアップする位置・大きさ */
+    .pf-rec-heart { position: absolute; left: 30%; top: 60%; transform: translate(-50%, -50%); font-size: clamp(1.4rem, 5.5vw, 2rem);
+      color: var(--y-peach); z-index: 2; pointer-events: none; filter: drop-shadow(0 2px 5px rgba(255,120,150,.5)); animation: floaty 6s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce) { .pf-rec-heart { animation: none; } }
 
     .pf-rec-info { margin-top: .65rem; }
@@ -395,14 +416,14 @@ const spineColors = [
     .sgl-date { font-family: var(--y-font-en); font-weight: 700; color: var(--y-ink-soft); }
     .sgl-desc { color: var(--y-ink-soft); line-height: 1.85; margin: 0 0 1.3rem; white-space: pre-wrap; }
     .sgl-desc.is-soon { color: var(--y-muted); }
-    .sgl-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    @media (max-width: 480px) { .sgl-imgs { grid-template-columns: 1fr; } }
-    .sgl-shot { margin: 0; }
+    .sgl-imgs { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; justify-content: center; }
+    .sgl-shot { margin: 0; flex: 1 1 150px; min-width: 0; }
+    .sgl-allsoon { color: var(--y-muted); font-family: var(--y-font-en); font-weight: 700; font-size: .85rem; text-align: center; padding: .6rem 0 .2rem; }
     .sgl-shot-label { font-family: var(--y-font-en); font-weight: 700; font-size: .8rem; color: var(--y-ink-soft); margin-bottom: .4rem; }
-    .sgl-shot-box { aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: color-mix(in srgb, var(--y-line) 38%, #fff);
-      display: grid; place-items: center; border: 1px dashed color-mix(in srgb, var(--y-line) 90%, var(--y-muted)); }
-    .sgl-shot-img { width: 100%; height: 100%; cursor: zoom-in; display: block; }
-    .sgl-shot-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* 画像はトリミングせず自然な比率で全体表示（縦長アー写の見切れ防止） */
+    .sgl-shot-box { border-radius: 12px; overflow: hidden; background: color-mix(in srgb, var(--y-line) 28%, #fff); }
+    .sgl-shot-img { display: block; width: 100%; cursor: zoom-in; }
+    .sgl-shot-img img { display: block; width: 100%; height: auto; }
     .sgl-soon { font-family: var(--y-font-en); font-weight: 700; font-size: .82rem; color: var(--y-muted); }
     @media (prefers-reduced-motion: reduce) { .sgl-modal { transition: none; } }
   </style>
@@ -419,13 +440,16 @@ const spineColors = [
       const unlockScroll = () => { const b = document.body; const n = Math.max(0, (parseInt(b.dataset.scrollLock || "0", 10)) - 1); b.dataset.scrollLock = String(n); if (n === 0) b.style.overflow = ""; };
       const focusables = () => Array.from(modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')).filter((el) => el.offsetParent !== null);
       const onTrap = (e) => { if (e.key !== "Tab") return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
-      const fill = (boxId, src, cap) => {
-        const box = byId(boxId);
-        if (!box) return;
+      // 画像がある枠だけ表示し、無い枠は figure ごと隠す。ある画像で1つのLightboxギャラリーを構成。
+      const setShot = (figId, boxId, gal, src, cap) => {
+        const fig = byId(figId), box = byId(boxId);
+        if (!fig || !box) return;
         if (src) {
+          fig.style.display = "";
           const w = document.createElement("div");
           w.className = "sgl-shot-img";
-          w.setAttribute("data-gallery", JSON.stringify([src]));
+          w.setAttribute("data-gallery", JSON.stringify(gal));
+          w.setAttribute("data-index", String(Math.max(0, gal.indexOf(src))));
           w.setAttribute("data-caption", cap);
           w.setAttribute("role", "button");
           w.setAttribute("tabindex", "0");
@@ -435,9 +459,8 @@ const spineColors = [
           w.appendChild(im);
           box.replaceChildren(w);
         } else {
-          const s = document.createElement("span");
-          s.className = "sgl-soon"; s.textContent = "準備中";
-          box.replaceChildren(s);
+          fig.style.display = "none";
+          box.replaceChildren();
         }
       };
       const open = (el) => {
@@ -450,8 +473,12 @@ const spineColors = [
         const desc = byId("sglDesc");
         if (d.desc) { desc.textContent = d.desc; desc.classList.remove("is-soon"); }
         else { desc.textContent = "このシングルの思い出・特徴は準備中です。素材ができ次第ここに載せます。"; desc.classList.add("is-soon"); }
-        fill("sglJacket", d.jacket, (d.no || "") + "th ジャケ写");
-        fill("sglMv", d.mv, (d.no || "") + "th MVカット");
+        const no = d.no || "";
+        const gal = [d.cover, d.photo, d.mv].filter(Boolean);
+        setShot("sglCoverFig", "sglCover", gal, d.cover, no + "th ジャケット");
+        setShot("sglPhotoFig", "sglPhoto", gal, d.photo, no + "th 弓木さんのアー写");
+        setShot("sglMvFig", "sglMv", gal, d.mv, no + "th MVカット");
+        byId("sglAllSoon").style.display = gal.length ? "none" : "";
         lastFocused = document.activeElement;
         modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
         lockScroll();

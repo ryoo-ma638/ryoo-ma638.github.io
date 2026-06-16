@@ -24,3 +24,8 @@ NOTES.local.md
 
 # 更新用スラッシュコマンド（Skills・ローカル専用）
 .assistant/
+
+# シングル素材の生フォルダ（最適化済み singles/ だけを公開。生＝大容量/未最適化はローカル保管・非公開・非デプロイ）
+public/assets/yumiki/MV弓木/
+public/assets/yumiki/アルバム弓木/
+public/assets/yumiki/ジャケ写/
