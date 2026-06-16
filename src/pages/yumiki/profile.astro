@@ -190,7 +190,7 @@ const spineColors = [
     <!-- シングル詳細モーダル（クリックで開く：思い出＋ジャケ写＋MVカットの2枚） -->
     <div class="sgl-modal" id="sglModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="シングルの詳細">
       <div class="sgl-panel">
-        <button class="sgl-close" id="sglClose" type="button" aria-label="閉じる">✕</button>
+        <button class="y-x sgl-close" id="sglClose" type="button" aria-label="閉じる">✕</button>
         <span class="sgl-tape sb-tape" aria-hidden="true"></span>
         <p class="sgl-meta"><span class="sgl-no sb-num" id="sglNo"></span><small>th SINGLE</small></p>
         <h3 class="sgl-title" id="sglTitle"></h3>
@@ -386,9 +386,7 @@ const spineColors = [
     .sgl-panel { position: relative; width: min(620px, 100%); max-height: 90vh; overflow-y: auto; background: #fffdf8;
       border-radius: 18px; border: 2px solid var(--y-line); box-shadow: var(--y-shadow); padding: clamp(1.5rem, 4vw, 2.2rem); }
     .sgl-tape { top: -13px; left: 50%; --tape: var(--y-pink); }
-    .sgl-close { position: absolute; top: 12px; right: 12px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; background: #fff;
-      box-shadow: var(--y-shadow-sm); color: var(--y-ink); font-size: 1.05rem; line-height: 1; display: grid; place-items: center; transition: transform .3s var(--y-ease), color .3s; }
-    .sgl-close:hover { transform: rotate(90deg) scale(1.08); color: var(--y-peach); }
+    .sgl-close { position: absolute; top: 12px; right: 12px; z-index: 2; }
     .sgl-meta { margin: 0; line-height: 1; }
     .sgl-no { font-size: 2.4rem; }
     .sgl-meta small { font-family: var(--y-font-en); font-weight: 700; color: var(--y-muted); letter-spacing: .1em; margin-left: .35rem; }
@@ -416,6 +414,11 @@ const spineColors = [
       const modal = document.getElementById("sglModal");
       if (!modal) return;
       const byId = (id) => document.getElementById(id);
+      let lastFocused = null;
+      const lockScroll = () => { const b = document.body; const n = (parseInt(b.dataset.scrollLock || "0", 10)) + 1; b.dataset.scrollLock = String(n); b.style.overflow = "hidden"; };
+      const unlockScroll = () => { const b = document.body; const n = Math.max(0, (parseInt(b.dataset.scrollLock || "0", 10)) - 1); b.dataset.scrollLock = String(n); if (n === 0) b.style.overflow = ""; };
+      const focusables = () => Array.from(modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')).filter((el) => el.offsetParent !== null);
+      const onTrap = (e) => { if (e.key !== "Tab") return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
       const fill = (boxId, src, cap) => {
         const box = byId(boxId);
         if (!box) return;
@@ -449,12 +452,17 @@ const spineColors = [
         else { desc.textContent = "このシングルの思い出・特徴は準備中です。素材ができ次第ここに載せます。"; desc.classList.add("is-soon"); }
         fill("sglJacket", d.jacket, (d.no || "") + "th ジャケ写");
         fill("sglMv", d.mv, (d.no || "") + "th MVカット");
+        lastFocused = document.activeElement;
         modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
+        lockScroll();
+        modal.addEventListener("keydown", onTrap);
+        const cb = byId("sglClose"); if (cb) cb.focus();
       };
       const close = () => {
         modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
+        modal.removeEventListener("keydown", onTrap);
+        unlockScroll();
+        if (lastFocused && lastFocused.focus) lastFocused.focus();
       };
       document.querySelectorAll(".pf-rec").forEach((el) => {
         el.addEventListener("click", () => open(el));

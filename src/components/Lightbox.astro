@@ -68,6 +68,11 @@
     let list: string[] = [];
     let caption = "";
     let i = 0;
+    let lastFocused: HTMLElement | null = null;
+    const lockScroll = () => { const b = document.body; const n = (parseInt(b.dataset.scrollLock || "0", 10)) + 1; b.dataset.scrollLock = String(n); b.style.overflow = "hidden"; };
+    const unlockScroll = () => { const b = document.body; const n = Math.max(0, (parseInt(b.dataset.scrollLock || "0", 10)) - 1); b.dataset.scrollLock = String(n); if (n === 0) b.style.overflow = ""; };
+    const focusables = () => Array.from(lb.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')).filter((el) => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
+    const onTrap = (e: KeyboardEvent) => { if (e.key !== "Tab") return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
 
     const show = () => {
       lb.classList.remove("show-img");
@@ -82,13 +87,18 @@
     };
     const open = (arr: string[], start: number, capText: string) => {
       list = arr; i = start; caption = capText || "";
+      lastFocused = document.activeElement as HTMLElement;
       lb.classList.add("open"); lb.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      lockScroll();
+      lb.addEventListener("keydown", onTrap as EventListener);
       show();
+      const cb = lb.querySelector(".lb-close") as HTMLElement | null; cb?.focus();
     };
     const close = () => {
       lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      lb.removeEventListener("keydown", onTrap as EventListener);
+      unlockScroll();
+      lastFocused?.focus?.();
     };
     const step = (d: number) => { if (list.length) { i = (i + d + list.length) % list.length; show(); } };
 
@@ -104,10 +114,11 @@
     });
     document.addEventListener("keydown", (e) => {
       if (!lb.classList.contains("open")) return;
-      if (e.key === "Escape") close();
+      // capture フェーズ＋伝播停止で、背後のモーダル(詳細/相関図)のEscより先に“最前面のLightboxだけ”閉じる
+      if (e.key === "Escape") { e.stopImmediatePropagation(); close(); }
       else if (e.key === "ArrowRight") step(1);
       else if (e.key === "ArrowLeft") step(-1);
-    });
+    }, true);
     // Enter/Space でもトリガー（アクセシビリティ）
     document.addEventListener("keydown", (e) => {
       if ((e.key === "Enter" || e.key === " ") && document.activeElement?.hasAttribute("data-gallery")) {

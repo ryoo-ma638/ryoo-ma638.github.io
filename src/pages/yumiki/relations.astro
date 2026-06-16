@@ -164,8 +164,8 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   </section>
 
   <!-- メンバー詳細ポップアップ -->
-  <div id="ymem" class="ymem" aria-hidden="true" role="dialog" aria-modal="true">
-    <button class="ymem-x" aria-label="閉じる">✕</button>
+  <div id="ymem" class="ymem" aria-hidden="true" role="dialog" aria-modal="true" aria-label="メンバーの詳細">
+    <button class="y-x ymem-x" aria-label="閉じる">✕</button>
     <div class="ymem-card" role="document">
       <span class="ymem-av" id="ymemAv"></span>
       <h3 class="ymem-name" id="ymemName"></h3>
@@ -280,7 +280,7 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   .ymem-sub { display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--y-ink); background: var(--y-cream-2); padding: 0.2rem 0.7rem; border-radius: 999px; }
   .ymem-sub:empty { display: none; }
   .ymem-note { margin-top: 1rem; color: var(--y-ink-soft); font-size: 0.92rem; line-height: 1.95; text-align: left; }
-  .ymem-x { position: fixed; top: clamp(1rem, 4vw, 2rem); right: clamp(1rem, 4vw, 2rem); width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--y-ink); font-size: 1.2rem; box-shadow: var(--y-shadow); display: grid; place-items: center; }
+  .ymem-x { position: fixed; top: clamp(1rem, 4vw, 2rem); right: clamp(1rem, 4vw, 2rem); z-index: 1; }
 
   @media (prefers-reduced-motion: reduce) { .ymem-card { animation: none; } }
 
@@ -350,6 +350,12 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
     const rel = document.getElementById("ymemRel")!;
     const sub = document.getElementById("ymemSub")!;
     const note = document.getElementById("ymemNote")!;
+    let lastFocused: HTMLElement | null = null;
+    const xBtn = modal.querySelector(".ymem-x") as HTMLElement | null;
+    const lockScroll = () => { const b = document.body; const n = (parseInt(b.dataset.scrollLock || "0", 10)) + 1; b.dataset.scrollLock = String(n); b.style.overflow = "hidden"; };
+    const unlockScroll = () => { const b = document.body; const n = Math.max(0, (parseInt(b.dataset.scrollLock || "0", 10)) - 1); b.dataset.scrollLock = String(n); if (n === 0) b.style.overflow = ""; };
+    const focusables = () => Array.from(modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')).filter((el) => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
+    const onTrap = (e: KeyboardEvent) => { if (e.key !== "Tab") return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
     const open = (btn: HTMLElement) => {
       const name = btn.dataset.name || "";
       const gc = btn.style.getPropertyValue("--gc") || "var(--y-peach)";
@@ -360,21 +366,26 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
       (rel as HTMLElement).style.background = gc;
       sub.textContent = btn.dataset.sub || "";
       note.textContent = btn.dataset.note || "";
+      lastFocused = document.activeElement as HTMLElement;
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      lockScroll();
+      modal.addEventListener("keydown", onTrap as EventListener);
+      xBtn?.focus();
     };
     const close = () => {
       modal.classList.remove("open");
       modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      modal.removeEventListener("keydown", onTrap as EventListener);
+      unlockScroll();
+      lastFocused?.focus?.();
     };
     document.addEventListener("click", (e) => {
       const btn = (e.target as HTMLElement).closest(".node--link") as HTMLElement | null;
       if (btn) { open(btn); return; }
       if (e.target === modal || (e.target as HTMLElement).classList.contains("ymem-x")) close();
     });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("open")) close(); });
   }
 
   // ── 中心相関図：ハブから各ノードへ“線”をSVGで描く（レスポンシブ再計算） ──
