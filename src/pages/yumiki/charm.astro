@@ -6,14 +6,28 @@ const features = charms.slice(0, -1);
 const summary = charms[charms.length - 1];
 const accents = ["var(--y-peach)", "var(--y-sky)", "var(--y-mint)"];
 const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
+// 各魅力ページ（ノート1ページ）の手書きツッコミ（本文の事実に沿った一言のみ）
+const notes = [
+  "“はんなりすっとこどっこい”が原点。",
+  "生放送でも自分のペース。",
+  "頼れる姉さん、でも陰で努力家。",
+];
+// 動画1本目=フィーチャー、残り=チェキ風
+const featureVideo = charmVideos[0];
+const restVideos = charmVideos.slice(1);
+// 締めの寄せ書き付箋（色だけ割り当て・文章はdataのまま）
+const sumColors = ["var(--y-peach)", "var(--y-sky)", "var(--y-mint)", "var(--y-lav)"];
+const sumTilts = ["-2.2deg", "1.6deg", "-1.4deg", "2deg"];
 ---
 <Yumiki title="魅力 — YUMIKI WORLD">
-  <section class="y-section cm-sec">
+  <section class="y-section cm-sec sb-grid">
     <div class="y-container">
-      <div class="y-head y-reveal">
-        <span class="y-eyebrow">Her Charm</span>
-        <h2>弓木奈於の<span class="wave">魅力</span>、語らせて。</h2>
-        <p class="cm-intro">知れば知るほど好きになる。彼女の“ずるい”魅力を、ファン目線でめいっぱい。</p>
+      <!-- 表紙＝推しノートの見開き（中央テンプレを崩した手貼りタイトル） -->
+      <div class="cm-cover y-reveal">
+        <span class="sb-doodle cm-cover-doodle" style="--cc:var(--y-pink)" aria-hidden="true">♡</span>
+        <span class="sb-stamp cm-cover-stamp" style="--cc:var(--y-peach)" aria-hidden="true">★ Her Charm</span>
+        <h2 class="cm-cover-tt">弓木奈於の<span class="sb-mark" style="--cc:var(--y-butter)">魅力</span>、語らせて。</h2>
+        <p class="cm-intro sb-note">知れば知るほど好きになる。彼女の“ずるい”魅力を、ファン目線でめいっぱい。</p>
       </div>
 
       <div class="cm-list">
@@ -21,23 +35,35 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
           const lead = c.body[0];
           const rest = c.body.slice(1);
           return (
-            <article class={`cm y-reveal ${i % 2 ? "cm--rev" : ""}`} style={`--ac:${accents[i % 3]};--tape:${tapes[i % 3]}`}>
-              <span class="cm-num" aria-hidden="true">0{i + 1}</span>
-              <span class="cm-doodle cm-doodle--1" aria-hidden="true">{["♡", "✦", "✿"][i % 3]}</span>
+            <article class={`cm-page y-reveal sb-ruled ${i % 2 ? "cm-page--rev" : ""}`} style={`--cc:${accents[i % 3]};--tape:${tapes[i % 3]}`}>
+              <span class="sb-doodle cm-page-doodle" style={`--cc:${accents[i % 3]}`} aria-hidden="true">{["♡", "✦", "✿"][i % 3]}</span>
 
-              <div class="cm-photo">
-                <span class="cm-tape" aria-hidden="true"></span>
-                <div class="cm-photo-inner">
-                  <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.cm-photo-inner').classList.add('noimg')" />
+              {/* 章見出し：左寄せ＋大きな通し番号でテンプレの単調反復を崩す */}
+              <header class="sb-head cm-page-head">
+                <span class="sb-num sb-head-num" aria-hidden="true">0{i + 1}</span>
+                <span class="sb-head-tt">
+                  <span class="sb-head-eyebrow">Point 0{i + 1}</span>
+                  <h3>{c.title}</h3>
+                </span>
+              </header>
+
+              <div class="cm-page-body">
+                {/* 貼り付けたチェキ写真 */}
+                <figure class="sb-cheki sb-taped cm-page-cheki">
+                  <span class="sb-tape l" aria-hidden="true"></span>
+                  <span class="sb-tape r" aria-hidden="true"></span>
+                  <div class="cm-cheki-img">
+                    <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.cm-cheki-img').classList.add('noimg')" />
+                  </div>
+                  <figcaption>♡ {c.tag}</figcaption>
+                </figure>
+
+                {/* 本文 */}
+                <div class="cm-page-text">
+                  <p class="cm-lead"><span class="cm-q" aria-hidden="true">❝</span>{lead}</p>
+                  {rest.map((p) => <p class="cm-p">{p}</p>)}
+                  <span class="sb-note cm-page-note">{notes[i]}</span>
                 </div>
-                <span class="cm-cap">{c.tag}</span>
-              </div>
-
-              <div class="cm-body">
-                <span class="cm-kicker">POINT 0{i + 1}</span>
-                <h3 class="cm-title">{c.title}</h3>
-                <p class="cm-lead"><span class="cm-q" aria-hidden="true">❝</span>{lead}</p>
-                {rest.map((p) => <p class="cm-p">{p}</p>)}
               </div>
             </article>
           );
@@ -46,14 +72,34 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
 
       <!-- 動画で知る弓木さん（すべて公式チャンネルのembed可能な動画） -->
       <section class="cm-movies y-reveal">
-        <div class="cm-mv-head">
-          <span class="cm-mv-eyebrow">MOVIE ✦</span>
-          <h3>動画で見る<span class="wave">弓木さん</span></h3>
-          <p>公式チャンネルの動画で、天真爛漫な“弓木ワールド”を。<small>サムネイルをタップすると再生します ▶</small></p>
-        </div>
+        <header class="sb-head cm-mv-head">
+          <span class="sb-num sb-head-num" style="--cc:var(--y-sky)" aria-hidden="true">▶</span>
+          <span class="sb-head-tt">
+            <span class="sb-head-eyebrow">Movie ✦</span>
+            <h3>動画で見る<span class="sb-mark" style="--cc:var(--y-sky)">弓木さん</span></h3>
+          </span>
+        </header>
+        <p class="cm-mv-intro sb-note">公式チャンネルの動画で、天真爛漫な“弓木ワールド”を。サムネイルをタップすると再生します ▶</p>
+
+        <!-- 1本目＝大きなフィーチャー（まずはこれ▶ ステッカー付き） -->
+        <article class="cm-mv-feature sb-taped" data-yt={featureVideo.id} style="--cc:var(--y-peach);--tape:var(--y-pink)">
+          <span class="sb-tape l" aria-hidden="true"></span>
+          <span class="sb-stamp cm-mv-first" style="--cc:var(--y-peach)" aria-hidden="true">まずはこれ ▶</span>
+          <button class="cm-mv-thumb cm-mv-thumb--big" type="button" aria-label={`再生：${featureVideo.title}`}>
+            <img src={`https://i.ytimg.com/vi/${featureVideo.id}/hqdefault.jpg`} alt={featureVideo.title} loading="lazy" width="480" height="360" />
+            <span class="cm-mv-play" aria-hidden="true">▶</span>
+          </button>
+          <div class="cm-mv-meta">
+            <span class="cm-mv-ch">{featureVideo.channel}</span>
+            <h4 class="cm-mv-title">{featureVideo.title}</h4>
+            <p class="cm-mv-note">{featureVideo.note}</p>
+          </div>
+        </article>
+
+        <!-- 残り＝チェキ風の非対称配置 -->
         <div class="cm-mv-grid">
-          {charmVideos.map((v) => (
-            <article class="cm-mv-card" data-yt={v.id}>
+          {restVideos.map((v) => (
+            <article class="cm-mv-card sb-cheki" data-yt={v.id}>
               <button class="cm-mv-thumb" type="button" aria-label={`再生：${v.title}`}>
                 <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt={v.title} loading="lazy" width="480" height="360" />
                 <span class="cm-mv-play" aria-hidden="true">▶</span>
@@ -69,121 +115,159 @@ const tapes = ["var(--y-butter)", "var(--y-pink)", "var(--y-lav)"];
         <p class="cm-mv-foot">※ 公式チャンネルの動画を埋め込み表示しています。著作権は各権利者に帰属します。</p>
       </section>
 
-      <!-- 締め：ファンからの“まとめ” -->
-      <article class="cm-sum y-reveal">
-        <span class="cm-sum-deco" aria-hidden="true">♡</span>
-        <div class="cm-sum-photo">
-          <img src={img(summary.img)} alt={summary.title} loading="lazy" onerror="this.closest('.cm-sum-photo').style.display='none'" />
+      <!-- 締め：ファンからの“寄せ書き／色紙”（色違いの付箋を貼った風） -->
+      <article class="cm-sum y-reveal sb-ruled">
+        <span class="sb-doodle cm-sum-doodle cm-sum-doodle--1" style="--cc:var(--y-pink)" aria-hidden="true">♡</span>
+        <span class="sb-doodle cm-sum-doodle cm-sum-doodle--2" style="--cc:var(--y-mint)" aria-hidden="true">✦</span>
+
+        <figure class="sb-cheki sb-taped cm-sum-cheki">
+          <span class="sb-tape" aria-hidden="true"></span>
+          <img src={img(summary.img)} alt={summary.title} loading="lazy" onerror="this.closest('.cm-sum-cheki').style.display='none'" />
+          <figcaption>♡ {summary.tag}</figcaption>
+        </figure>
+
+        <div class="cm-sum-board">
+          <span class="sb-stamp cm-sum-stamp" style="--cc:var(--y-peach)" aria-hidden="true">My Conclusion</span>
+          <h3 class="cm-sum-title"><span class="sb-mark" style="--cc:var(--y-butter)">{summary.title}</span></h3>
+          <div class="cm-sum-notes">
+            {summary.body.map((p, i) => (
+              <p class="sb-sticky cm-sum-note" style={`--cc:${sumColors[i % sumColors.length]};transform:rotate(${sumTilts[i % sumTilts.length]})`}>{p}</p>
+            ))}
+          </div>
+
+          <div class="cm-sum-cta">
+            <span class="cm-sum-arrow" aria-hidden="true">↪</span>
+            <a href="/yumiki/memory" class="y-btn y-btn--peach cm-sum-btn">推しとの思い出を見る ♡</a>
+          </div>
         </div>
-        <span class="y-tag cm-sum-tag" style="background:var(--y-peach)">{summary.tag}</span>
-        <h3 class="cm-sum-title"><span class="wave">{summary.title}</span></h3>
-        {summary.body.map((p) => <p>{p}</p>)}
-        <a href="/yumiki/memory" class="y-btn y-btn--peach cm-sum-btn">推しとの思い出を見る ♡</a>
       </article>
     </div>
   </section>
 
   <style>
     .cm-sec { position: relative; }
-    .y-head h2 { line-height: 1.35; }
-    .cm-intro { margin-top: 0.9rem; color: var(--y-ink-soft); font-size: 0.95rem; max-width: 40ch; margin-inline: auto; }
 
-    .cm-list { display: flex; flex-direction: column; gap: clamp(3.5rem, 9vw, 6rem); margin-top: clamp(2rem, 6vw, 3.5rem); }
+    /* ===== 表紙（手貼りタイトル・中央テンプレを崩す） ===== */
+    .cm-cover { position: relative; padding: 1rem 0 1.6rem; }
+    .cm-cover-stamp { margin-bottom: 0.9rem; }
+    .cm-cover-tt { font-size: clamp(1.7rem, 4.6vw, 2.7rem); line-height: 1.4; transform: rotate(-1deg); }
+    .cm-cover-doodle { top: -0.4rem; left: -0.2rem; font-size: 1.6rem; }
+    /* .sb-note 既定の rotate(-2deg) は読みやすさのため少しだけ右回転に上書き */
+    .cm-intro { display: inline-block; margin-top: 1rem; font-size: 0.95rem; max-width: 42ch; transform: rotate(1deg); }
 
-    /* 1つの魅力 = 雑誌の見開き風（写真＝ポラロイド、本文＝やわらかカード） */
-    .cm { position: relative; display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: center; }
+    .cm-list { display: flex; flex-direction: column; gap: clamp(2.4rem, 7vw, 4.2rem); margin-top: clamp(1.6rem, 5vw, 2.8rem); }
+
+    /* ===== 1つの魅力 = ノートの1ページ ===== */
+    .cm-page { position: relative; border-radius: var(--y-radius-sm); padding: clamp(1.4rem, 4vw, 2.4rem);
+      box-shadow: var(--y-shadow-sm); border: 2px solid #fff;
+      transform: rotate(-0.5deg); transition: transform 0.4s var(--y-ease), box-shadow 0.4s var(--y-ease); }
+    .cm-page--rev { transform: rotate(0.6deg); }
+    .cm-page:hover { transform: rotate(0); box-shadow: var(--y-shadow); }
+    .cm-page-doodle { top: -0.6rem; right: 6%; font-size: 1.7rem; }
+    .cm-page--rev .cm-page-doodle { right: auto; left: 6%; }
+
+    .cm-page-head { margin-bottom: 1.4rem; }
+    .cm-page-head .sb-head-num { color: transparent; opacity: 0.85; }
+    .cm-page-head h3 { font-size: clamp(1.35rem, 3.4vw, 1.95rem); line-height: 1.4; }
+
+    .cm-page-body { display: grid; gap: 1.4rem; grid-template-columns: 1fr; align-items: start; }
     @media (min-width: 880px) {
-      .cm { grid-template-columns: 0.92fr 1.08fr; gap: clamp(2rem, 4vw, 3.4rem); }
-      .cm--rev .cm-photo { order: 2; }
+      .cm-page-body { grid-template-columns: 0.86fr 1.14fr; gap: clamp(1.8rem, 3.5vw, 3rem); align-items: center; }
+      .cm-page--rev .cm-page-cheki { order: 2; }
     }
 
-    /* 大きな通し番号（背景の飾り） */
-    .cm-num { position: absolute; top: -2.4rem; left: -0.5rem; z-index: 0; font-family: var(--y-font-en); font-weight: 700;
-      font-size: clamp(5rem, 16vw, 9rem); line-height: 1; color: transparent;
-      -webkit-text-stroke: 2px color-mix(in srgb, var(--ac) 45%, transparent); opacity: 0.5; pointer-events: none; }
-    .cm--rev .cm-num { left: auto; right: -0.5rem; }
-
-    .cm-doodle { position: absolute; z-index: 2; font-size: 1.8rem; color: var(--ac); pointer-events: none;
-      animation: twinkle 3s ease-in-out infinite, floaty 7s ease-in-out infinite; }
-    .cm-doodle--1 { top: -1rem; right: 8%; }
-    .cm--rev .cm-doodle--1 { right: auto; left: 8%; }
-
-    /* ポラロイド写真 */
-    .cm-photo { position: relative; z-index: 1; justify-self: center; width: min(86vw, 380px);
-      background: #fff; padding: 12px 12px 46px; border-radius: 8px; box-shadow: 0 16px 36px rgba(120,90,80,0.18);
-      transform: rotate(-3deg); transition: transform 0.4s var(--y-ease); }
-    .cm--rev .cm-photo { transform: rotate(3deg); }
-    .cm:hover .cm-photo { transform: rotate(0) scale(1.02); }
-    .cm-photo-inner { aspect-ratio: 3/2; border-radius: 4px; overflow: hidden; background: var(--y-cream-2); }
-    .cm-photo-inner img { width: 100%; height: 100%; object-fit: cover; }
-    .cm-photo-inner.noimg img { display: none; }
-    .cm-photo-inner.noimg::after { content: "📷"; display: grid; place-items: center; height: 100%; font-size: 2.4rem; opacity: 0.4; }
-    /* マスキングテープ */
-    .cm-tape { position: absolute; top: -14px; left: 50%; width: 108px; height: 30px; transform: translateX(-50%) rotate(-4deg);
-      background: color-mix(in srgb, var(--tape) 78%, transparent); box-shadow: 0 2px 6px rgba(120,90,80,0.12);
-      -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 6px, transparent 6px 8px); mask-image: repeating-linear-gradient(90deg, #000 0 6px, transparent 6px 8px); opacity: 0.85; }
-    /* 手書き風キャプション */
-    .cm-cap { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-family: var(--y-font-jp);
-      font-weight: 700; font-size: 1.05rem; color: var(--y-ink); letter-spacing: 0.02em; }
-    .cm-cap::before { content: "♡ "; color: var(--ac); }
+    /* チェキ（共通 .sb-cheki を使い、サイズ・傾きだけ調整） */
+    .cm-page-cheki { justify-self: center; width: min(82vw, 340px); transform: rotate(-2.4deg);
+      transition: transform 0.4s var(--y-ease); }
+    .cm-page--rev .cm-page-cheki { transform: rotate(2.4deg); }
+    .cm-page:hover .cm-page-cheki { transform: rotate(0) scale(1.015); }
+    .cm-cheki-img { aspect-ratio: 3/2; border-radius: 2px; overflow: hidden; background: var(--y-cream-2); }
+    .cm-cheki-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cm-cheki-img.noimg img { display: none; }
+    .cm-cheki-img.noimg::after { content: "📷"; display: grid; place-items: center; height: 100%; font-size: 2.4rem; opacity: 0.4; }
+    .cm-page-cheki figcaption::first-letter { color: var(--cc); }
 
     /* 本文 */
-    .cm-body { position: relative; z-index: 1; }
-    .cm-kicker { font-family: var(--y-font-en); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.18em; color: var(--ac); }
-    .cm-title { font-size: clamp(1.45rem, 3.4vw, 2.05rem); line-height: 1.4; margin: 0.4rem 0 1rem;
-      background: linear-gradient(transparent 66%, color-mix(in srgb, var(--ac) 40%, transparent) 66%); display: inline; padding-inline: 0.05em; }
-    .cm-lead { position: relative; font-size: 1.06rem; font-weight: 700; line-height: 1.95; color: var(--y-ink); margin: 1rem 0 0.9rem; padding-left: 1.4rem; }
-    .cm-q { position: absolute; left: -0.1rem; top: -0.5rem; font-size: 2.2rem; color: var(--ac); opacity: 0.6; line-height: 1; }
+    .cm-page-text { position: relative; }
+    .cm-lead { position: relative; font-size: 1.06rem; font-weight: 700; line-height: 1.95; color: var(--y-ink); margin: 0 0 0.9rem; padding-left: 1.4rem; }
+    .cm-q { position: absolute; left: -0.1rem; top: -0.5rem; font-size: 2.2rem; color: var(--cc); opacity: 0.6; line-height: 1; }
     .cm-p { color: var(--y-ink-soft); margin-bottom: 0.8rem; line-height: 1.9; font-size: 0.95rem; }
-
-    /* 締めカード（まとめ） */
-    .cm-sum { position: relative; overflow: hidden; margin-top: clamp(3.5rem, 9vw, 6rem); text-align: center;
-      background: linear-gradient(160deg, #fff, var(--y-cream-2)); border: 2px dashed var(--y-line); border-radius: var(--y-radius);
-      padding: clamp(2.2rem, 6vw, 3.6rem) clamp(1.3rem, 5vw, 3rem); box-shadow: var(--y-shadow-sm); }
-    .cm-sum-deco { position: absolute; top: -1.5rem; right: -1.5rem; font-size: 8rem; color: var(--y-pink); opacity: 0.25; pointer-events: none; }
-    .cm-sum-photo { width: min(78vw, 360px); margin: 0 auto 1.4rem; background: #fff; padding: 10px 10px 10px; border-radius: 8px; box-shadow: 0 14px 32px rgba(120,90,80,0.16); transform: rotate(-2deg); }
-    .cm-sum-photo img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 4px; }
-    .cm-sum-tag { color: #fff; }
-    .cm-sum-title { font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 0.8rem 0 1.2rem; }
-    .cm-sum p { color: var(--y-ink-soft); max-width: 54ch; margin: 0 auto 0.9rem; line-height: 1.95; }
-    .cm-sum-btn { margin-top: 1.4rem; }
+    .cm-page-note { margin-top: 0.4rem; }
 
     /* ===== 動画で知る弓木さん ===== */
-    .cm-movies { margin-top: clamp(3.5rem, 9vw, 6rem); }
-    .cm-mv-head { text-align: center; margin-bottom: clamp(1.6rem, 4vw, 2.4rem); }
-    .cm-mv-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .18em; font-size: .72rem; color: var(--y-peach); }
-    .cm-mv-head h3 { font-size: clamp(1.5rem, 4vw, 2.1rem); margin: .3rem 0 .55rem; }
-    .cm-mv-head p { color: var(--y-ink-soft); font-size: .92rem; }
-    .cm-mv-head small { display: block; color: var(--y-muted); font-size: .8rem; margin-top: .25rem; }
-    .cm-mv-grid { display: grid; gap: 1.6rem 1.4rem; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); }
-    .cm-mv-card { background: #fff; border: 2px solid var(--y-line); border-radius: 16px; overflow: hidden; box-shadow: var(--y-shadow-sm);
-      transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
-    .cm-mv-card:nth-child(odd) { transform: rotate(-.8deg); }
-    .cm-mv-card:nth-child(even) { transform: rotate(.8deg); }
+    .cm-movies { margin-top: clamp(3.2rem, 8vw, 5rem); }
+    .cm-mv-head { margin-bottom: 0.8rem; }
+    .cm-mv-head .sb-head-num { color: transparent; }
+    .cm-mv-head h3 { font-size: clamp(1.5rem, 4vw, 2.1rem); }
+    .cm-mv-intro { display: inline-block; margin-bottom: clamp(1.6rem, 4vw, 2.2rem); font-size: 0.92rem; max-width: 46ch; }
+
+    /* フィーチャー（1本目を大きく） */
+    .cm-mv-feature { position: relative; display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: center;
+      background: #fff; border: 2px solid var(--y-line); border-radius: var(--y-radius-sm); padding: clamp(0.9rem, 2.5vw, 1.4rem);
+      box-shadow: var(--y-shadow-sm); transform: rotate(-0.6deg); margin-bottom: clamp(1.8rem, 5vw, 2.6rem);
+      transition: transform 0.4s var(--y-ease), box-shadow 0.4s var(--y-ease); }
+    @media (min-width: 760px) { .cm-mv-feature { grid-template-columns: 1.25fr 0.75fr; gap: clamp(1.4rem, 3vw, 2.2rem); } }
+    .cm-mv-feature:hover { transform: rotate(0); box-shadow: var(--y-shadow); }
+    .cm-mv-first { position: absolute; top: -0.9rem; right: 1rem; z-index: 4; font-size: 0.82rem;
+      transform: rotate(4deg); box-shadow: var(--y-shadow-sm); }
+    .cm-mv-thumb--big { border-radius: var(--y-radius-sm); }
+
+    /* 残り（チェキ風の非対称配置） */
+    .cm-mv-grid { display: grid; gap: 1.8rem 1.4rem; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); align-items: start; }
+    .cm-mv-card { padding: 0.55rem 0.55rem 0; overflow: visible; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .cm-mv-card:nth-child(odd) { transform: rotate(-1.4deg); }
+    .cm-mv-card:nth-child(even) { transform: rotate(1.6deg); }
+    .cm-mv-card:nth-child(3n) { transform: rotate(-0.6deg) translateY(0.9rem); }
     .cm-mv-card:hover { transform: rotate(0) translateY(-5px); box-shadow: var(--y-shadow); }
-    .cm-mv-thumb { display: block; position: relative; width: 100%; padding: 0; border: 0; cursor: pointer; background: #000; aspect-ratio: 16/9; overflow: hidden; }
+
+    /* サムネ（共通の再生ボタン演出） */
+    .cm-mv-thumb { display: block; position: relative; width: 100%; padding: 0; border: 0; cursor: pointer; background: #000; aspect-ratio: 16/9; overflow: hidden; border-radius: 2px; }
+    .cm-mv-card .cm-mv-thumb { border-radius: 2px; }
     .cm-mv-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--y-ease), opacity .3s; }
     .cm-mv-thumb:hover img { transform: scale(1.05); opacity: .85; }
     .cm-mv-play { position: absolute; inset: 0; margin: auto; width: 58px; height: 58px; display: grid; place-items: center; border-radius: 50%;
       background: color-mix(in srgb, var(--y-peach) 88%, #fff); color: #fff; font-size: 1.25rem; padding-left: 4px;
       box-shadow: 0 6px 18px rgba(0,0,0,.3); transition: transform .3s var(--y-ease); }
     .cm-mv-thumb:hover .cm-mv-play { transform: scale(1.12); }
-    .cm-mv-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+    .cm-mv-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 2px; overflow: hidden; }
     .cm-mv-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    .cm-mv-meta { padding: 1rem 1.1rem 1.2rem; }
+    .cm-mv-meta { padding: 0.85rem 0.6rem 0.9rem; }
+    .cm-mv-feature .cm-mv-meta { padding: 0.2rem 0.4rem; }
     .cm-mv-ch { display: inline-block; font-family: var(--y-font-en); font-weight: 700; font-size: .68rem; letter-spacing: .04em; color: var(--y-ink-soft);
       background: var(--y-cream-2); border-radius: 999px; padding: .25rem .7rem; margin-bottom: .55rem; }
     .cm-mv-title { font-size: 1.02rem; line-height: 1.5; margin-bottom: .4rem; }
+    .cm-mv-feature .cm-mv-title { font-size: clamp(1.05rem, 2.4vw, 1.3rem); }
     .cm-mv-note { color: var(--y-ink-soft); font-size: .85rem; line-height: 1.7; }
-    .cm-mv-foot { text-align: center; color: var(--y-muted); font-size: .76rem; margin-top: 1.4rem; }
+    .cm-mv-foot { text-align: center; color: var(--y-muted); font-size: .76rem; margin-top: 1.6rem; }
 
-    @media (prefers-reduced-motion: reduce) { .cm-doodle { animation: none; } }
+    /* ===== 締め：寄せ書き／色紙 ===== */
+    .cm-sum { position: relative; overflow: hidden; margin-top: clamp(3.2rem, 8vw, 5rem);
+      border: 2px dashed var(--y-line); border-radius: var(--y-radius);
+      padding: clamp(1.8rem, 5vw, 3rem) clamp(1.2rem, 4vw, 2.6rem); box-shadow: var(--y-shadow-sm); }
+    .cm-sum-doodle { font-size: 2.2rem; }
+    .cm-sum-doodle--1 { top: 1rem; right: 1.2rem; }
+    .cm-sum-doodle--2 { bottom: 1rem; left: 1.4rem; font-size: 1.6rem; }
+    .cm-sum-cheki { display: block; width: min(72vw, 320px); margin: 0 auto 1.6rem; transform: rotate(-2deg); }
+    .cm-sum-cheki img { aspect-ratio: 3/2; }
+    .cm-sum-cheki figcaption::first-letter { color: var(--y-peach); }
+    .cm-sum-board { max-width: 60ch; margin: 0 auto; text-align: center; }
+    .cm-sum-stamp { margin-bottom: 0.9rem; }
+    .cm-sum-title { font-size: clamp(1.45rem, 4vw, 2.1rem); line-height: 1.4; margin-bottom: 1.4rem; display: inline-block; }
+    .cm-sum-notes { display: flex; flex-direction: column; gap: 1rem; text-align: left; margin-bottom: 1.8rem; }
+    .cm-sum-note { color: var(--y-ink); line-height: 1.9; font-size: 0.95rem; font-weight: 500; }
+    .cm-sum-cta { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .cm-sum-arrow { font-size: 1.8rem; color: var(--y-peach); transform: rotate(8deg); line-height: 1; }
+    .cm-sum-btn { margin: 0; }
+
+    @media (max-width: 879px) {
+      .cm-sum-notes { gap: 0.85rem; }
+    }
   </style>
 
   <script>
     // 動画サムネをクリックしたら、その場で YouTube（プライバシー強化モード）を再生。
     // 初期表示はサムネ画像だけ＝iframeは押すまで読み込まないので軽い（lite-youtube方式）。
-    document.querySelectorAll(".cm-mv-card").forEach((card) => {
+    document.querySelectorAll(".cm-mv-card, .cm-mv-feature").forEach((card) => {
       const btn = card.querySelector(".cm-mv-thumb");
       const id = card.getAttribute("data-yt");
       if (!btn || !id) return;

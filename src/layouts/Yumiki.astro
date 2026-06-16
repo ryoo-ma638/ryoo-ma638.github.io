@@ -26,6 +26,8 @@ const isActive = (href: string) => href === "/yumiki/" ? pathname === "/yumiki/"
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <!-- JS有効時のみリビールを隠す＝JS無効/失敗でも本文が必ず見える（空白防止） -->
+    <script is:inline>document.documentElement.classList.add("js")</script>
   </head>
   <body class="yumiki">
     <div class="yumiki-bg" aria-hidden="true"></div>

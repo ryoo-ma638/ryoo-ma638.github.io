@@ -5,9 +5,14 @@ const { keyBonds, generations, groups } = relations;
 const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
 ---
 <Yumiki title="つながり — YUMIKI WORLD">
-  <section class="y-section">
+  <section class="y-section rel-page sb-grid">
     <div class="y-container">
-      <div class="y-head y-reveal">
+      <div class="y-head y-reveal rel-cover sb-taped" style="--tape:var(--y-pink)">
+        <span class="sb-tape l" aria-hidden="true"></span>
+        <span class="sb-tape r" aria-hidden="true"></span>
+        <span class="sb-doodle rel-doodle rel-doodle--a" aria-hidden="true" style="--cc:var(--y-lav)">✦</span>
+        <span class="sb-doodle rel-doodle rel-doodle--b" aria-hidden="true" style="--cc:var(--y-mint)">♡</span>
+        <span class="sb-stamp rel-cover-stamp" style="--cc:var(--y-peach)">Friendship Map</span>
         <span class="y-eyebrow">Connections</span>
         <h2>🤝 弓木さんの<span class="wave">つながり</span></h2>
         <p class="rel-intro">同期との2人旅、軍団、慕う後輩、お世話になった先輩、高校の同級生、番組での共演まで。弓木さんを中心に、人とのつながりを“相関図”にしてみました。</p>
@@ -15,11 +20,13 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
       </div>
 
       <!-- 軍団 首ンセス -->
-      <article class="unit y-reveal">
+      <article class="unit y-reveal" style="--tape:var(--y-butter)">
         <span class="unit-deco" aria-hidden="true">♛</span>
+        <span class="unit-crest" aria-hidden="true">♛</span>
+        <span class="sb-stamp unit-stamp" style="--cc:var(--y-lav)">♛ Royal Squad</span>
         <div class="unit-head">
           <span class="unit-badge">弓木 奈於 率いる軍団</span>
-          <h3 class="unit-name">{unit.name}<small>（{unit.reading}）</small></h3>
+          <h3 class="unit-name"><span class="sb-mark" style="--cc:var(--y-pink)">{unit.name}</span><small>（{unit.reading}）</small></h3>
           <p class="unit-meta">{unit.formed} 結成 ／ {unit.song}</p>
           <p class="unit-origin">{unit.origin}</p>
           <div class="unit-members">
@@ -29,10 +36,19 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
             ))}
           </div>
         </div>
+        <span class="sb-note unit-note" aria-hidden="true">“首のケアを怠らない”理念がすき</span>
       </article>
 
       <!-- ★ 中心相関図（縁の深い人を線でつなぐ） -->
-      <h3 class="rel-sec-title y-reveal">弓木さんと、特に縁の深い人たち</h3>
+      <div class="sb-head rel-head rel-head--1 y-reveal sb-taped" style="--cc:var(--y-pink);--tape:var(--y-pink)">
+        <span class="sb-tape l" aria-hidden="true"></span>
+        <span class="sb-num sb-head-num" style="--cc:var(--y-pink)">01</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Closest bonds</span>
+          <h2 class="rel-head-h">弓木さんと、特に縁の深い人たち</h2>
+        </span>
+        <span class="sb-doodle rel-head-doodle" aria-hidden="true" style="--cc:var(--y-butter)">✿</span>
+      </div>
       <div class="cor-legend y-reveal">
         <span class="cor-leg" style="--gc:var(--y-pink)"><i></i>同期</span>
         <span class="cor-leg" style="--gc:var(--y-mint)"><i></i>後輩</span>
@@ -74,10 +90,19 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
       </div>
 
       <!-- 全員ロスター（世代別） -->
-      <h3 class="rel-sec-title y-reveal">同じ時代を生きる乃木坂46の仲間（現役メンバー）</h3>
+      <div class="sb-head rel-head rel-head--2 y-reveal sb-taped" style="--cc:var(--y-sky);--tape:var(--y-sky)">
+        <span class="sb-tape r" aria-hidden="true"></span>
+        <span class="sb-num sb-head-num" style="--cc:var(--y-sky)">02</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Roster by generation</span>
+          <h2 class="rel-head-h rel-head-h--sm">同じ時代を生きる乃木坂46の仲間（現役メンバー）</h2>
+        </span>
+        <span class="sb-doodle rel-head-doodle" aria-hidden="true" style="--cc:var(--y-mint)">✦</span>
+      </div>
       <div class="gen-grid">
         {generations.map((g, gi) => (
-          <div class="cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+          <div class={`cluster cluster--sb y-reveal cl-tilt-${gi % 3}`} style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+            <span class="sb-doodle cluster-doodle" aria-hidden="true">♡</span>
             <h4 class="cluster-title">{g.gen}<small>現役 {g.members.length}名</small></h4>
             <div class="nodes">
               {g.members.map((m) => (
@@ -100,10 +125,19 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
       </div>
 
       <!-- 世代外のつながり -->
-      <h3 class="rel-sec-title y-reveal">弓木さんを支える、まわりの人々</h3>
+      <div class="sb-head rel-head rel-head--3 y-reveal sb-taped" style="--cc:var(--y-lav);--tape:var(--y-lav)">
+        <span class="sb-tape l" aria-hidden="true"></span>
+        <span class="sb-num sb-head-num" style="--cc:var(--y-lav)">03</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Around her</span>
+          <h2 class="rel-head-h rel-head-h--sm">弓木さんを支える、まわりの人々</h2>
+        </span>
+        <span class="sb-note rel-head-note" aria-hidden="true">先輩・同級生・番組のみなさん</span>
+      </div>
       <div class="grp-grid">
         {groups.map((g, gi) => (
-          <div class="cluster y-reveal" style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+          <div class={`cluster cluster--sb y-reveal cl-tilt-${(gi + 1) % 3}`} style={`--gc:${g.color}`} data-delay={(gi % 2) + 1}>
+            <span class="sb-stamp cluster-stamp" aria-hidden="true">♢ Friends</span>
             <h4 class="cluster-title cluster-title--sm">{g.group}</h4>
             <div class="nodes">
               {g.people.map((p) => (
@@ -125,7 +159,7 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
         ))}
       </div>
 
-      <p class="rel-foot y-reveal">※ メンバー在籍は2026年6月時点。番組での共演・本人やメンバーの発信など、公開されている情報をもとにファンが作成したものです。</p>
+      <p class="rel-foot y-reveal"><span class="sb-note rel-foot-note">※ メンバー在籍は2026年6月時点。番組での共演・本人やメンバーの発信など、公開されている情報をもとにファンが作成したものです。</span></p>
     </div>
   </section>
 
@@ -249,6 +283,62 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   .ymem-x { position: fixed; top: clamp(1rem, 4vw, 2rem); right: clamp(1rem, 4vw, 2rem); width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--y-ink); font-size: 1.2rem; box-shadow: var(--y-shadow); display: grid; place-items: center; }
 
   @media (prefers-reduced-motion: reduce) { .ymem-card { animation: none; } }
+
+  /* ===== スクラップブック化（このページのレイアウト調整のみ。見た目の量産はしない＝共有部品を使う） ===== */
+  .rel-page { border-radius: var(--y-radius); }
+
+  /* 表紙見出し＝ノートの表紙カードに（中央寄せテンプレを“貼った紙”に） */
+  .rel-cover { position: relative; background: #fffdf8; border: 1.5px solid var(--y-line); border-radius: var(--y-radius);
+    padding: clamp(1.8rem, 5vw, 2.8rem) 1.2rem clamp(1.6rem, 4vw, 2.2rem); box-shadow: var(--y-shadow-sm);
+    transform: rotate(-0.6deg); }
+  .rel-cover .y-eyebrow, .rel-cover h2, .rel-cover .rel-intro, .rel-cover .rel-hint { transform: rotate(0.6deg); }
+  .rel-cover-stamp { position: absolute; top: 1rem; right: 1rem; }
+  .rel-doodle { font-size: 1.4rem; }
+  .rel-doodle--a { top: 1.1rem; left: 1.2rem; }
+  .rel-doodle--b { bottom: 1rem; right: 1.6rem; font-size: 1.1rem; }
+
+  /* 軍団＝札／紋章っぽく少しリッチに（レイアウトは維持） */
+  .unit { position: relative; }
+  .unit-crest { position: absolute; top: 0.7rem; left: 0.9rem; font-size: 1.6rem; color: color-mix(in srgb, var(--y-butter) 75%, var(--y-peach)); opacity: 0.7; pointer-events: none; }
+  .unit-stamp { position: absolute; top: 0.9rem; right: 1rem; z-index: 2; }
+  .unit-note { position: absolute; bottom: 0.6rem; right: 1.1rem; z-index: 2; pointer-events: none; }
+  @media (max-width: 640px) { .unit-note { display: none; } }
+
+  /* 章見出し（.sb-head）に優先順位の差を付ける＝全部同じ大きさをやめる */
+  .rel-head { position: relative; margin-top: clamp(2.6rem, 6vw, 3.6rem); padding: 0.4rem 0.2rem 0.6rem; }
+  .rel-head .sb-head-eyebrow { color: color-mix(in srgb, var(--cc) 60%, var(--y-ink-soft)); }
+  .rel-head-h { line-height: 1.35; }
+  .rel-head--1 { transform: rotate(-0.8deg); }                    /* いちばん大きく＝最優先 */
+  .rel-head--1 .sb-head-num { font-size: clamp(2.6rem, 8vw, 4.2rem); }
+  .rel-head--1 .rel-head-h { font-size: clamp(1.5rem, 4vw, 2.1rem); }
+  .rel-head--2 { transform: rotate(0.7deg); justify-content: flex-end; text-align: right; }
+  .rel-head--2 .sb-head-tt { align-items: flex-end; }
+  .rel-head--3 { transform: rotate(-0.5deg); }
+  .rel-head-h--sm { font-size: clamp(1.2rem, 3vw, 1.6rem); }
+  .rel-head-doodle { font-size: 1.3rem; right: 0; top: -0.4rem; }
+  .rel-head--2 .rel-head-doodle { right: auto; left: -0.2rem; }
+  .rel-head-note { margin-top: 0.2rem; }
+  @media (max-width: 560px) {
+    .rel-head--2 { justify-content: flex-start; text-align: left; }
+    .rel-head--2 .sb-head-tt { align-items: flex-start; }
+  }
+
+  /* クラスター（均一な角丸カードの羅列）を“貼ったメモ”に＝微回転で崩す */
+  .cluster--sb { position: relative; }
+  .cl-tilt-0 { transform: rotate(-1deg); }
+  .cl-tilt-1 { transform: rotate(0.9deg); }
+  .cl-tilt-2 { transform: rotate(-0.4deg); }
+  .cluster-doodle { top: -6px; right: 10px; font-size: 1.05rem; color: var(--gc); }
+  .cluster-stamp { position: absolute; top: -10px; right: 12px; z-index: 2; }
+
+  /* 欄外メモ＝footを手書きの一言風に（可読性は維持） */
+  .rel-foot-note { transform: rotate(-0.6deg); max-width: 60ch; }
+
+  /* スクラップブックの微回転は reduced-motion でも見た目の崩しなので残すが、揺れ系は停止（.sb-doodle 側で対応済み） */
+  @media (prefers-reduced-motion: reduce) {
+    .rel-cover, .rel-cover .y-eyebrow, .rel-cover h2, .rel-cover .rel-intro, .rel-cover .rel-hint,
+    .rel-head, .cl-tilt-0, .cl-tilt-1, .cl-tilt-2, .rel-foot-note { transform: none; }
+  }
 </style>
 
 <script>

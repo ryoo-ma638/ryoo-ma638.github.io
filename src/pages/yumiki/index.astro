@@ -16,8 +16,56 @@ const cardColor: Record<string, string> = {
   "/yumiki/relations": "var(--y-butter)",
   "/yumiki/gallery": "var(--y-lav)",
 };
+// 各ナビを「アルバムに貼ったチェキ／シール」に。代表チェキの実在画像・キャプション・口語CTA・付箋メモを紐付け（事実とdataは不変・見せ方のみ）。
+const cardCheki: Record<
+  string,
+  { img: string; alt: string; cap: string; cta: string; note: string; stamp: string }
+> = {
+  "/yumiki/profile": {
+    img: "top-profile.jpg",
+    alt: "弓木奈於さん",
+    cap: "NAO YUMIKI",
+    cta: "沼の入口へ →",
+    note: "京都府・2/3生まれ",
+    stamp: "PROFILE",
+  },
+  "/yumiki/charm": {
+    img: "top-charm.jpg",
+    alt: "弓木奈於さん",
+    cap: "YUMIKI WORLD",
+    cta: "魅力にハマる →",
+    note: "はんなりすっとこどっこい",
+    stamp: "CHARM ♡",
+  },
+  "/yumiki/memory": {
+    img: "live_13th_stage.jpg",
+    alt: "13th YEAR BIRTHDAY LIVE のステージ",
+    cap: "LIVE & EVENT",
+    cta: "現場レポへ →",
+    note: "全ツ・ミーグリの記録",
+    stamp: "MEMORY",
+  },
+  "/yumiki/relations": {
+    img: "fav_shot_01.jpg",
+    alt: "弓木奈於さんのお気に入りショット",
+    cap: "RELATIONS",
+    cta: "首ンセス図鑑へ →",
+    note: "軍団＆お世話になった方々",
+    stamp: "RELATIONS",
+  },
+  "/yumiki/gallery": {
+    img: "photobook_cover.jpg",
+    alt: "1st写真集『天使だったのか』の表紙",
+    cap: "PHOTO ALBUM",
+    cta: "アルバムを開く →",
+    note: "写真集・生写真・お気に入り",
+    stamp: "PHOTO",
+  },
+};
 const heroLead =
   "天真爛漫なトークでバラエティを沸かせ、影では努力を惜しまない——乃木坂46 4期生・弓木奈於さんの魅力を、ファン目線でめいっぱい詰め込んだ非公式ファンサイトです。";
+// ヒーロー写真（サムネ）の背面に斜めで流すゴーストの言葉（ポートフォリオの hero-kinetic を弓木仕様に）
+const kineticWords = ["弓木奈於", "NAO YUMIKI", "ゆみっきー", "乃木坂46", "はんなり", "なおちゃん"];
 // 今の弓木さん（2026年6月時点の最新トピックス・事実）
 const now = [
   { emoji: "💿", t: "最新シングル", d: "42nd『是非に及ばず』(2026.7.22)に選抜入り。センターは一ノ瀬美空", c: "var(--y-sky)" },
@@ -30,6 +78,11 @@ const now = [
   <!-- HERO -->
   <section class="y-hero">
     <div class="y-hero-glow" aria-hidden="true"></div>
+    <div class="y-hero-kinetic" aria-hidden="true">
+      <div class="yhk-row yhk-row--1">{[...kineticWords, ...kineticWords, ...kineticWords].map((w, i) => (<span class:list={{ on: i % 3 === 1 }}>{w} <i>✦</i> </span>))}</div>
+      <div class="yhk-row yhk-row--2">{[...kineticWords, ...kineticWords, ...kineticWords].map((w, i) => (<span class:list={{ on: i % 3 === 2 }}>{w} <i>♡</i> </span>))}</div>
+      <div class="yhk-row yhk-row--3">{[...kineticWords, ...kineticWords, ...kineticWords].map((w, i) => (<span class:list={{ on: i % 4 === 0 }}>{w} <i>✿</i> </span>))}</div>
+    </div>
     <div class="y-container y-hero-inner">
       <div class="y-hero-text y-reveal">
         <span class="y-hero-eyebrow">NOGIZAKA46 <i>✦</i> 4<small>TH</small> GENERATION</span>
@@ -112,22 +165,47 @@ const now = [
     </div>
   </section>
 
-  <!-- NAV CARDS -->
-  <section class="y-section">
+  <!-- NAV CARDS（探検ナビ：均一角丸カード → アルバムに貼り混ぜたチェキ／シール風） -->
+  <section class="y-section sb-explore">
+    <div class="sb-grid sb-explore-paper" aria-hidden="true"></div>
     <div class="y-container">
-      <div class="y-head y-reveal">
-        <span class="y-eyebrow">Explore</span>
-        <h2><span class="wave">弓木ワールド</span>を探検しよう</h2>
+      <!-- 中央寄せテンプレを崩すノートの章見出し（左寄せ＋テープ＋通し番号） -->
+      <div class="sb-head y-reveal">
+        <span class="sb-num sb-head-num" style="--cc:var(--y-peach)" aria-hidden="true">00</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Explore</span>
+          <h2><span class="sb-mark" style="--cc:var(--y-butter)">弓木ワールド</span>を探検しよう</h2>
+        </span>
+        <span class="sb-stamp sb-head-stamp" style="--cc:var(--y-pink)">♡ INDEX</span>
       </div>
-      <div class="y-cards">
-        {cards.map((c, i) => (
-          <a href={c.href} class="y-nav-card y-card y-reveal" data-delay={(i % 3) + 1} style={`--cc:${cardColor[c.href]}`}>
-            <span class="y-nav-emoji">{c.emoji}</span>
-            <h3>{c.label}</h3>
-            <p>{cardDesc[c.href]}</p>
-            <span class="y-nav-go">のぞいてみる →</span>
-          </a>
-        ))}
+      <p class="sb-note sb-explore-note">気になるページから、好きにめくってね</p>
+
+      <div class="sb-album">
+        {cards.map((c, i) => {
+          const ck = cardCheki[c.href];
+          return (
+            <a
+              href={c.href}
+              class="sb-album-item y-reveal"
+              data-delay={(i % 4) + 1}
+              style={`--cc:${cardColor[c.href]}`}
+            >
+              <figure class="sb-cheki sb-taped sb-album-cheki" style={`--tape:${cardColor[c.href]}`}>
+                <span class={`sb-tape ${i % 2 === 0 ? "l" : "r"}`} aria-hidden="true"></span>
+                <span class="sb-stamp sb-album-stamp" aria-hidden="true">{c.emoji} {ck.stamp}</span>
+                <img src={img(ck.img)} alt={ck.alt} loading="lazy" />
+                <figcaption>{ck.cap}</figcaption>
+              </figure>
+              <div class="sb-sticky sb-album-sticky">
+                <h3 class="sb-album-title"><span class="sb-album-emoji" aria-hidden="true">{c.emoji}</span>{c.label}</h3>
+                <p class="sb-album-desc">{cardDesc[c.href]}</p>
+                <span class="sb-album-cta">{ck.cta}</span>
+              </div>
+              <span class="sb-note sb-album-note" aria-hidden="true">{ck.note}</span>
+              <span class="sb-doodle sb-album-doodle" aria-hidden="true">{["♡", "✦", "✿", "⭐️", "♪"][i % 5]}</span>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -143,7 +221,21 @@ const now = [
       filter: blur(10px); opacity: .85; animation: y-hero-glow 15s ease-in-out infinite alternate; }
     @keyframes y-hero-glow { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(0,-2%,0) scale(1.07); } }
 
-    .y-hero-inner { display: grid; gap: clamp(2rem, 4vw, 3rem); grid-template-columns: 1fr; align-items: center; }
+    /* ヒーロー背景：斜めに流れるゴーストの言葉（サムネ背面・ポートフォリオの hero-kinetic を弓木仕様に） */
+    .y-hero-kinetic { position: absolute; inset: -14% -12%; z-index: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(.1rem, 1.6vh, .9rem); transform: rotate(-8deg); pointer-events: none; opacity: .8; }
+    .yhk-row { display: flex; gap: 1.3rem; width: max-content; white-space: nowrap; font-family: var(--y-font-en); font-weight: 900; font-size: clamp(1.9rem, 8.4vw, 5.8rem); line-height: 1.05; color: transparent; -webkit-text-stroke: 1.6px color-mix(in srgb, var(--y-peach) 30%, transparent); }
+    .yhk-row i { font-style: normal; }
+    .yhk-row .on { -webkit-text-stroke: 0; }
+    .yhk-row--1 { animation: yhk1 52s linear infinite; }
+    .yhk-row--1 .on { color: color-mix(in srgb, var(--y-pink) 44%, transparent); }
+    .yhk-row--2 { -webkit-text-stroke-color: color-mix(in srgb, var(--y-sky) 32%, transparent); animation: yhk2 68s linear infinite; }
+    .yhk-row--2 .on { color: color-mix(in srgb, var(--y-sky) 42%, transparent); }
+    .yhk-row--3 { -webkit-text-stroke-color: color-mix(in srgb, var(--y-lav) 30%, transparent); animation: yhk1 86s linear infinite; }
+    .yhk-row--3 .on { color: color-mix(in srgb, var(--y-lav) 44%, transparent); }
+    @keyframes yhk1 { to { transform: translateX(-33.33%); } }
+    @keyframes yhk2 { from { transform: translateX(-33.33%); } to { transform: translateX(0); } }
+
+    .y-hero-inner { position: relative; z-index: 1; display: grid; gap: clamp(2rem, 4vw, 3rem); grid-template-columns: 1fr; align-items: center; }
     @media (min-width: 880px) { .y-hero-inner { grid-template-columns: 1.05fr 0.95fr; } }
 
     .y-hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--y-font-en); font-weight: 700; font-size: .78rem; letter-spacing: .14em; color: var(--y-ink-soft); background: #fff; border: 2px solid var(--y-line); padding: .42rem .95rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); }
@@ -193,11 +285,12 @@ const now = [
     .y-ribbon-unit { font-family: var(--y-font-en); font-weight: 700; font-size: 1rem; letter-spacing: .04em; color: #fff; white-space: nowrap; padding-right: 1rem; text-shadow: 0 1px 2px rgba(120,90,80,.2); }
     .y-ribbon-unit i { font-style: normal; }
     @keyframes y-marquee { to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .y-ribbon-track, .y-photo-ring, .y-hero-glow, .y-hero-name { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .y-ribbon-track, .y-photo-ring, .y-hero-glow, .y-hero-name, .yhk-row { animation: none; } }
 
     .y-now-sec { padding-top: 0; }
     /* スクラップブックのメモ風（付箋＋マスキングテープ＋互い違いの傾き） */
     .y-now-grid { display: grid; gap: 1.4rem 1.2rem; grid-template-columns: repeat(2, 1fr); max-width: 760px; margin-inline: auto; }
+    @media (min-width: 880px) { .y-now-grid { grid-template-columns: repeat(4, 1fr); max-width: none; } }
     .y-memo { position: relative; background: color-mix(in srgb, var(--cc) 15%, #fff); border: 1.5px solid color-mix(in srgb, var(--cc) 32%, #fff);
       border-radius: 14px; padding: 1.6rem 1.3rem 1.4rem; box-shadow: var(--y-shadow-sm); transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
     .y-memo:nth-child(odd) { transform: rotate(-1.5deg); }
@@ -210,19 +303,60 @@ const now = [
     .y-memo-t { font-size: 1.08rem; margin: 0.4rem 0 0.4rem; }
     .y-memo-d { color: var(--y-ink-soft); font-size: 0.85rem; line-height: 1.75; }
 
-    .y-cards { display: grid; gap: 1.4rem; grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 620px) { .y-cards { grid-template-columns: 1fr; } }
-    .y-nav-card { position: relative; overflow: hidden; padding: 2.1rem 1.7rem; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
-    .y-nav-card::after { content: ""; position: absolute; right: -26px; bottom: -26px; width: 88px; height: 88px; border-radius: 50%; background: color-mix(in srgb, var(--cc) 22%, transparent); transition: transform .45s var(--y-ease); }
-    .y-nav-card:hover { transform: translateY(-7px) rotate(-1.2deg); box-shadow: var(--y-shadow); }
-    .y-nav-card:hover::after { transform: scale(1.6); }
-    .y-nav-emoji { position: relative; z-index: 1; display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; font-size: 2rem; margin-bottom: 0.8rem;
-      background: color-mix(in srgb, var(--cc) 34%, #fff); box-shadow: 0 6px 16px color-mix(in srgb, var(--cc) 45%, transparent); }
-    .y-nav-card h3 { position: relative; z-index: 1; font-size: 1.4rem; margin-bottom: 0.4rem; }
-    .y-nav-card p { position: relative; z-index: 1; color: var(--y-ink-soft); font-size: 0.9rem; margin-bottom: 1rem; }
-    .y-nav-go { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--y-font-en); font-weight: 700; color: var(--y-ink);
-      background: color-mix(in srgb, var(--cc) 30%, #fff); padding: 0.4rem 0.95rem; border-radius: 999px; transition: gap .3s var(--y-ease); }
-    .y-nav-card:hover .y-nav-go { gap: 0.6rem; }
+    /* ===== 探検ナビ＝スクラップブック・アルバム（チェキ＋付箋＋テープ＋通し番号） ===== */
+    .sb-explore { position: relative; overflow: hidden; }
+    /* 方眼ノートの紙地を背面に薄く敷く（本文の可読性は保つ） */
+    .sb-explore-paper { position: absolute; inset: 0; z-index: 0; opacity: .5; pointer-events: none;
+      -webkit-mask-image: radial-gradient(120% 100% at 50% 0%, #000 55%, transparent 100%); mask-image: radial-gradient(120% 100% at 50% 0%, #000 55%, transparent 100%); }
+    .sb-explore > .y-container { position: relative; z-index: 1; }
+    .sb-head-stamp { margin-left: auto; align-self: center; }
+    .sb-explore-note { margin: -.6rem 0 2rem .4rem; }
+
+    /* アルバム面：チェキを互い違いに貼り混ぜる非対称グリッド */
+    /* 中央寄せflex＝5枚を上3＋下2の中央寄せに（右側に空セルの空白を作らない） */
+    .sb-album { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 2.4rem 1.6rem; }
+    .sb-album-item { flex: 0 1 calc(50% - 1rem); }
+    @media (min-width: 760px) { .sb-album { gap: 2.8rem 2rem; } .sb-album-item { flex-basis: calc(33.333% - 1.4rem); } }
+    @media (max-width: 520px) { .sb-album { gap: 2.6rem; max-width: 360px; margin-inline: auto; } .sb-album-item { flex-basis: 100%; } }
+
+    .sb-album-item { position: relative; display: block; padding-top: .4rem;
+      transition: transform .35s var(--y-ease); }
+    /* チェキを少しずつ違う角度で貼った“手で並べた”感（互い違いの微回転） */
+    .sb-album-item:nth-child(1) { transform: rotate(-2.5deg); }
+    .sb-album-item:nth-child(2) { transform: rotate(1.8deg); margin-top: 1.6rem; }
+    .sb-album-item:nth-child(3) { transform: rotate(-1.2deg); }
+    .sb-album-item:nth-child(4) { transform: rotate(2.2deg); margin-top: 1rem; }
+    .sb-album-item:nth-child(5) { transform: rotate(-2deg); }
+    .sb-album-item:hover, .sb-album-item:focus-visible { transform: rotate(0) translateY(-7px) scale(1.02); z-index: 2; outline: none; }
+    .sb-album-item:focus-visible .sb-album-cheki { box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc) 70%, #fff), var(--y-shadow); }
+
+    /* 代表チェキ（サイズ違い・テープ留め） */
+    .sb-album-cheki { display: block; width: 100%; padding: .6rem .6rem 1.5rem; transition: box-shadow .35s var(--y-ease); }
+    .sb-album-cheki > img { aspect-ratio: 4 / 5; object-position: center top; }
+    .sb-album-cheki figcaption { letter-spacing: .12em; }
+    /* 偶数番目のチェキは少し縦長＝サイズ違いで単調さを崩す */
+    .sb-album-item:nth-child(even) .sb-album-cheki > img { aspect-ratio: 3 / 4; }
+    .sb-album-stamp { position: absolute; top: -10px; right: -8px; z-index: 4; background: #fff;
+      font-size: .62rem; padding: .22rem .55rem; box-shadow: var(--y-shadow-sm); }
+
+    /* 付箋（タイトル＋説明＋口語CTA）。チェキに少し重ねて貼った感 */
+    .sb-album-sticky { margin: -.7rem .35rem 0; position: relative; z-index: 1; }
+    .sb-album-title { font-size: 1.18rem; margin: 0 0 .25rem; display: flex; align-items: center; gap: .4rem; }
+    .sb-album-emoji { font-size: 1.15rem; }
+    .sb-album-desc { color: var(--y-ink-soft); font-size: .82rem; line-height: 1.65; margin: 0 0 .7rem; }
+    .sb-album-cta { display: inline-flex; align-items: center; font-family: var(--y-font-en); font-weight: 700; font-size: .82rem; color: var(--y-ink);
+      background: color-mix(in srgb, var(--cc) 32%, #fff); padding: .35rem .9rem; border-radius: 999px; transition: gap .3s var(--y-ease), transform .3s var(--y-ease); }
+    .sb-album-item:hover .sb-album-cta, .sb-album-item:focus-visible .sb-album-cta { transform: translateX(3px); }
+
+    /* 欄外の手書きメモ＆落書き（背面・余白に薄く） */
+    .sb-album-note { position: absolute; bottom: .2rem; right: .2rem; max-width: 60%; text-align: right; opacity: .9; }
+    .sb-album-item:nth-child(even) .sb-album-note { left: .2rem; right: auto; text-align: left; }
+    .sb-album-doodle { font-size: 1.5rem; }
+    .sb-album-item:nth-child(1) .sb-album-doodle { top: 40%; left: -10px; }
+    .sb-album-item:nth-child(2) .sb-album-doodle { top: -6px; right: 18%; }
+    .sb-album-item:nth-child(3) .sb-album-doodle { bottom: 22%; right: -8px; }
+    .sb-album-item:nth-child(4) .sb-album-doodle { top: 8%; left: -6px; }
+    .sb-album-item:nth-child(5) .sb-album-doodle { bottom: 30%; left: -10px; }
 
     /* ===== お誕生日カウントダウン（スクラップブック風） ===== */
     .y-bday-sec { padding: clamp(1.2rem, 3vw, 1.8rem) 0 0; }

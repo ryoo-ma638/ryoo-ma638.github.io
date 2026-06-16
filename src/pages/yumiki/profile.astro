@@ -1,26 +1,110 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
+import Lightbox from "../../components/Lightbox.astro";
 import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.ts";
+
+// 付箋に回す差し色（順番に巡回）
+const stickyColors = [
+  "var(--y-peach)", "var(--y-sky)", "var(--y-mint)",
+  "var(--y-butter)", "var(--y-lav)", "var(--y-pink)",
+];
+// プロフィール帳らしい「質問」ラベルへの読み替え（事実・値は data のまま）
+const factQ: Record<string, string> = {
+  "生年月日": "うまれた日は？",
+  "出身地": "どこ出身？",
+  "所属": "どこにいる人？",
+  "ニックネーム": "なんて呼ぶ？",
+  "血液型": "血液型は？",
+  "星座": "星座は？",
+  "身長": "身長は？",
+  "サイリウムカラー": "サイリウムは？",
+  "趣味": "趣味は？",
+  "特技": "特技は？",
+  "家族構成": "家族は？",
+};
+// 趣味・特技には小さな落書きを添える
+const doodleKeys = new Set(["趣味", "特技"]);
+const factDoodle: Record<string, string> = { "趣味": "✿", "特技": "✦" };
+// 年表の節目（大きめに見せる）。data の date と一致するものを強調
+const milestoneDates = new Set(["2022.7", "2024.4", "2024.7", "2025.1"]);
+// レコード棚プレースホルダの背表紙色（6色を巡回）
+const spineColors = [
+  "var(--y-peach)", "var(--y-pink)", "var(--y-butter)",
+  "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
+];
 ---
 <Yumiki title="プロフィール — YUMIKI WORLD">
-  <section class="y-section">
+  <!-- ===== 観察ノートの表紙的セクション：基本情報（プロフィール帳） ===== -->
+  <section class="y-section pf-sheet sb-grid">
     <div class="y-container">
-      <div class="y-head y-reveal">
-        <span class="y-eyebrow">Profile</span>
-        <h2>📖 <span class="wave">弓木奈於</span>って、こんな人</h2>
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-sky)" aria-hidden="true">01</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Profile Note</span>
+          <h2>📖 <span class="sb-mark" style="--cc:var(--y-butter)">弓木奈於</span>って、こんな人</h2>
+        </span>
+        <span class="sb-stamp" style="--cc:var(--y-peach)" aria-hidden="true">♡ MY OSHI</span>
       </div>
 
-      <div class="y-prof-top">
-        <div class="y-prof-photo y-card y-reveal">
+      <div class="pf-top">
+        <div class="pf-left">
+        <!-- 観察写真（チェキ） -->
+        <figure class="sb-cheki pf-photo y-reveal sb-taped" style="--tape:var(--y-pink)">
+          <span class="sb-tape l" aria-hidden="true"></span>
           <img src={img("nao_main.jpg")} alt="弓木奈於さん" onerror="this.src='/assets/yumiki/yumiki-main.png'" />
+          <figcaption>{profile.en}</figcaption>
+          <span class="sb-doodle pf-photo-d1" style="--cc:var(--y-butter)" aria-hidden="true">✦</span>
+          <span class="sb-doodle pf-photo-d2" style="--cc:var(--y-peach)" aria-hidden="true">♡</span>
+        </figure>
+
+        <!-- 弓木さんのおもしろポイント（左カラムの空白を埋める・すべて事実ベース） -->
+        <aside class="pf-fun sb-sticky sb-taped y-reveal" style="--cc:var(--y-peach); --tape:var(--y-butter)" data-delay="2">
+          <span class="sb-tape r" aria-hidden="true"></span>
+          <h3 class="pf-fun-t">ここが<span class="sb-mark" style="--cc:var(--y-pink)">おもしろい</span> ♡</h3>
+          <p class="pf-fun-lead"><b>ドンストップエナジー（ドンエネ）</b><br />ラジオ『沈黙の金曜日』でおなじみ、公式動画にもなった伝説の即興パフォーマンス。</p>
+          <a class="pf-fun-link" href="https://www.instagram.com/reel/DJRKfD9TgSm/" target="_blank" rel="noopener noreferrer">▶ ドンエネを見る</a>
+          <p class="pf-fun-sub sb-note">弓木語、まだまだあります →</p>
+          <div class="pf-fun-tags">
+            <span class="sb-stamp" style="--cc:var(--y-sky)">はんなりすっとこどっこい</span>
+            <span class="sb-stamp" style="--cc:var(--y-mint)">Alligator🐊</span>
+            <span class="sb-stamp" style="--cc:var(--y-lav)">架空の歌</span>
+            <span class="sb-stamp" style="--cc:var(--y-butter)">暴れん坊パンダの歌</span>
+            <span class="sb-stamp" style="--cc:var(--y-peach)">テネット弓木</span>
+          </div>
+        </aside>
         </div>
-        <div class="y-prof-info y-card y-reveal" data-delay="1">
-          <h3 class="y-prof-name">{profile.name} <small>（{profile.kana}）</small></h3>
-          <p class="y-prof-en">{profile.en}</p>
-          <dl class="y-facts">
-            {profile.facts.map((f) => (<div><dt>{f.k}</dt><dd>{f.v}</dd></div>))}
-          </dl>
-          <div class="y-prof-sns">
+
+        <!-- プロフィール帳（質問→答えの付箋） -->
+        <div class="pf-card y-reveal" data-delay="1">
+          <h3 class="pf-name">{profile.name} <small>（{profile.kana}）</small></h3>
+          <p class="sb-note pf-note">基本データ、ぜんぶメモしました</p>
+
+          <div class="pf-facts">
+            {profile.facts.map((f, i) => (
+              <div
+                class:list={["pf-fact", { "is-wide": f.k === "趣味" || f.k === "特技" || f.k === "家族構成" || f.k === "サイリウムカラー" }]}
+                style={`--cc:${stickyColors[i % stickyColors.length]}; transform: rotate(${(i % 2 === 0 ? -1 : 1) * (1 + (i % 3) * 0.4)}deg)`}
+              >
+                <dl class="sb-sticky pf-sticky">
+                  <dt class="pf-q">{factQ[f.k] ?? f.k}</dt>
+                  <dd class="pf-a">
+                    {f.k === "サイリウムカラー" ? (
+                      <span class="pf-penlight">
+                        <span class="pf-swatch" style="background:#ff3b3b" aria-hidden="true"></span>
+                        <span class="pf-swatch" style="background:#9acd32" aria-hidden="true"></span>
+                        <span>{f.v}</span>
+                      </span>
+                    ) : f.v}
+                    {doodleKeys.has(f.k) && (
+                      <span class="sb-doodle pf-fact-d" style={`--cc:${stickyColors[i % stickyColors.length]}`} aria-hidden="true">{factDoodle[f.k]}</span>
+                    )}
+                  </dd>
+                </dl>
+              </div>
+            ))}
+          </div>
+
+          <div class="pf-sns">
             {sns.map((s) => (<a href={s.href} target="_blank" rel="noopener noreferrer" class="y-tag" style="background:var(--y-pink)"><img src={img(s.icon)} alt="" width="18" height="18" />{s.label}</a>))}
           </div>
         </div>
@@ -28,47 +112,126 @@ import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.t
     </div>
   </section>
 
-  <section class="y-section" style="padding-top:0">
+  <!-- ===== 活動年表：点線レールを♡ノードが進むロードマップ ===== -->
+  <section class="y-section pf-sheet-ruled sb-ruled" style="padding-top:0">
     <div class="y-container y-narrow">
-      <div class="y-head y-reveal"><span class="y-eyebrow">History</span><h2>🕰️ 活動年表</h2></div>
-      <ol class="y-timeline y-card y-reveal">
-        {timeline.map((t) => (
-          <li><span class="y-t-date">{t.date}</span><span class="y-t-dot"></span><span class="y-t-text">{t.text}</span></li>
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-mint)" aria-hidden="true">02</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">History</span>
+          <h2>🕰️ 活動<span class="sb-mark" style="--cc:var(--y-mint)">年表</span></h2>
+        </span>
+      </div>
+      <p class="sb-note pf-road-note">スタートからここまで、ぜんぶ追いかけた道のり ♡</p>
+
+      <ol class="pf-road">
+        {timeline.map((t, i) => (
+          <li class:list={["pf-stop", "y-reveal", { "is-mile": milestoneDates.has(t.date) }]} data-delay={(i % 3) + 1}>
+            <span class="pf-stop-node" aria-hidden="true">{milestoneDates.has(t.date) ? "★" : "♡"}</span>
+            <span class="pf-stop-date">{t.date}</span>
+            <span class="pf-stop-text">{t.text}</span>
+          </li>
         ))}
+        <li class="pf-stop pf-stop--goal y-reveal" aria-hidden="true">
+          <span class="pf-stop-node">✦</span>
+          <span class="pf-stop-text">これからも、ずっと応援！</span>
+        </li>
       </ol>
     </div>
   </section>
 
-  <section class="y-section" style="padding-top:0">
+  <!-- ===== ディスコグラフィー：レコード棚（ジャケ画像は出さずプレースホルダ） ===== -->
+  <section class="y-section pf-sheet sb-grid" style="padding-top:0">
     <div class="y-container">
-      <div class="y-head y-reveal"><span class="y-eyebrow">Discography</span><h2>💿 参加<span class="wave">シングル</span></h2></div>
-      <p class="y-disco-note y-reveal">2020年に乃木坂46へ配属。アンダー期を経て <b>30thで初選抜</b>、<b>35thで初福神</b>。以降もずっと選抜入りを続けています。</p>
-      <div class="y-disco">
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-peach)" aria-hidden="true">03</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Discography</span>
+          <h2>💿 参加<span class="sb-mark" style="--cc:var(--y-pink)">シングル</span></h2>
+        </span>
+      </div>
+      <p class="pf-disco-note y-reveal">2020年に乃木坂46へ配属。アンダー期を経て <b>30thで初選抜</b>、<b>35thで初福神</b>。以降もずっと選抜入りを続けています。</p>
+
+      <div class="pf-shelf">
         {singles.map((s, i) => (
-          <article class="y-single y-reveal" data-delay={(i % 3) + 1}>
-            <div class="y-single-cover">
-              <img src={`/assets/yumiki/singles/${s.no}.jpg`} alt={`${s.no}thシングル「${s.title}」`} loading="lazy" onerror="this.closest('.y-single-cover').classList.add('noimg')" />
-              <span class="y-single-no">{s.no}<small>th</small></span>
-              {s.pos !== "選抜" && <span class={`y-single-pos${s.pos === "初福神" ? " is-fukujin" : ""}`}>{s.pos}</span>}
+          <article
+            class:list={["pf-rec", "y-reveal", { "is-fukujin": s.pos === "初福神", "is-debut": s.pos === "初選抜" }]}
+            data-delay={(i % 3) + 1}
+            style={`--cc:${spineColors[i % spineColors.length]}; transform: rotate(${(i % 2 === 0 ? -1 : 1.2)}deg)`}
+            role="button"
+            tabindex="0"
+            aria-label={`${s.no}th「${s.title}」の詳細を見る`}
+            data-no={String(s.no)}
+            data-title={s.title}
+            data-date={s.date}
+            data-pos={s.pos}
+            data-desc={s.desc ?? ""}
+            data-jacket={s.jacket ? img(s.jacket) : ""}
+            data-mv={s.mv ? img(s.mv) : ""}
+          >
+            <div class="pf-rec-cover" aria-hidden="true">
+              <span class="pf-rec-disc"></span>
+              <span class="pf-rec-no sb-num" style={`--cc:${spineColors[i % spineColors.length]}`}>{s.no}<small>th</small></span>
+              {s.pos === "初福神" && <span class="pf-rec-heart">♡</span>}
             </div>
-            <div class="y-single-info">
+            <div class="pf-rec-info">
               <h3>{s.title}</h3>
-              <span class="y-single-date">{s.date}</span>
+              <span class="pf-rec-date">{s.date}</span>
+              {s.pos !== "選抜" && (
+                <span class:list={["sb-stamp", "pf-rec-pos", { "is-fukujin": s.pos === "初福神" }]} style={`--cc:${s.pos === "初福神" ? "var(--y-peach)" : "var(--y-sky)"}`}>{s.pos}</span>
+              )}
             </div>
           </article>
         ))}
       </div>
+      <p class="sb-note pf-shelf-note">※ジャケットはイメージ（番号で並べた“弓木さんのレコード棚”）。押すと詳細（思い出・ジャケ写・MVカット）— 素材は順次追加します。</p>
+    </div>
+
+    <!-- シングル詳細モーダル（クリックで開く：思い出＋ジャケ写＋MVカットの2枚） -->
+    <div class="sgl-modal" id="sglModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="シングルの詳細">
+      <div class="sgl-panel">
+        <button class="sgl-close" id="sglClose" type="button" aria-label="閉じる">✕</button>
+        <span class="sgl-tape sb-tape" aria-hidden="true"></span>
+        <p class="sgl-meta"><span class="sgl-no sb-num" id="sglNo"></span><small>th SINGLE</small></p>
+        <h3 class="sgl-title" id="sglTitle"></h3>
+        <p class="sgl-sub"><span class="sgl-date" id="sglDate"></span><span class="sgl-pos sb-stamp" id="sglPos"></span></p>
+        <p class="sgl-desc" id="sglDesc"></p>
+        <div class="sgl-imgs">
+          <figure class="sgl-shot">
+            <figcaption class="sgl-shot-label">📀 ジャケ写</figcaption>
+            <div class="sgl-shot-box" id="sglJacket"></div>
+          </figure>
+          <figure class="sgl-shot">
+            <figcaption class="sgl-shot-label">🎬 MVカット</figcaption>
+            <div class="sgl-shot-box" id="sglMv"></div>
+          </figure>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="y-section" style="padding-top:0">
+  <!-- ===== 主な出演番組：付箋メモのコルクボード ===== -->
+  <section class="y-section pf-sheet-ruled sb-ruled" style="padding-top:0">
     <div class="y-container">
-      <div class="y-head y-reveal"><span class="y-eyebrow">On TV</span><h2>📺 主な出演番組</h2></div>
-      <div class="y-shows">
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-butter)" aria-hidden="true">04</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">On TV</span>
+          <h2>📺 主な<span class="sb-mark" style="--cc:var(--y-butter)">出演番組</span></h2>
+        </span>
+      </div>
+      <div class="pf-shows">
         {shows.map((s, i) => (
-          <div class="y-show y-card y-reveal" data-delay={(i % 3) + 1}>
-            <h3>{s.name}</h3>
-            <p>{s.desc}</p>
+          <div
+            class="pf-show y-reveal"
+            data-delay={(i % 3) + 1}
+            style={`--cc:${stickyColors[(i + 2) % stickyColors.length]}; transform: rotate(${(i % 2 === 0 ? -1.4 : 1.2)}deg)`}
+          >
+            <div class="sb-sticky pf-show-sticky sb-taped" style={`--tape:${stickyColors[(i + 2) % stickyColors.length]}`}>
+              <span class="sb-tape" aria-hidden="true"></span>
+              <h3>{s.name}</h3>
+              <p>{s.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -76,66 +239,230 @@ import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.t
   </section>
 
   <style>
-    .y-prof-top { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
-    @media (min-width: 820px) { .y-prof-top { grid-template-columns: 0.8fr 1.2fr; } }
-    .y-prof-photo { padding: 10px; transform: rotate(-2deg); }
-    .y-prof-photo img { width: 100%; border-radius: 20px; aspect-ratio: 4/5; object-fit: cover; object-position: center top; }
-    .y-prof-info { padding: 1.8rem 1.8rem 1.6rem; }
-    .y-prof-name { font-size: 1.8rem; }
-    .y-prof-name small { font-size: 1rem; color: var(--y-muted); font-weight: 500; }
-    .y-prof-en { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); letter-spacing: 0.1em; margin-bottom: 1.2rem; }
-    .y-facts { display: grid; gap: 0.55rem; }
-    .y-facts > div { display: grid; grid-template-columns: 6.4rem 1fr; gap: 0.85rem; align-items: start; }
-    .y-facts dt { font-weight: 700; font-size: 0.76rem; color: var(--y-ink); text-align: center; padding: 0.34rem 0.4rem; border-radius: 999px; background: var(--y-cream-2); }
-    .y-facts > div:nth-child(6n+1) dt { background: color-mix(in srgb, var(--y-peach) 38%, #fff); }
-    .y-facts > div:nth-child(6n+2) dt { background: color-mix(in srgb, var(--y-sky) 40%, #fff); }
-    .y-facts > div:nth-child(6n+3) dt { background: color-mix(in srgb, var(--y-mint) 44%, #fff); }
-    .y-facts > div:nth-child(6n+4) dt { background: color-mix(in srgb, var(--y-butter) 50%, #fff); }
-    .y-facts > div:nth-child(6n+5) dt { background: color-mix(in srgb, var(--y-lav) 42%, #fff); }
-    .y-facts > div:nth-child(6n) dt { background: color-mix(in srgb, var(--y-pink) 46%, #fff); }
-    .y-facts dd { color: var(--y-ink); font-size: 0.92rem; padding-top: 0.14rem; }
-    .y-prof-sns { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.4rem; }
-    .y-prof-sns .y-tag { gap: 0.4rem; }
+    /* 紙地のセクションを少し縁取り、ノートの“ページ”らしく */
+    .pf-sheet, .pf-sheet-ruled { position: relative; }
 
-    .y-timeline { position: relative; padding: 1.6rem 1.8rem; }
-    .y-timeline li { display: grid; grid-template-columns: 4.5rem auto 1fr; gap: 1rem; align-items: center; padding: 0.7rem 0; border-bottom: 2px dotted var(--y-line); }
-    .y-timeline li:last-child { border-bottom: none; }
-    .y-t-date { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); font-size: 0.85rem; }
-    .y-t-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--y-mint); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--y-mint); }
-    .y-t-text { color: var(--y-ink); font-size: 0.92rem; }
+    /* ── 01 基本情報（プロフィール帳） ── */
+    .pf-top { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
+    @media (min-width: 860px) { .pf-top { grid-template-columns: 0.82fr 1.18fr; } }
+    /* 左カラム：写真＋おもしろカードを縦に積んで空白を埋める */
+    .pf-left { display: flex; flex-direction: column; gap: 1.5rem; }
 
-    .y-shows { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .y-show { padding: 1.5rem; border-left: 6px solid var(--y-butter); transition: transform .3s var(--y-ease), box-shadow .3s var(--y-ease); }
-    .y-show:hover { transform: translateY(-4px); box-shadow: var(--y-shadow); }
-    .y-show:nth-child(5n+1) { border-left-color: var(--y-peach); }
-    .y-show:nth-child(5n+2) { border-left-color: var(--y-sky); }
-    .y-show:nth-child(5n+3) { border-left-color: var(--y-mint); }
-    .y-show:nth-child(5n+4) { border-left-color: var(--y-lav); }
-    .y-show:nth-child(5n) { border-left-color: var(--y-pink); }
-    .y-show h3 { font-size: 1.2rem; margin-bottom: 0.3rem; }
-    .y-show p { color: var(--y-ink-soft); font-size: 0.9rem; }
+    .pf-photo { width: 100%; padding: .6rem .6rem 1.5rem; transform: rotate(-2.5deg); position: relative; }
+    .pf-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: center top; border-radius: 3px; }
+    .pf-photo figcaption { letter-spacing: .14em; color: var(--y-peach); }
+    .pf-photo-d1 { top: -14px; right: -10px; font-size: 1.5rem; }
+    .pf-photo-d2 { bottom: 34px; left: -14px; font-size: 1.4rem; }
 
-    /* ディスコグラフィー（参加シングル） */
-    .y-disco-note { text-align: center; color: var(--y-ink-soft); font-size: 0.92rem; max-width: 52ch; margin: 0 auto 1.8rem; line-height: 1.8; }
-    .y-disco-note b { color: var(--y-peach); }
-    .y-disco { display: grid; gap: 1.4rem 1.1rem; grid-template-columns: repeat(2, 1fr); }
-    @media (min-width: 620px) { .y-disco { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 920px) { .y-disco { grid-template-columns: repeat(4, 1fr); } }
-    .y-single { text-align: center; transition: transform 0.3s var(--y-ease); }
-    .y-single:nth-child(odd) { transform: rotate(-1deg); }
-    .y-single:nth-child(even) { transform: rotate(1deg); }
-    .y-single:hover { transform: rotate(0) translateY(-5px); }
-    .y-single-cover { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--y-cream-2); border: 4px solid #fff; box-shadow: var(--y-shadow-sm); }
-    .y-single-cover img { width: 100%; height: 100%; object-fit: cover; }
-    .y-single-cover.noimg { display: grid; place-items: center; background: linear-gradient(135deg, color-mix(in srgb, var(--y-pink) 22%, #fff), color-mix(in srgb, var(--y-lav) 22%, #fff)); }
-    .y-single-cover.noimg img { display: none; }
-    .y-single-cover.noimg::after { content: "♪"; font-size: 2rem; color: var(--y-peach); opacity: 0.7; }
-    .y-single-no { position: absolute; top: 8px; left: 8px; font-family: var(--y-font-en); font-weight: 700; font-size: 0.92rem; color: var(--y-ink); background: rgba(255,255,255,0.92); padding: 0.12rem 0.5rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); }
-    .y-single-no small { font-size: 0.62em; }
-    .y-single-pos { position: absolute; bottom: 8px; right: 8px; font-weight: 700; font-size: 0.64rem; color: #fff; background: var(--y-sky); padding: 0.2rem 0.5rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); }
-    .y-single-pos.is-fukujin { background: var(--y-peach); }
-    .y-single-info { margin-top: 0.6rem; }
-    .y-single-info h3 { font-size: 0.9rem; line-height: 1.45; margin-bottom: 0.1rem; }
-    .y-single-date { font-family: var(--y-font-en); font-weight: 700; font-size: 0.72rem; color: var(--y-muted); }
+    /* 左カラムの空白を埋める「おもしろポイント」カード（ドンエネ） */
+    .pf-fun { position: relative; transform: rotate(-1deg); }
+    .pf-fun-t { font-size: 1.12rem; margin: .15rem 0 .55rem; }
+    .pf-fun-lead { font-size: .88rem; color: var(--y-ink-soft); line-height: 1.7; margin: 0 0 .8rem; }
+    .pf-fun-lead b { color: var(--y-ink); }
+    .pf-fun-link { display: inline-flex; align-items: center; gap: .3rem; font-family: var(--y-font-en); font-weight: 700; font-size: .82rem; color: #fff; background: var(--y-peach); padding: .42rem .95rem; border-radius: 999px; box-shadow: var(--y-shadow-sm); transition: transform .3s var(--y-ease), box-shadow .3s var(--y-ease); }
+    .pf-fun-link:hover { transform: translateY(-2px) scale(1.03); box-shadow: var(--y-shadow); }
+    .pf-fun-sub { display: block; margin: .95rem 0 .6rem; }
+    .pf-fun-tags { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .pf-fun-tags .sb-stamp { background: #fff; }
+
+    .pf-card { position: relative; }
+    .pf-name { font-size: 1.8rem; }
+    .pf-name small { font-size: 1rem; color: var(--y-muted); font-weight: 500; }
+    .pf-note { margin: .2rem 0 1.4rem; }
+
+    .pf-facts { display: grid; gap: .9rem; grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 520px) { .pf-facts { grid-template-columns: 1fr; } }
+    .pf-fact { position: relative; }
+    .pf-fact.is-wide { grid-column: 1 / -1; }
+    .pf-fact .pf-sticky { position: relative; height: 100%; margin: 0; }
+    .pf-fact:hover { transform: rotate(0) translateY(-3px) !important; transition: transform .3s var(--y-ease); z-index: 4; }
+    .pf-q { font-family: var(--y-font-en); font-weight: 700; font-size: .72rem; color: var(--y-ink-soft); letter-spacing: .02em; margin-bottom: .25rem; }
+    .pf-q::before { content: "Q. "; color: color-mix(in srgb, var(--cc, var(--y-peach)) 80%, var(--y-ink-soft)); }
+    .pf-a { color: var(--y-ink); font-size: .95rem; font-weight: 700; line-height: 1.55; position: relative; }
+    .pf-fact-d { right: 2px; top: -10px; font-size: 1.1rem; }
+
+    /* サイリウムカラーのスウォッチ（赤×黄緑） */
+    .pf-penlight { display: inline-flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+    .pf-swatch { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; box-shadow: var(--y-shadow-sm); display: inline-block; }
+
+    .pf-sns { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.6rem; }
+    .pf-sns .y-tag { gap: .4rem; transform: rotate(-1.5deg); }
+    .pf-sns .y-tag:nth-child(2) { transform: rotate(1.5deg); }
+    .pf-sns .y-tag:nth-child(3) { transform: rotate(-1deg); }
+
+    /* ── 02 活動年表（点線レール×♡ノード） ── */
+    .pf-road-note { margin: -.4rem 0 1.6rem; }
+    .pf-road { position: relative; list-style: none; margin: 0; padding: .4rem 0 .4rem 2.2rem; }
+    /* 縦の点線レール */
+    .pf-road::before {
+      content: ""; position: absolute; left: 7px; top: .8rem; bottom: 1.4rem; width: 3px;
+      background-image: linear-gradient(var(--y-peach) 60%, transparent 0);
+      background-size: 3px 11px; background-repeat: repeat-y; border-radius: 3px;
+    }
+    .pf-stop { position: relative; display: grid; grid-template-columns: auto 1fr; gap: .2rem .9rem; align-items: baseline;
+      padding: .55rem 0; }
+    .pf-stop-node {
+      position: absolute; left: -2.2rem; top: .5rem; width: 18px; height: 18px; display: grid; place-items: center;
+      font-size: .68rem; color: var(--y-peach); background: #fff; border-radius: 50%;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--y-pink) 55%, #fff); z-index: 2;
+    }
+    .pf-stop-date { font-family: var(--y-font-en); font-weight: 700; color: var(--y-peach); font-size: .82rem; grid-column: 1 / -1; }
+    .pf-stop-text { color: var(--y-ink); font-size: .95rem; grid-column: 1 / -1; }
+
+    /* 節目は大きめ＆カード化 */
+    .pf-stop.is-mile { background: color-mix(in srgb, var(--y-butter) 14%, #fff); border: 1.5px solid color-mix(in srgb, var(--y-butter) 34%, #fff);
+      border-radius: 4px 14px 10px 12px; padding: .8rem 1rem; box-shadow: var(--y-shadow-sm); transform: rotate(-.6deg); margin: .3rem 0; }
+    .pf-stop.is-mile .pf-stop-node { left: calc(-2.2rem - .8px); top: .85rem; width: 24px; height: 24px; font-size: .85rem; color: var(--y-butter);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--y-butter) 60%, #fff); }
+    .pf-stop.is-mile .pf-stop-date { color: color-mix(in srgb, var(--y-peach) 80%, var(--y-ink)); font-size: .9rem; }
+    .pf-stop.is-mile .pf-stop-text { font-weight: 700; font-size: 1.02rem; }
+
+    /* ゴール */
+    .pf-stop--goal { margin-top: .6rem; }
+    .pf-stop--goal .pf-stop-node { color: var(--y-mint); box-shadow: 0 0 0 3px color-mix(in srgb, var(--y-mint) 55%, #fff); }
+    .pf-stop--goal .pf-stop-text { font-weight: 700; color: var(--y-ink-soft); }
+
+    /* ── 03 ディスコグラフィー（レコード棚） ── */
+    .pf-disco-note { text-align: center; color: var(--y-ink-soft); font-size: .92rem; max-width: 52ch; margin: 0 auto 2rem; line-height: 1.8; }
+    .pf-disco-note b { color: var(--y-peach); }
+    .pf-shelf { display: grid; gap: 1.4rem 1.1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 620px) { .pf-shelf { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 920px) { .pf-shelf { grid-template-columns: repeat(4, 1fr); } }
+
+    .pf-rec { text-align: center; transition: transform .3s var(--y-ease); position: relative; }
+    .pf-rec:hover { transform: rotate(0) translateY(-5px) !important; z-index: 3; }
+
+    /* それっぽいジャケット（6色パステル）＋レコード盤 */
+    .pf-rec-cover {
+      position: relative; aspect-ratio: 1; border-radius: 6px 14px 6px 14px; overflow: hidden;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--cc, var(--y-pink)) 34%, #fff),
+        color-mix(in srgb, var(--cc, var(--y-pink)) 14%, #fff));
+      border: 4px solid #fff; box-shadow: var(--y-shadow-sm); display: grid; place-items: center;
+    }
+    .pf-rec-disc {
+      position: absolute; width: 64%; aspect-ratio: 1; border-radius: 50%;
+      background: radial-gradient(circle, #fff 16%, transparent 17%),
+        repeating-radial-gradient(circle, color-mix(in srgb, var(--cc, var(--y-pink)) 50%, #fff) 0 2px, color-mix(in srgb, var(--cc, var(--y-pink)) 30%, #fff) 2px 5px);
+      right: -22%; opacity: .9;
+    }
+    .pf-rec-no { position: relative; font-size: clamp(1.8rem, 7vw, 2.6rem); z-index: 1;
+      -webkit-text-stroke-width: 3px; }
+    .pf-rec-no small { font-size: .42em; }
+
+    /* 初選抜 / 初福神は前面に大きく */
+    .pf-rec.is-debut .pf-rec-cover { border-color: color-mix(in srgb, var(--y-sky) 50%, #fff); }
+    .pf-rec.is-fukujin { transform: rotate(-1deg) scale(1.06) !important; z-index: 2; }
+    .pf-rec.is-fukujin .pf-rec-cover { border: 5px solid var(--y-peach); box-shadow: 0 14px 30px rgba(255, 120, 150, .28); }
+    .pf-rec-heart { position: absolute; inset: 0; display: grid; place-items: center; font-size: clamp(2.4rem, 9vw, 3.4rem);
+      color: var(--y-peach); z-index: 2; pointer-events: none; filter: drop-shadow(0 3px 6px rgba(255,120,150,.4)); animation: floaty 6s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .pf-rec-heart { animation: none; } }
+
+    .pf-rec-info { margin-top: .65rem; }
+    .pf-rec-info h3 { font-size: .9rem; line-height: 1.45; margin-bottom: .15rem; }
+    .pf-rec-date { font-family: var(--y-font-en); font-weight: 700; font-size: .72rem; color: var(--y-muted); }
+    .pf-rec-pos { margin-top: .45rem; font-size: .68rem; color: var(--y-ink-soft); }
+    .pf-rec-pos.is-fukujin { color: color-mix(in srgb, var(--y-peach) 80%, var(--y-ink)); border-style: solid; }
+
+    .pf-shelf-note { display: block; text-align: center; margin-top: 1.6rem; }
+
+    /* ── 04 出演番組（付箋のコルクボード） ── */
+    .pf-shows { display: grid; gap: 1.6rem 1.2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .pf-show { transition: transform .3s var(--y-ease); position: relative; }
+    .pf-show:hover { transform: rotate(0) translateY(-4px) !important; z-index: 3; }
+    .pf-show-sticky { padding-top: 1.3rem; height: 100%; }
+    .pf-show-sticky h3 { font-size: 1.15rem; margin-bottom: .35rem; }
+    .pf-show-sticky p { color: var(--y-ink-soft); font-size: .88rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pf-rec, .pf-show, .pf-fact { transform: none !important; }
+    }
+    /* ── シングル詳細モーダル（押すと開く：思い出＋ジャケ写＋MVカット） ── */
+    .pf-rec { cursor: pointer; }
+    .pf-rec:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc, var(--y-peach)) 60%, #fff); border-radius: 10px; }
+    .sgl-modal { position: fixed; inset: 0; z-index: 900; display: none; place-items: center; padding: clamp(1rem, 4vw, 2.5rem);
+      background: color-mix(in srgb, var(--y-ink) 40%, transparent); backdrop-filter: blur(6px); opacity: 0; transition: opacity .3s var(--y-ease); }
+    .sgl-modal.open { display: grid; opacity: 1; }
+    .sgl-panel { position: relative; width: min(620px, 100%); max-height: 90vh; overflow-y: auto; background: #fffdf8;
+      border-radius: 18px; border: 2px solid var(--y-line); box-shadow: var(--y-shadow); padding: clamp(1.5rem, 4vw, 2.2rem); }
+    .sgl-tape { top: -13px; left: 50%; --tape: var(--y-pink); }
+    .sgl-close { position: absolute; top: 12px; right: 12px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; background: #fff;
+      box-shadow: var(--y-shadow-sm); color: var(--y-ink); font-size: 1.05rem; line-height: 1; display: grid; place-items: center; transition: transform .3s var(--y-ease), color .3s; }
+    .sgl-close:hover { transform: rotate(90deg) scale(1.08); color: var(--y-peach); }
+    .sgl-meta { margin: 0; line-height: 1; }
+    .sgl-no { font-size: 2.4rem; }
+    .sgl-meta small { font-family: var(--y-font-en); font-weight: 700; color: var(--y-muted); letter-spacing: .1em; margin-left: .35rem; }
+    .sgl-title { font-size: clamp(1.3rem, 4vw, 1.7rem); margin: .25rem 0 .4rem; }
+    .sgl-sub { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin: 0 0 1rem; }
+    .sgl-date { font-family: var(--y-font-en); font-weight: 700; color: var(--y-ink-soft); }
+    .sgl-desc { color: var(--y-ink-soft); line-height: 1.85; margin: 0 0 1.3rem; white-space: pre-wrap; }
+    .sgl-desc.is-soon { color: var(--y-muted); }
+    .sgl-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 480px) { .sgl-imgs { grid-template-columns: 1fr; } }
+    .sgl-shot { margin: 0; }
+    .sgl-shot-label { font-family: var(--y-font-en); font-weight: 700; font-size: .8rem; color: var(--y-ink-soft); margin-bottom: .4rem; }
+    .sgl-shot-box { aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: color-mix(in srgb, var(--y-line) 38%, #fff);
+      display: grid; place-items: center; border: 1px dashed color-mix(in srgb, var(--y-line) 90%, var(--y-muted)); }
+    .sgl-shot-img { width: 100%; height: 100%; cursor: zoom-in; display: block; }
+    .sgl-shot-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sgl-soon { font-family: var(--y-font-en); font-weight: 700; font-size: .82rem; color: var(--y-muted); }
+    @media (prefers-reduced-motion: reduce) { .sgl-modal { transition: none; } }
   </style>
+
+  <Lightbox />
+
+  <script>
+    (function () {
+      const modal = document.getElementById("sglModal");
+      if (!modal) return;
+      const byId = (id) => document.getElementById(id);
+      const fill = (boxId, src, cap) => {
+        const box = byId(boxId);
+        if (!box) return;
+        if (src) {
+          const w = document.createElement("div");
+          w.className = "sgl-shot-img";
+          w.setAttribute("data-gallery", JSON.stringify([src]));
+          w.setAttribute("data-caption", cap);
+          w.setAttribute("role", "button");
+          w.setAttribute("tabindex", "0");
+          w.setAttribute("aria-label", cap + "を拡大");
+          const im = document.createElement("img");
+          im.src = src; im.alt = cap; im.loading = "lazy";
+          w.appendChild(im);
+          box.replaceChildren(w);
+        } else {
+          const s = document.createElement("span");
+          s.className = "sgl-soon"; s.textContent = "準備中";
+          box.replaceChildren(s);
+        }
+      };
+      const open = (el) => {
+        const d = el.dataset;
+        byId("sglNo").textContent = d.no || "";
+        byId("sglTitle").textContent = "『" + (d.title || "") + "』";
+        byId("sglDate").textContent = d.date || "";
+        const pos = byId("sglPos");
+        pos.textContent = d.pos || ""; pos.style.display = d.pos ? "" : "none";
+        const desc = byId("sglDesc");
+        if (d.desc) { desc.textContent = d.desc; desc.classList.remove("is-soon"); }
+        else { desc.textContent = "このシングルの思い出・特徴は準備中です。素材ができ次第ここに載せます。"; desc.classList.add("is-soon"); }
+        fill("sglJacket", d.jacket, (d.no || "") + "th ジャケ写");
+        fill("sglMv", d.mv, (d.no || "") + "th MVカット");
+        modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      };
+      const close = () => {
+        modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+      document.querySelectorAll(".pf-rec").forEach((el) => {
+        el.addEventListener("click", () => open(el));
+        el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(el); } });
+      });
+      byId("sglClose").addEventListener("click", close);
+      modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("open")) close(); });
+    })();
+  </script>
 </Yumiki>

@@ -10,7 +10,7 @@
   --y-cream-2: #fdeee2;
   --y-ink: #4a3b34;        /* やわらかいこげ茶（黒より可愛い） */
   --y-ink-soft: #7a685f;
-  --y-muted: #a99a90;
+  --y-muted: #857262;        /* コントラスト改善（旧#a99a90はクリーム地で約2.3:1=WCAG未達） */
   --y-line: #f0ddcd;
   --y-card: #ffffff;
 
@@ -32,7 +32,7 @@
   --y-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.yumiki { font-family: var(--y-font-jp); color: var(--y-ink); background: var(--y-cream); line-height: 1.9; }
+.yumiki { font-family: var(--y-font-jp); color: var(--y-ink); background: var(--y-cream); line-height: 1.75; }
 .yumiki * { box-sizing: border-box; }
 .yumiki img { display: block; max-width: 100%; }
 .yumiki figure { margin: 0; }
@@ -90,10 +90,11 @@
 @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes wobble { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 
-/* リビール */
-.y-reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s var(--y-ease), transform 0.8s var(--y-ease); }
+/* リビール（.js が付く＝JS有効時のみ隠す。JS無効/失敗でも本文は表示。reduced-motion は即時表示で空白を作らない） */
+.js .y-reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s var(--y-ease), transform 0.8s var(--y-ease); }
 .y-reveal.is-visible { opacity: 1; transform: none; }
-.y-reveal[data-delay="1"]{ transition-delay: .1s } .y-reveal[data-delay="2"]{ transition-delay: .2s } .y-reveal[data-delay="3"]{ transition-delay: .3s }
+.y-reveal[data-delay="1"]{ transition-delay: .1s } .y-reveal[data-delay="2"]{ transition-delay: .2s } .y-reveal[data-delay="3"]{ transition-delay: .3s } .y-reveal[data-delay="4"]{ transition-delay: .4s }
+@media (prefers-reduced-motion: reduce) { .js .y-reveal { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) { .yumiki *, .yumiki *::before, .yumiki *::after { animation: none !important; transition-duration: .001ms !important; } }
 
@@ -128,3 +129,70 @@
 .y-footer .y-sns a:hover { transform: translateY(-4px) scale(1.08); }
 .y-footer .y-sns img { width: 24px; height: 24px; }
 .y-disclaimer { font-size: 0.72rem; color: var(--y-muted); max-width: 60ch; margin: 1rem auto 0; line-height: 1.7; }
+
+/* =========================================================
+   スクラップブック（推し活ノート）共通パーツ
+   ── 全ページで使い回し、世界観を統一する。各ページは原則
+   これらの class を使う（独自の見た目を増やしてバラけさせない）。
+   色は --cc を指定すると差し色が切り替わる（既定はピーチ）。
+   ========================================================= */
+
+/* 紙地：方眼ノート／罫線ノート（セクションやカードの背景に敷く） */
+.sb-grid { background-color: #fffdf8;
+  background-image: linear-gradient(color-mix(in srgb, var(--y-line) 80%, transparent) 1px, transparent 1px),
+                    linear-gradient(90deg, color-mix(in srgb, var(--y-line) 80%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px; }
+.sb-ruled { background-color: #fffdf8;
+  background-image: repeating-linear-gradient(transparent 0 31px, color-mix(in srgb, var(--y-sky) 30%, transparent) 31px 32px); }
+
+/* washi マスキングテープ（.sb-taped を付けた要素に擬似的なテープ片を貼る） */
+.sb-taped { position: relative; }
+.sb-tape { position: absolute; z-index: 3; width: 84px; height: 26px; top: -12px; left: 50%; transform: translateX(-50%) rotate(-5deg);
+  background: color-mix(in srgb, var(--tape, var(--cc, var(--y-pink))) 60%, transparent); opacity: .9; box-shadow: 0 2px 5px rgba(120,90,80,.12);
+  -webkit-mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); }
+.sb-tape.l { left: 26px; transform: rotate(-8deg); }
+.sb-tape.r { left: auto; right: 26px; transform: rotate(7deg); }
+
+/* チェキ（白フチのポラロイド／チェキ風フレーム） */
+.sb-cheki { display: inline-block; background: #fff; padding: .55rem .55rem 1.4rem; border-radius: 4px; box-shadow: var(--y-shadow-sm); border: 1px solid #f3e8dd; }
+.sb-cheki > img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; display: block; }
+.sb-cheki figcaption, .sb-cheki .cap { font-family: var(--y-font-en); font-weight: 700; text-align: center; margin-top: .5rem; color: var(--y-ink-soft); font-size: .82rem; }
+
+/* 付箋（手書きメモ。角を不揃いに、紙の継ぎ目感） */
+.sb-sticky { position: relative; background: color-mix(in srgb, var(--cc, var(--y-butter)) 17%, #fff);
+  border: 1px solid color-mix(in srgb, var(--cc, var(--y-butter)) 32%, #fff); border-radius: 3px 12px 9px 11px;
+  padding: 1rem 1.15rem; box-shadow: var(--y-shadow-sm); }
+
+/* スタンプ／シール風ラベル（破線丸・少し傾く） */
+.sb-stamp { display: inline-flex; align-items: center; gap: .3rem; font-family: var(--y-font-en); font-weight: 700; font-size: .72rem;
+  border: 2px dashed color-mix(in srgb, var(--cc, var(--y-peach)) 58%, #fff); color: var(--y-ink-soft);
+  padding: .2rem .65rem; border-radius: 999px; transform: rotate(-3deg); background: #fff; }
+
+/* 大きな通し番号（ストローク・紙面の手書き番号） */
+.sb-num { font-family: var(--y-font-en); font-weight: 800; line-height: 1; color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--cc, var(--y-peach)) 42%, transparent); }
+
+/* 手書き風マーカー下線（既存 .wave の汎用版・色可変） */
+.sb-mark { background: linear-gradient(transparent 58%, color-mix(in srgb, var(--cc, var(--y-butter)) 72%, transparent) 58%); padding-inline: .1em; }
+
+/* 落書きドゥードル（♡✦✿ などを散らす・ゆらぐ） */
+.sb-doodle { position: absolute; pointer-events: none; color: var(--cc, var(--y-peach)); opacity: .8;
+  animation: twinkle 2.8s ease-in-out infinite, floaty 7s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .sb-doodle { animation: none; } }
+
+/* 欄外の手書きツッコミメモ（ノートの余白に書いた一言） */
+.sb-note { font-family: var(--y-font-jp); font-weight: 500; font-size: .82rem; color: var(--y-ink-soft);
+  display: inline-block; transform: rotate(-2deg); }
+.sb-note::before { content: "✐ "; color: var(--y-peach); }
+
+/* 見出しのバリエーション：中央寄せテンプレを崩す“ノートの章見出し”（左寄せ＋テープ＋通し番号） */
+.sb-head { display: flex; align-items: flex-end; gap: .8rem; margin-bottom: 1.8rem; }
+.sb-head .sb-head-num { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+.sb-head .sb-head-tt { display: flex; flex-direction: column; }
+.sb-head .sb-head-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .72rem; color: var(--y-peach); }
+.sb-head h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); }
+
+/* チケット半券（思い出などで使用：右側にミシン目） */
+.sb-ticket { position: relative; background: #fff; border-radius: 10px; box-shadow: var(--y-shadow-sm); padding: 1rem 1.1rem; }
+.sb-ticket::after { content: ""; position: absolute; top: 8px; bottom: 8px; right: 64px; width: 2px;
+  background-image: radial-gradient(circle, var(--y-line) 1.4px, transparent 1.5px); background-size: 2px 9px; }

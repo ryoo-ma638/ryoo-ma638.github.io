@@ -6,62 +6,121 @@ const g = gallery;
 const pbImgs = [g.photobook.cover, ...g.photobook.offshots].map(img);
 const nsImgs = g.namashashin.map((n) => img(n.img));
 const favImgs = g.favs.map(img);
+
+// 写真集の脇に貼るミニ・スタンプ群（事実：プーケット/バンコク撮影・オリコン1位・秋元康命名）
+const pbStamps = [
+  { t: "プーケット", e: "🏝", cc: "var(--y-sky)" },
+  { t: "バンコク", e: "🛺", cc: "var(--y-mint)" },
+  { t: "オリコン1位", e: "👑", cc: "var(--y-butter)" },
+  { t: "秋元康 命名", e: "✍", cc: "var(--y-lav)" },
+];
+// 生写真カードの色（種類ごとに washi の差し色を変えて単調を崩す）
+const nsColors = ["var(--y-pink)", "var(--y-sky)", "var(--y-mint)", "var(--y-peach)", "var(--y-lav)"];
+// お気に入りに時々添える欄外メモ
+const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…", "", "保存版"];
 ---
 <Yumiki title="写真 — YUMIKI WORLD">
-  <section class="y-section">
+  <!-- ===== 表紙：推しアルバムのページ ===== -->
+  <section class="y-section gal-page">
     <div class="y-container">
       <div class="y-head y-reveal">
         <span class="y-eyebrow">Gallery</span>
-        <h2>📷 <span class="wave">写真</span>ギャラリー</h2>
+        <h2>📷 弓木さんの<span class="wave">推しアルバム</span></h2>
       </div>
 
       <!-- 写真集 -->
-      <div class="y-pb y-reveal">
-        <div class="y-pb-cover y-card" data-gallery={JSON.stringify(pbImgs)} data-index="0" data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="写真集の画像を拡大">
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-lav)">01</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Photo Book</span>
+          <h2>1st 写真集</h2>
+        </span>
+      </div>
+
+      <div class="pb-spread">
+        <!-- 表紙チェキ（大きく傾けて主役化） -->
+        <figure class="pb-cover sb-cheki sb-taped y-reveal" style="--tape:var(--y-lav)" data-gallery={JSON.stringify(pbImgs)} data-index="0" data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="写真集の画像を拡大">
+          <span class="sb-tape l" aria-hidden="true"></span>
+          <span class="sb-tape r" aria-hidden="true"></span>
           <img src={img(g.photobook.cover)} alt={g.photobook.title} onerror="this.src='/assets/yumiki/nao_photobook_cover.jpg'" />
-        </div>
-        <div class="y-pb-text">
-          <span class="y-tag" style="background:var(--y-lav)">1st PHOTO BOOK</span>
-          <h3>{g.photobook.title}</h3>
-          <p>{g.photobook.text}</p>
+          <figcaption>1st PHOTO BOOK</figcaption>
+        </figure>
+
+        <div class="pb-text y-reveal" data-delay="1">
+          <div class="pb-stamps" aria-hidden="false">
+            {pbStamps.map((s) => (
+              <span class="sb-stamp" style={`--cc:${s.cc}`}>{s.e} {s.t}</span>
+            ))}
+          </div>
+          <h3 class="pb-title"><span class="sb-mark" style="--cc:var(--y-lav)">{g.photobook.title}</span></h3>
+          <p class="pb-lead">{g.photobook.text}</p>
+          <span class="sb-note" style="margin-top:.4rem">25歳の誕生日に夢が叶った一冊</span>
         </div>
       </div>
-      <div class="y-offshots">
-        {g.photobook.offshots.map((o, i) => (
-          <div class="y-off y-reveal" data-delay={(i % 3) + 1} data-gallery={JSON.stringify(pbImgs)} data-index={i + 1} data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="オフショットを拡大"><img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.y-off').style.display='none'" /></div>
-        ))}
+
+      <!-- オフショット（高さ・サイズをバラけさせ、1枚だけ大きく＝この一枚が好き） -->
+      <div class="off-band">
+        <span class="sb-doodle" style="--cc:var(--y-peach); top:-1.4rem; left:8%; font-size:1.4rem" aria-hidden="true">✦</span>
+        <span class="sb-doodle" style="--cc:var(--y-sky); bottom:-1rem; right:6%; font-size:1.2rem" aria-hidden="true">♡</span>
+        <p class="off-label sb-note" style="--cc:var(--y-peach)">この一枚が好き →</p>
+        <div class="off-masonry">
+          {g.photobook.offshots.map((o, i) => (
+            <figure class={`off-cheki sb-cheki y-reveal${i === 0 ? " off-cheki--big" : ""}`} data-delay={(i % 3) + 1} style={`transform: rotate(${[-2.5, 1.5, -1, 2, -1.8, 1.2][i % 6]}deg)`} data-gallery={JSON.stringify(pbImgs)} data-index={i + 1} data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="オフショットを拡大">
+              <img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.off-cheki').style.display='none'" />
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 生写真 -->
-  <section class="y-section" style="padding-top:0">
+  <!-- ===== 生写真：トレカ／チェキ風コレクション ===== -->
+  <section class="y-section gal-page" style="padding-top:0">
     <div class="y-container">
-      <div class="y-head y-reveal"><span class="y-eyebrow">Bromides</span><h2>🃏 生写真コレクション</h2></div>
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-peach)">02</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Bromides</span>
+          <h2>生写真コレクション</h2>
+        </span>
+      </div>
       <p class="y-note y-reveal">1人につき「ヨリ」「チュウ」「ヒキ」の3種類が基本。衣装によっては「座りヨリ」などレアポーズも。</p>
-      <div class="y-namashashin">
+
+      <div class="ns-trays">
         {g.namashashin.map((n, i) => (
-          <figure class={`y-ns y-reveal${n.rare ? " y-ns--rare" : ""}`} data-delay={(i % 3) + 1}>
-            <div class="y-ns-img" data-gallery={JSON.stringify(nsImgs)} data-index={i} data-caption="生写真コレクション" role="button" tabindex="0" aria-label={`${n.label} を拡大`}>
-              <img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.y-ns-img').classList.add('noimg')" />
-              {n.rare && <span class="y-ns-rare">★ レア</span>}
+          <figure class={`ns-card y-reveal${n.rare ? " ns-card--rare" : ""}`} data-delay={(i % 3) + 1} style={`--cc:${nsColors[i % nsColors.length]}; transform: rotate(${[-2, 1.4, -1.2, 2, -1.6][i % 5]}deg)`}>
+            <div class="ns-img" data-gallery={JSON.stringify(nsImgs)} data-index={i} data-caption="生写真コレクション" role="button" tabindex="0" aria-label={`${n.label} を拡大`}>
+              <img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.ns-img').classList.add('noimg')" />
+              {n.rare && <span class="ns-holo" aria-hidden="true"></span>}
+              {n.rare && <span class="ns-rare">★ レア</span>}
             </div>
-            <figcaption>{n.label}</figcaption>
+            <figcaption class="ns-label">{n.label}</figcaption>
           </figure>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- お気に入り -->
-  <section class="y-section" style="padding-top:0">
+  <!-- ===== お気に入り：ノートに貼ったチェキ ===== -->
+  <section class="y-section gal-page" style="padding-top:0">
     <div class="y-container">
-      <div class="y-head y-reveal"><span class="y-eyebrow">My Favorites</span><h2>♡ お気に入りショット</h2></div>
-      <div class="y-fav-grid">
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-mint)">03</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">My Favorites</span>
+          <h2>お気に入りショット</h2>
+        </span>
+      </div>
+
+      <div class="fav-board">
         {g.favs.map((f, i) => (
-          <a class="y-fav y-reveal" data-delay={(i % 3) + 1} href={img(f)} data-gallery={JSON.stringify(favImgs)} data-index={i} data-caption="お気に入りショット" aria-label="お気に入りショットを拡大">
-            <img src={img(f)} alt="お気に入りショット" loading="lazy" onerror="this.closest('.y-fav').style.display='none'" />
-          </a>
+          <div class="fav-item">
+            <a class={`fav-cheki sb-cheki sb-taped y-reveal${i % 3 === 0 ? " fav-cheki--tall" : ""}`} data-delay={(i % 3) + 1} style={`--tape:${nsColors[(i + 2) % nsColors.length]}; transform: rotate(${[-1.8, 1.6, -1, 2, -2.2, 1.2, -1.4, 1.8][i % 8]}deg)`} href={img(f)} data-gallery={JSON.stringify(favImgs)} data-index={i} data-caption="お気に入りショット" aria-label="お気に入りショットを拡大">
+              <span class={`sb-tape ${i % 2 === 0 ? "l" : "r"}`} aria-hidden="true"></span>
+              <img src={img(f)} alt="お気に入りショット" loading="lazy" onerror="this.closest('.fav-item').style.display='none'" />
+            </a>
+            {favNotes[i] && <span class="fav-note sb-note" style={`--cc:${nsColors[i % nsColors.length]}`}>{favNotes[i]}</span>}
+          </div>
         ))}
       </div>
     </div>
@@ -70,40 +129,83 @@ const favImgs = g.favs.map(img);
   <Lightbox />
 
   <style>
-    .y-pb { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-bottom: 1.5rem; }
-    @media (min-width: 820px) { .y-pb { grid-template-columns: 0.8fr 1.2fr; } }
-    .y-pb-cover { padding: 10px; transform: rotate(-2deg); }
-    .y-pb-cover img { width: 100%; border-radius: 18px; }
-    .y-pb-text h3 { font-size: 1.6rem; margin: 0.5rem 0 0.8rem; }
-    .y-pb-text p { color: var(--y-ink-soft); font-size: 0.95rem; }
+    /* 紙地：このページ全体を方眼ノートに（背面に薄く敷く＝可読性は保つ） */
+    .gal-page { position: relative; }
+    .gal-page::before {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(color-mix(in srgb, var(--y-line) 70%, transparent) 1px, transparent 1px),
+                        linear-gradient(90deg, color-mix(in srgb, var(--y-line) 70%, transparent) 1px, transparent 1px);
+      background-size: 22px 22px; opacity: 0.55;
+    }
+    .gal-page > .y-container { position: relative; z-index: 1; }
 
-    .y-offshots { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
-    @media (min-width: 700px) { .y-offshots { grid-template-columns: repeat(6, 1fr); } }
-    .y-off { border-radius: 14px; overflow: hidden; aspect-ratio: 3/4; border: 3px solid #fff; box-shadow: var(--y-shadow-sm); }
-    .y-off img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--y-ease); }
-    .y-off:hover img { transform: scale(1.08); }
+    /* ===== 写真集の見開き ===== */
+    .pb-spread { display: grid; gap: 2.4rem; grid-template-columns: 1fr; align-items: start; margin-bottom: 2.2rem; }
+    @media (min-width: 820px) { .pb-spread { grid-template-columns: 0.82fr 1.18fr; gap: 3rem; align-items: center; } }
 
-    .y-note { text-align: center; color: var(--y-ink-soft); max-width: 56ch; margin: 0 auto 1.2rem; font-size: 0.92rem; }
-    /* 生写真：モバイルは2列で大きく見せる（余り1枚は中央寄せ）。レアは角バッジ表示 */
-    .y-namashashin { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 660px; margin-inline: auto; }
-    .y-ns { flex: 0 1 calc(50% - 0.8rem); text-align: center; margin: 0; }
-    @media (min-width: 600px) { .y-ns { flex-basis: calc(33.333% - 0.9rem); } }
-    @media (min-width: 900px) { .y-namashashin { max-width: none; gap: 1.1rem; } .y-ns { flex-basis: calc(20% - 1rem); } }
-    .y-ns-img { position: relative; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: var(--y-cream-2); border: 3px solid #fff; box-shadow: var(--y-shadow-sm); transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
-    .y-ns-img:hover { transform: translateY(-4px); box-shadow: var(--y-shadow); }
-    .y-ns-img img { width: 100%; height: 100%; object-fit: cover; }
-    .y-ns-img.noimg img { display: none; }
-    .y-ns-img.noimg::after { content: "♡"; display: grid; place-items: center; height: 100%; color: var(--y-pink); font-size: 1.8rem; }
-    .y-ns-rare { position: absolute; top: 8px; right: 8px; font-family: var(--y-font-en); font-weight: 700; font-size: 0.64rem; letter-spacing: 0.03em; padding: 0.2rem 0.5rem; border-radius: 999px; background: var(--y-peach); color: #fff; box-shadow: 0 4px 12px rgba(255,159,178,0.55); }
-    .y-ns figcaption { margin-top: 0.55rem; font-weight: 700; font-size: 0.95rem; color: var(--y-ink); white-space: nowrap; }
-    .y-ns--rare figcaption { color: var(--y-peach); }
+    .pb-cover { width: 100%; max-width: 360px; margin-inline: auto; padding: 0.7rem 0.7rem 1.6rem; transform: rotate(-3deg); cursor: zoom-in; transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease); }
+    .pb-cover:hover { transform: rotate(-1deg) scale(1.02); box-shadow: var(--y-shadow); }
+    .pb-cover img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 3px; }
+    .pb-cover figcaption { letter-spacing: 0.14em; }
 
-    .y-fav-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
-    @media (min-width: 700px) { .y-fav-grid { grid-template-columns: repeat(4, 1fr); } }
-    .y-fav { border-radius: 16px; overflow: hidden; aspect-ratio: 1; border: 3px solid #fff; box-shadow: var(--y-shadow-sm); transition: transform .35s var(--y-ease); }
-    .y-fav:nth-child(odd) { transform: rotate(-1.5deg); }
-    .y-fav:nth-child(even) { transform: rotate(1.5deg); }
-    .y-fav:hover { transform: scale(1.05) rotate(0); box-shadow: var(--y-shadow); }
-    .y-fav img { width: 100%; height: 100%; object-fit: cover; }
+    .pb-stamps { display: flex; flex-wrap: wrap; gap: 0.5rem 0.7rem; margin-bottom: 1rem; }
+    .pb-title { font-size: clamp(1.4rem, 3.6vw, 1.9rem); margin: 0 0 0.9rem; }
+    .pb-lead { color: var(--y-ink-soft); font-size: 0.96rem; line-height: 1.85; }
+
+    /* ===== オフショット（マチマチな高さ＝手で貼った感） ===== */
+    .off-band { position: relative; padding-top: 1.4rem; }
+    .off-label { display: block; text-align: right; margin-bottom: 0.8rem; }
+    /* CSS columns のmasonry＝高さ違いでも隙間なく詰まる（グリッドの空セルを作らない） */
+    .off-masonry { columns: 2; column-gap: 0.9rem; }
+    @media (min-width: 560px) { .off-masonry { columns: 3; } }
+    @media (min-width: 860px) { .off-masonry { columns: 3; column-gap: 1.1rem; } }
+    .off-cheki { break-inside: avoid; display: inline-block; width: 100%; margin: 0 0 1rem; padding: 0.4rem 0.4rem 1rem; cursor: zoom-in; transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease), z-index 0s; }
+    .off-cheki img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 2px; }
+    /* 1枚だけ大きく＝この一枚が好き（縦に高くして存在感を出す） */
+    .off-cheki--big img { aspect-ratio: 2/3; }
+    .off-cheki:hover { transform: rotate(0deg) scale(1.04) !important; box-shadow: var(--y-shadow); position: relative; z-index: 2; }
+
+    /* ===== 生写真：トレカ／チェキ風（厚め白フチ＋下部ラベル帯） ===== */
+    .ns-trays { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4rem 1.2rem; }
+    .ns-card { flex: 0 1 calc(50% - 0.8rem); margin: 0; background: #fff; border-radius: 6px;
+      padding: 0.5rem 0.5rem 0; border: 1px solid #f3e8dd; box-shadow: var(--y-shadow-sm);
+      transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    @media (min-width: 600px) { .ns-card { flex-basis: calc(33.333% - 0.9rem); } }
+    @media (min-width: 900px) { .ns-trays { gap: 1.5rem 1.3rem; } .ns-card { flex-basis: calc(20% - 1.1rem); } }
+    .ns-card:hover { transform: rotate(0deg) translateY(-5px) !important; box-shadow: var(--y-shadow); z-index: 2; position: relative; }
+
+    .ns-img { position: relative; aspect-ratio: 3/4; border-radius: 4px; overflow: hidden; background: var(--y-cream-2); cursor: zoom-in; }
+    .ns-img img { width: 100%; height: 100%; object-fit: cover; }
+    .ns-img.noimg img { display: none; }
+    .ns-img.noimg::after { content: "♡"; display: grid; place-items: center; height: 100%; color: var(--y-pink); font-size: 1.8rem; }
+
+    /* レアのホログラム反射（fine pointer 時のみ・ホバーで動く） */
+    .ns-holo { position: absolute; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: screen;
+      background: conic-gradient(from 0deg, #ff9fb2, #ffd98a, #9fe3c5, #a9d8ff, #cdbcff, #ff9fb2);
+      transition: opacity .4s var(--y-ease); }
+    @media (hover: hover) and (pointer: fine) {
+      .ns-card--rare:hover .ns-holo { opacity: 0.32; animation: ns-holo-spin 6s linear infinite; }
+    }
+    @keyframes ns-holo-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .ns-card--rare:hover .ns-holo { animation: none; } }
+
+    .ns-rare { position: absolute; top: 7px; right: 7px; font-family: var(--y-font-en); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.03em; padding: 0.2rem 0.5rem; border-radius: 999px; background: var(--y-peach); color: #fff; box-shadow: 0 4px 12px rgba(255,159,178,0.55); z-index: 2; }
+
+    /* 下部ラベル帯（差し色 --cc を帯に） */
+    .ns-label { margin: 0; padding: 0.55rem 0.4rem 0.6rem; text-align: center; font-family: var(--y-font-en); font-weight: 700; font-size: 0.92rem;
+      color: var(--y-ink); border-top: 1px dashed color-mix(in srgb, var(--cc, var(--y-pink)) 50%, #fff); white-space: nowrap; }
+    .ns-label::before { content: ""; display: inline-block; width: 0.5em; height: 0.5em; border-radius: 50%; margin-right: 0.4em; vertical-align: 0.05em; background: var(--cc, var(--y-pink)); }
+    .ns-card--rare .ns-label { color: var(--y-peach); }
+
+    /* ===== お気に入り：ノートに貼ったチェキ（masonry風・サイズ違い） ===== */
+    .fav-board { columns: 2; column-gap: 1.2rem; }
+    @media (min-width: 640px) { .fav-board { columns: 3; column-gap: 1.4rem; } }
+    @media (min-width: 980px) { .fav-board { columns: 4; column-gap: 1.5rem; } }
+    .fav-item { break-inside: avoid; margin-bottom: 1.8rem; display: flex; flex-direction: column; align-items: center; }
+    .fav-cheki { width: 100%; padding: 0.5rem 0.5rem 1.3rem; cursor: zoom-in; transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease); }
+    .fav-cheki img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 2px; }
+    .fav-cheki--tall img { aspect-ratio: 3/4; }
+    .fav-cheki:hover { transform: rotate(0deg) scale(1.03) !important; box-shadow: var(--y-shadow); position: relative; z-index: 2; }
+    .fav-note { margin-top: 0.55rem; align-self: flex-start; }
   </style>
 </Yumiki>
