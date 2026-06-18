@@ -131,6 +131,11 @@ const tilts = [-2.4, 1.9, -1.4, 2.3, -2, 1.4];
     .wd-pull-q { position: relative; z-index: 1; margin: 0; font-family: var(--y-font-en); font-weight: 700;
       font-size: clamp(1.35rem, 4.2vw, 2.25rem); line-height: 1.5; color: var(--y-ink); letter-spacing: 0.005em; }
     .wd-pull-q:lang(ja) { letter-spacing: 0.02em; }
+    /* 語録プルクオートを“キネティックに立ち上げる”（マスク・ワイプ・イン） */
+    .js .wd-pull-q { clip-path: inset(0 100% 0 0); }
+    .wd-pull.is-visible .wd-pull-q { animation: wd-pull-wipe 0.75s var(--y-ease) 0.12s forwards; }
+    @keyframes wd-pull-wipe { to { clip-path: inset(0 0 0 0); } }
+    @media (prefers-reduced-motion: reduce) { .js .wd-pull-q { clip-path: none; } .wd-pull.is-visible .wd-pull-q { animation: none; } }
     .wd-pull-ctx { position: relative; z-index: 1; margin: 0.85rem 0 0; font-size: 0.92rem; line-height: 1.85; color: var(--y-ink-soft); max-width: 62ch; }
     .wd-pull-src { position: relative; z-index: 1; margin: 0.8rem 0 0; font-size: 0.8rem; color: var(--y-ink-soft); font-family: var(--y-font-jp); line-height: 1.6; }
     .wd-pull-links { margin-top: 1rem; }

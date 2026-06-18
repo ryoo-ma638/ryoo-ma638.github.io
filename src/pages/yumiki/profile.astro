@@ -77,10 +77,14 @@ const spineColors = [
       <div class="pf-top">
         <div class="pf-left">
         <!-- 観察写真（チェキ） -->
-        <figure class="sb-cheki pf-photo y-reveal sb-taped" style="--tape:var(--y-pink)">
+        <figure class="sb-cheki pf-photo pf-tcard y-reveal sb-taped" style="--tape:var(--y-pink)">
           <span class="sb-tape l" aria-hidden="true"></span>
+          <span class="pf-foil" aria-hidden="true">♡ OSHI CARD</span>
           <img src={img("nao_main.jpg")} alt="弓木奈於さん" onerror="this.src='/assets/yumiki/yumiki-main.png'" />
-          <figcaption>{profile.en}</figcaption>
+          <figcaption class="pf-tcard-cap">
+            <span class="pf-tcard-name">弓木 奈於 <small>YUMIKI NAO ・ 乃木坂46 4期生</small></span>
+            <span class="pf-tcard-pen"><i class="pf-pen" style="background:#ff3b3b" aria-hidden="true"></i><i class="pf-pen" style="background:#9acd32" aria-hidden="true"></i> 赤 × 黄緑</span>
+          </figcaption>
           <span class="sb-doodle pf-photo-d1" style="--cc:var(--y-butter)" aria-hidden="true">✦</span>
           <span class="sb-doodle pf-photo-d2" style="--cc:var(--y-peach)" aria-hidden="true">♡</span>
         </figure>
@@ -510,6 +514,18 @@ const spineColors = [
     .sgl-shot-img img { display: block; width: 100%; height: auto; }
     .sgl-soon { font-family: var(--y-font-en); font-weight: 700; font-size: .82rem; color: var(--y-muted); }
     @media (prefers-reduced-motion: reduce) { .sgl-modal { transition: none; } }
+
+    /* ── 主役写真＝ファントレカ（ホロの推しカード） ── */
+    .pf-tcard { padding: .6rem .6rem 3.4rem; transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .pf-tcard:hover { transform: rotate(0deg) translateY(-4px) scale(1.01); box-shadow: var(--y-shadow); }
+    @media (prefers-reduced-motion: reduce) { .pf-tcard:hover { transform: rotate(-2.5deg); } }
+    .pf-foil { position: absolute; top: 12px; right: -6px; z-index: 4; font-family: var(--y-font-en); font-weight: 700; font-size: .6rem; letter-spacing: .08em;
+      color: #fff; background: linear-gradient(120deg, var(--y-peach), var(--y-lav)); padding: .25rem .62rem; border-radius: 999px; transform: rotate(4deg); box-shadow: var(--y-shadow-sm); }
+    .pf-tcard-cap { text-align: center; }
+    .pf-tcard-name { display: block; font-weight: 700; font-size: 1.04rem; color: var(--y-ink); }
+    .pf-tcard-name small { display: block; font-family: var(--y-font-en); font-weight: 700; font-size: .56rem; letter-spacing: .08em; color: var(--y-muted); margin-top: 2px; }
+    .pf-tcard-pen { display: inline-flex; align-items: center; gap: .3rem; margin-top: .4rem; font-family: var(--y-font-hand); font-size: .78rem; color: var(--y-ink-soft); }
+    .pf-tcard-pen .pf-pen { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: var(--y-shadow-sm); display: inline-block; }
   </style>
 
   <Lightbox />
