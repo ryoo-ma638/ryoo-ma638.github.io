@@ -97,7 +97,6 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
           <figure class={`ns-card y-reveal${n.rare ? " ns-card--rare" : ""}`} data-delay={(i % 3) + 1} style={`--cc:${nsColors[i % nsColors.length]}; transform: rotate(${[-2, 1.4, -1.2, 2, -1.6][i % 5]}deg)`}>
             <div class="ns-img" data-gallery={JSON.stringify(nsImgs)} data-index={i} data-caption="生写真コレクション" role="button" tabindex="0" aria-label={`${n.label} を拡大`}>
               <img src={img(n.img)} alt={n.label} loading="lazy" onerror="this.closest('.ns-img').classList.add('noimg')" />
-              {n.rare && <span class="ns-holo" aria-hidden="true"></span>}
               {n.rare && <span class="ns-rare">★ レア</span>}
             </div>
             <figcaption class="ns-label">{n.label}</figcaption>
@@ -184,16 +183,6 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
     .ns-img img { width: 100%; height: 100%; object-fit: cover; }
     .ns-img.noimg img { display: none; }
     .ns-img.noimg::after { content: "♡"; display: grid; place-items: center; height: 100%; color: var(--y-pink); font-size: 1.8rem; }
-
-    /* レアのホログラム反射（fine pointer 時のみ・ホバーで動く） */
-    .ns-holo { position: absolute; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: screen;
-      background: conic-gradient(from 0deg, #ff9fb2, #ffd98a, #9fe3c5, #a9d8ff, #cdbcff, #ff9fb2);
-      transition: opacity .4s var(--y-ease); }
-    @media (hover: hover) and (pointer: fine) {
-      .ns-card--rare:hover .ns-holo { opacity: 0.32; animation: ns-holo-spin 6s linear infinite; }
-    }
-    @keyframes ns-holo-spin { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .ns-card--rare:hover .ns-holo { animation: none; } }
 
     .ns-rare { position: absolute; top: 7px; right: 7px; font-family: var(--y-font-en); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.03em; padding: 0.2rem 0.5rem; border-radius: 999px; background: var(--y-peach); color: #fff; box-shadow: 0 4px 12px rgba(255,159,178,0.55); z-index: 2; }
 
