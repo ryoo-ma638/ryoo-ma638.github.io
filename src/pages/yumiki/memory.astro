@@ -15,7 +15,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
         <span class="sb-stamp" style="--cc:var(--y-peach)">📔 FAN DIARY</span>
         <div class="y-head" style="margin-bottom:1rem">
           <span class="y-eyebrow">Memories</span>
-          <h2>💭 推し活の<span class="wave">思い出</span></h2>
+          <h1>💭 推し活の<span class="wave">思い出</span></h1>
         </div>
         <p class="sb-note">手で貼って綴った、わたしの推し活ノート。</p>
         <span class="sb-doodle" style="--cc:var(--y-pink); top:-4px; right:8%; font-size:1.6rem" aria-hidden="true">♡</span>
@@ -44,7 +44,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
             </figure>
             <div class="mem-ticket-body">
               <span class="sb-stamp" style={`--cc:${tapes[i % tapes.length]}`}>🎫 {m.date}</span>
-              <h4>{m.title}</h4>
+              <h3>{m.title}</h3>
               <div class="sb-sticky mem-sticky" style={`--cc:${tapes[i % tapes.length]}`}>
                 <p>{m.text}</p>
               </div>
@@ -78,14 +78,14 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
             <span class="sb-head-eyebrow">A Day's Bookmark</span>
             <div class="mem-shiori-head">
               <span class="sb-num mem-bignum" style="--cc:var(--y-mint)">#{i + 1}</span>
-              <h4>はじめての対面</h4>
+              <h3>{i === 0 ? "はじめての対面" : "また会えた日"}</h3>
             </div>
-            <span class="sb-stamp" style="--cc:var(--y-peach)">🎫 {m.date}</span>
-            <h5 class="mem-shiori-title"><span class="sb-mark" style="--cc:var(--y-mint)">{m.title}</span></h5>
+            <span class="sb-stamp" style="--cc:var(--y-peach)">🎫 リアルミーグリ</span>
+            <h4 class="mem-shiori-title"><span class="sb-mark" style="--cc:var(--y-mint)">{m.title}</span></h4>
             <div class="sb-sticky mem-sticky" style="--cc:var(--y-mint)">
               <p>{m.text}</p>
             </div>
-            <span class="sb-note">この日のことは一生忘れない。</span>
+            {i === 0 && <span class="sb-note">この日のことは一生忘れない。</span>}
           </div>
         </div>
       ))}
@@ -110,7 +110,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
               </div>
             </figure>
             <div class="sb-sticky mem-sticky mem-scatter-note" style={`--cc:${tapes[(i + 2) % tapes.length]}`}>
-              <h4>{m.title}</h4>
+              <h3>{m.title}</h3>
               <p>{m.text}</p>
             </div>
           </article>
@@ -169,7 +169,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
     .mem-ticket-cheki .mem-photo { aspect-ratio: 3 / 4; }
     .mem-ticket-body { display: flex; flex-direction: column; gap: .55rem; padding-left: .4rem; }
     .mem-ticket-body .sb-stamp { align-self: flex-start; }
-    .mem-ticket-body h4 { font-size: 1.1rem; margin: .1rem 0 .15rem; line-height: 1.4; }
+    .mem-ticket-body h3 { font-size: 1.1rem; margin: .1rem 0 .15rem; line-height: 1.4; }
 
     @media (max-width: 560px) {
       .mem-ticket { grid-template-columns: 1fr; justify-items: center; text-align: left; }
@@ -188,7 +188,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
     .mem-shiori-text { display: flex; flex-direction: column; gap: .7rem; align-items: flex-start; }
     .mem-shiori-head { display: flex; align-items: baseline; gap: .7rem; }
     .mem-bignum { font-size: clamp(2.8rem, 9vw, 4.6rem); }
-    .mem-shiori-head h4 { font-size: clamp(1.2rem, 3.5vw, 1.7rem); margin: 0; }
+    .mem-shiori-head h3 { font-size: clamp(1.2rem, 3.5vw, 1.7rem); margin: 0; }
     .mem-shiori-title { font-size: 1rem; margin: 0; font-weight: 700; }
     .mem-shiori .mem-sticky { width: 100%; }
 
@@ -204,7 +204,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
     .mem-scatter-cheki { display: block; width: 100%; }
     .mem-scatter-cheki .mem-photo { aspect-ratio: 4 / 3; }
     .mem-scatter-note { margin-top: -.6rem; position: relative; z-index: 2; transform: rotate(.8deg); }
-    .mem-scatter-note h4 { font-size: 1.02rem; margin: 0 0 .35rem; line-height: 1.4; }
+    .mem-scatter-note h3 { font-size: 1.02rem; margin: 0 0 .35rem; line-height: 1.4; }
     .mem-scatter-note p { color: var(--y-ink-soft); font-size: .86rem; line-height: 1.75; margin: 0; }
 
     /* 微回転は reduced-motion でも見た目（静的tilt）は維持。動くアニメだけ停止 */

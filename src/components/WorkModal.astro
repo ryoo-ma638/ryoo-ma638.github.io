@@ -131,6 +131,13 @@ const data = works.map((w) => ({
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s == null ? "" : s);
 
+    // 焦点トラップ＆参照カウント方式のスクロールロック（Lightbox と整合させ早期解除を防ぐ）
+    let lastFocused = null;
+    const lockScroll = () => { const b = document.body; const n = (parseInt(b.dataset.scrollLock || "0", 10)) + 1; b.dataset.scrollLock = String(n); b.style.overflow = "hidden"; };
+    const unlockScroll = () => { const b = document.body; const n = Math.max(0, (parseInt(b.dataset.scrollLock || "0", 10)) - 1); b.dataset.scrollLock = String(n); if (n === 0) b.style.overflow = ""; };
+    const focusables = () => Array.from(modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"]), audio[controls], video[controls]')).filter((el) => el.offsetParent !== null);
+    const onTrap = (e) => { if (e.key !== "Tab") return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } };
+
     function open(slug) {
       const w = byId[slug];
       if (!w) return;
@@ -184,16 +191,24 @@ const data = works.map((w) => ({
       const link = $("wmLink");
       if (w.link) { link.hidden = false; link.href = w.link; } else link.hidden = true;
 
+      lastFocused = document.activeElement;
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+      lockScroll();
+      modal.addEventListener("keydown", onTrap);
+      const cb = modal.querySelector(".wm-close"); if (cb) cb.focus();
     }
     function close() {
+      // フォーカスがモーダル内に残っていると aria-hidden が無効になる→先に外す
+      const fa = document.activeElement;
+      if (fa && modal.contains(fa) && fa.blur) fa.blur();
       modal.classList.remove("open");
+      modal.removeEventListener("keydown", onTrap);
       modal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
+      unlockScroll();
       const v = modal.querySelector("video"); if (v) v.pause();
       modal.querySelectorAll("audio").forEach((a) => a.pause());
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
     }
 
     document.addEventListener("click", (e) => {

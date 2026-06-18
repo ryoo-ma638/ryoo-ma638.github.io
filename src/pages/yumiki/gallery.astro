@@ -25,7 +25,7 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
     <div class="y-container">
       <div class="y-head y-reveal">
         <span class="y-eyebrow">Gallery</span>
-        <h2>📷 弓木さんの<span class="wave">推しアルバム</span></h2>
+        <h1>📷 弓木さんの<span class="wave">推しアルバム</span></h1>
       </div>
 
       <!-- 写真集 -->
@@ -66,7 +66,7 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
         <div class="off-masonry">
           {g.photobook.offshots.map((o, i) => (
             <figure class={`off-cheki sb-cheki y-reveal${i === 0 ? " off-cheki--big" : ""}`} data-delay={(i % 3) + 1} style={`transform: rotate(${[-2.5, 1.5, -1, 2, -1.8, 1.2][i % 6]}deg)`} data-gallery={JSON.stringify(pbImgs)} data-index={i + 1} data-caption="写真集『天使だったのか』" role="button" tabindex="0" aria-label="オフショットを拡大">
-              <img src={img(o)} alt="オフショット" loading="lazy" onerror="this.closest('.off-cheki').style.display='none'" />
+              <img src={img(o)} alt={`写真集オフショット ${i + 1}`} loading="lazy" onerror="this.closest('.off-cheki').style.display='none'" />
             </figure>
           ))}
         </div>
@@ -117,7 +117,7 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
           <div class="fav-item">
             <a class={`fav-cheki sb-cheki sb-taped y-reveal${i % 3 === 0 ? " fav-cheki--tall" : ""}`} data-delay={(i % 3) + 1} style={`--tape:${nsColors[(i + 2) % nsColors.length]}; transform: rotate(${[-1.8, 1.6, -1, 2, -2.2, 1.2, -1.4, 1.8][i % 8]}deg)`} href={img(f)} data-gallery={JSON.stringify(favImgs)} data-index={i} data-caption="お気に入りショット" aria-label="お気に入りショットを拡大">
               <span class={`sb-tape ${i % 2 === 0 ? "l" : "r"}`} aria-hidden="true"></span>
-              <img src={img(f)} alt="お気に入りショット" loading="lazy" onerror="this.closest('.fav-item').style.display='none'" />
+              <img src={img(f)} alt={`お気に入りショット ${i + 1}`} loading="lazy" onerror="this.closest('.fav-item').style.display='none'" />
             </a>
             {favNotes[i] && <span class="fav-note sb-note" style={`--cc:${nsColors[i % nsColors.length]}`}>{favNotes[i]}</span>}
           </div>
@@ -156,10 +156,10 @@ const favNotes = ["ここ好き⤵", "", "この笑顔！", "", "", "尊い…",
     .off-band { position: relative; padding-top: 1.4rem; }
     .off-label { display: block; text-align: right; margin-bottom: 0.8rem; }
     /* CSS columns のmasonry＝高さ違いでも隙間なく詰まる（グリッドの空セルを作らない） */
-    .off-masonry { columns: 2; column-gap: 0.9rem; }
-    @media (min-width: 560px) { .off-masonry { columns: 3; } }
-    @media (min-width: 860px) { .off-masonry { columns: 3; column-gap: 1.1rem; } }
-    .off-cheki { break-inside: avoid; display: inline-block; width: 100%; margin: 0 0 1rem; padding: 0.4rem 0.4rem 1rem; cursor: zoom-in; transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease), z-index 0s; }
+    .off-masonry { columns: 3; column-gap: 0.6rem; }
+    @media (min-width: 560px) { .off-masonry { columns: 4; column-gap: 0.7rem; } }
+    @media (min-width: 900px) { .off-masonry { columns: 5; column-gap: 0.8rem; } }
+    .off-cheki { break-inside: avoid; display: inline-block; width: 100%; margin: 0 0 0.7rem; padding: 0.28rem 0.28rem 0.7rem; cursor: zoom-in; transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease), z-index 0s; }
     .off-cheki img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 2px; }
     /* 1枚だけ大きく＝この一枚が好き（縦に高くして存在感を出す） */
     .off-cheki--big img { aspect-ratio: 2/3; }

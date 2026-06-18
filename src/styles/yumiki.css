@@ -24,6 +24,7 @@
 
   --y-font-jp: "Zen Maru Gothic", "Noto Sans JP", system-ui, sans-serif;
   --y-font-en: "Quicksand", "Zen Maru Gothic", system-ui, sans-serif;
+  --y-font-hand: "Yomogi", "Zen Maru Gothic", system-ui, cursive; /* 手書きアクセント（キャプション・引用・メモ。本文には使わない＝可読性のため） */
 
   --y-radius: 28px;
   --y-radius-sm: 16px;
@@ -69,8 +70,8 @@
 /* セクション見出し */
 .y-head { text-align: center; margin-bottom: 3rem; }
 .y-head .y-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: 0.2em; color: var(--y-peach); text-transform: uppercase; font-size: 0.85rem; }
-.y-head h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin-top: 0.4rem; }
-.y-head h2 .wave { background: linear-gradient(transparent 62%, var(--y-butter) 62%); padding-inline: 0.1em; }
+.y-head :is(h1, h2) { font-size: clamp(1.7rem, 4vw, 2.6rem); margin-top: 0.4rem; }
+.y-head :is(h1, h2) .wave { background: linear-gradient(transparent 62%, var(--y-butter) 62%); padding-inline: 0.1em; }
 
 /* バッジ/タグ */
 .y-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--y-font-en); font-weight: 700; font-size: 0.78rem; padding: 0.35rem 0.9rem; border-radius: 999px; color: var(--y-ink); }
@@ -133,6 +134,8 @@
   .y-nav a { font-size: 1.1rem; }
   .y-burger { display: flex; }
   .y-back { display: none; }
+  /* 折りたたみ時はヘッダーから消すが、開いたメニュー内では導線を残す */
+  .y-nav.open .y-back { display: inline-block; margin-top: 0.5rem; }
 }
 
 /* ===== フッター ===== */
@@ -141,7 +144,7 @@
 .y-footer .y-sns a { width: 48px; height: 48px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: var(--y-shadow-sm); transition: transform .3s var(--y-ease); }
 .y-footer .y-sns a:hover { transform: translateY(-4px) scale(1.08); }
 .y-footer .y-sns img { width: 24px; height: 24px; }
-.y-disclaimer { font-size: 0.72rem; color: var(--y-muted); max-width: 60ch; margin: 1rem auto 0; line-height: 1.7; }
+.y-disclaimer { font-size: 0.72rem; color: var(--y-ink-soft); max-width: 60ch; margin: 1rem auto 0; line-height: 1.7; }
 
 /* =========================================================
    スクラップブック（推し活ノート）共通パーツ
@@ -203,9 +206,32 @@
 .sb-head .sb-head-num { font-size: clamp(2.2rem, 6vw, 3.4rem); }
 .sb-head .sb-head-tt { display: flex; flex-direction: column; }
 .sb-head .sb-head-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .72rem; color: var(--y-peach); }
-.sb-head h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); }
+.sb-head :is(h1, h2) { font-size: clamp(1.5rem, 4vw, 2.2rem); }
 
 /* チケット半券（思い出などで使用：右側にミシン目） */
 .sb-ticket { position: relative; background: #fff; border-radius: 10px; box-shadow: var(--y-shadow-sm); padding: 1rem 1.1rem; }
 .sb-ticket::after { content: ""; position: absolute; top: 8px; bottom: 8px; right: 64px; width: 2px;
   background-image: radial-gradient(circle, var(--y-line) 1.4px, transparent 1.5px); background-size: 2px 9px; }
+
+/* =========================================================
+   追加ユーティリティ（2026-06-18・つながり/ことば 強化で新設）
+   ── 既存 sb-* の寸法は変えず“足すだけ”。他ページに無害。
+   ========================================================= */
+
+/* 紙の粒状感（クリーム地のベタ塗りを上質に）。固定オーバーレイ＝背景だけに薄く乗り、文字/カードは汚さない */
+.y-grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
+
+/* シール化（白フチ＋落ち影＝切り抜きステッカー）。box-shadowと違い透明な形に沿う */
+.sb-decal { filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(0 4px 5px rgba(120, 90, 80, .3)); }
+
+/* 触るとぷるんと弾む（ばねイージング）。装飾チップ・絵文字シールに */
+.sb-jiggle { transition: transform .35s var(--y-ease); }
+.sb-jiggle:hover { transform: scale(1.16) rotate(-5deg); }
+.sb-jiggle:active { transform: scale(.94) rotate(-2deg); }
+@media (prefers-reduced-motion: reduce) { .sb-jiggle, .sb-jiggle:hover, .sb-jiggle:active { transition: none; transform: none; } }
+
+/* カーソル追従キラキラ（layout の JS が生成・fine pointer かつ motion 許可時のみ） */
+.y-trail { position: fixed; pointer-events: none; z-index: 200; font-size: .8rem; line-height: 1; will-change: transform, opacity;
+  transform: translate(-50%, -50%); animation: y-trail-pop .7s ease forwards; }
+@keyframes y-trail-pop { from { transform: translate(-50%, -50%) scale(.4) rotate(0); opacity: .85; } to { transform: translate(-50%, -150%) scale(1.05) rotate(22deg); opacity: 0; } }

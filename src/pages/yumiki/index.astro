@@ -1,6 +1,6 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
-import { profile, nav, sns, img } from "../../data/yumiki.ts";
+import { nav, sns, img } from "../../data/yumiki.ts";
 const cards = nav.filter((n) => n.href !== "/yumiki/");
 const cardDesc: Record<string, string> = {
   "/yumiki/profile": "生年月日・経歴・参加シングル・出演番組",
@@ -8,6 +8,7 @@ const cardDesc: Record<string, string> = {
   "/yumiki/memory": "ライブ・ミーグリ・イベントの思い出",
   "/yumiki/relations": "首ンセス（軍団）・お世話になっている方々",
   "/yumiki/gallery": "写真集・生写真・お気に入りショット",
+  "/yumiki/words": "ブログや発言から集めた、弓木さん本人の言葉",
 };
 const cardColor: Record<string, string> = {
   "/yumiki/profile": "var(--y-sky)",
@@ -15,6 +16,7 @@ const cardColor: Record<string, string> = {
   "/yumiki/memory": "var(--y-mint)",
   "/yumiki/relations": "var(--y-butter)",
   "/yumiki/gallery": "var(--y-lav)",
+  "/yumiki/words": "var(--y-peach)",
 };
 // 各ナビを「アルバムに貼ったチェキ／シール」に。代表チェキの実在画像・キャプション・口語CTA・付箋メモを紐付け（事実とdataは不変・見せ方のみ）。
 const cardCheki: Record<
@@ -60,6 +62,14 @@ const cardCheki: Record<
     cta: "アルバムを開く →",
     note: "写真集・生写真・お気に入り",
     stamp: "PHOTO",
+  },
+  "/yumiki/words": {
+    img: "kotoba-hero.jpg",
+    alt: "弓木奈於さん",
+    cap: "HER WORDS",
+    cta: "言葉を読む →",
+    note: "ブログ・発言から",
+    stamp: "WORDS ✍",
   },
 };
 const heroLead =
@@ -135,9 +145,15 @@ const now = [
     <div class="y-container">
       <div class="y-bday y-reveal" id="y-bday">
         <span class="y-bday-tape" aria-hidden="true"></span>
-        <span class="y-bday-cake" aria-hidden="true">🎂</span>
-        <p class="y-bday-msg" id="y-bday-msg">弓木さんのお誕生日は <b>2月3日</b></p>
-        <p class="y-bday-count" id="y-bday-count">もうすぐ ♡</p>
+        <figure class="sb-cheki y-bday-photo" style="--tape:var(--y-pink)">
+          <img src={img("birthday-26.jpg")} alt="弓木奈於さんの誕生日を4期生とお祝いする様子" loading="lazy" />
+          <figcaption>🎂 Happy Birthday なお</figcaption>
+        </figure>
+        <div class="y-bday-body">
+          <span class="y-bday-cake" aria-hidden="true">🎂</span>
+          <p class="y-bday-msg" id="y-bday-msg">弓木さんのお誕生日は <b>2月3日</b></p>
+          <p class="y-bday-count" id="y-bday-count">もうすぐ ♡</p>
+        </div>
         <span class="y-bday-deco y-bday-deco--1" aria-hidden="true">✦</span>
         <span class="y-bday-deco y-bday-deco--2" aria-hidden="true">♡</span>
         <span class="y-bday-deco y-bday-deco--3" aria-hidden="true">✿</span>
@@ -148,9 +164,13 @@ const now = [
   <!-- NOW / 最新トピックス -->
   <section class="y-section y-now-sec">
     <div class="y-container">
-      <div class="y-head y-reveal">
-        <span class="y-eyebrow">Now</span>
-        <h2>✨ 今の<span class="wave">弓木さん</span></h2>
+      <div class="sb-head y-reveal">
+        <span class="sb-num sb-head-num" style="--cc:var(--y-pink)" aria-hidden="true">01</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">Now</span>
+          <h2>✨ 今の<span class="sb-mark" style="--cc:var(--y-butter)">弓木さん</span></h2>
+        </span>
+        <span class="sb-stamp sb-head-stamp" style="--cc:var(--y-peach)">♡ LATEST</span>
       </div>
       <div class="y-now-grid">
         {now.map((n, i) => (
@@ -171,7 +191,7 @@ const now = [
     <div class="y-container">
       <!-- 中央寄せテンプレを崩すノートの章見出し（左寄せ＋テープ＋通し番号） -->
       <div class="sb-head y-reveal">
-        <span class="sb-num sb-head-num" style="--cc:var(--y-peach)" aria-hidden="true">00</span>
+        <span class="sb-num sb-head-num" style="--cc:var(--y-peach)" aria-hidden="true">02</span>
         <span class="sb-head-tt">
           <span class="sb-head-eyebrow">Explore</span>
           <h2><span class="sb-mark" style="--cc:var(--y-butter)">弓木ワールド</span>を探検しよう</h2>
@@ -360,7 +380,7 @@ const now = [
 
     /* ===== お誕生日カウントダウン（スクラップブック風） ===== */
     .y-bday-sec { padding: clamp(1.2rem, 3vw, 1.8rem) 0 0; }
-    .y-bday { position: relative; max-width: 520px; margin-inline: auto; text-align: center;
+    .y-bday { position: relative; max-width: 700px; margin-inline: auto; text-align: center;
       background: color-mix(in srgb, var(--y-pink) 16%, #fff);
       border: 2px solid color-mix(in srgb, var(--y-pink) 34%, #fff);
       border-radius: 18px; padding: 1.5rem 1.4rem 1.35rem; box-shadow: var(--y-shadow-sm);
@@ -374,6 +394,14 @@ const now = [
     .y-bday-count { font-size: clamp(1.35rem, 5vw, 1.95rem); font-weight: 900; color: var(--y-ink); line-height: 1.2; }
     .y-bday-count b { font-family: var(--y-font-en); color: var(--y-peach); font-size: 1.45em; padding: 0 .08em; }
     .y-bday-sub { color: var(--y-muted); font-size: .8rem; font-weight: 700; margin-top: .3rem; }
+    .y-bday-photo { width: min(340px, 86%); margin: 1.1rem auto 0; padding: .45rem .45rem .9rem; transform: rotate(-1.5deg); }
+    .y-bday-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 3px; }
+    .y-bday-photo figcaption { font-family: var(--y-font-en); font-weight: 700; text-align: center; margin-top: .35rem; color: var(--y-peach); font-size: .78rem; }
+    @media (min-width: 620px) {
+      .y-bday { display: grid; grid-template-columns: 240px 1fr; gap: 1.6rem; align-items: center; }
+      .y-bday-photo { width: 100%; margin: 0; }
+      .y-bday-body { text-align: center; }
+    }
     .y-bday.is-today { background: color-mix(in srgb, var(--y-butter) 22%, #fff); border-color: color-mix(in srgb, var(--y-peach) 48%, #fff); }
     .y-bday-deco { position: absolute; font-size: 1.3rem; pointer-events: none; animation: twinkle 2.6s ease-in-out infinite; }
     .y-bday-deco--1 { top: -7px; right: 16px; color: var(--y-sky); }

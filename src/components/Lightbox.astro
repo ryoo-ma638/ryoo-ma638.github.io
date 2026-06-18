@@ -42,7 +42,7 @@
   }
   .lb-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.08); }
   .lb-close { top: clamp(1rem, 3vw, 2rem); right: clamp(1rem, 3vw, 2rem); color: #0b0a12; background: #fff; border: none; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
-  .lb-close:hover { background: var(--accent-ink, #5a3df0); color: #fff; transform: scale(1.1) rotate(90deg); }
+  .lb-close:hover { background: var(--accent-ink, var(--y-peach, #5a3df0)); color: #fff; transform: scale(1.1) rotate(90deg); }
   .lb-prev { left: clamp(0.5rem, 3vw, 2rem); top: 50%; transform: translateY(-50%); }
   .lb-next { right: clamp(0.5rem, 3vw, 2rem); top: 50%; transform: translateY(-50%); }
   .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.08); }
@@ -95,8 +95,12 @@
       const cb = lb.querySelector(".lb-close") as HTMLElement | null; cb?.focus();
     };
     const close = () => {
-      lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true");
+      // フォーカスがLightbox内に残っていると aria-hidden が無効になる→先に外す
+      const fa = document.activeElement as HTMLElement | null;
+      if (fa && lb.contains(fa) && fa.blur) fa.blur();
+      lb.classList.remove("open");
       lb.removeEventListener("keydown", onTrap as EventListener);
+      lb.setAttribute("aria-hidden", "true");
       unlockScroll();
       lastFocused?.focus?.();
     };
