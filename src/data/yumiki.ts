@@ -4,7 +4,13 @@
 // ※非公式ファンサイト。画像は引用、著作権尊重。ねつ造禁止。
 // =========================================================
 
-export const img = (f: string) => `/assets/yumiki/${f}`;
+// 画像は WebP を配信（軽量化）。データ側の拡張子(.jpg/.png)は据え置きでも自動で .webp を指す。
+// ※元の jpg/png はフォールバック用に残置。WebP が無い素材は元拡張子のまま返す。
+import fsImg from "node:fs";
+export const img = (f: string) => {
+  const webp = f.replace(/\.(jpe?g|png)$/i, ".webp");
+  return `/assets/yumiki/${fsImg.existsSync(`public/assets/yumiki/${webp}`) ? webp : f}`;
+};
 
 export const nav = [
   { href: "/yumiki/", label: "トップ", emoji: "✦" },
