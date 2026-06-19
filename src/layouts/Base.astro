@@ -98,6 +98,21 @@ const {
         addEventListener("resize", onScrollBar);
       }
 
+      // スクロールで移ろうアクセント色：data-accent を持つ区画が画面中央の帯に入ると --page-accent を切替
+      // → 進捗バー・カーソルグローがその色を帯び、分野（＝色）の間を旅するように移ろう
+      const accentEls = document.querySelectorAll<HTMLElement>("[data-accent]");
+      if ("IntersectionObserver" in window && accentEls.length) {
+        const rootEl = document.documentElement;
+        const ao = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            const t = e.target as HTMLElement;
+            if (e.isIntersecting && t.dataset.accent) rootEl.style.setProperty("--page-accent", t.dataset.accent);
+          }),
+          { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+        );
+        accentEls.forEach((el) => ao.observe(el));
+      }
+
       // イントロ：アニメ後にクラス除去（body の overflow を戻す）／早期スキップ
       if (document.documentElement.classList.contains("intro")) {
         const clearIntro = () => document.documentElement.classList.remove("intro");

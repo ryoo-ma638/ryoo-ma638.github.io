@@ -193,11 +193,23 @@ h1, h2, h3, h4 { line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; f
 @keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
 body { animation: pageFade 0.5s var(--ease) both; }
 
-/* ---------- スクロール進捗バー（スペクトラム） ---------- */
+/* ---------- スクロールで移ろうアクセント色（分光の旅／--page-accent） ----------
+   data-accent を持つ区画が画面中央に来ると、JSが --page-accent を切替。
+   @property で <color> として登録 → 値の変化がフレーム単位で滑らかに補間される。
+   未対応ブラウザでは即時切替（フォールバック）。 */
+@property --page-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7b5cff;
+}
+:root { --page-accent: var(--c-violet); transition: --page-accent 0.7s var(--ease); }
+@media (prefers-reduced-motion: reduce) { :root { transition: none; } }
+
+/* ---------- スクロール進捗バー（現在地の分野色を帯びる） ---------- */
 .scroll-progress {
   position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 999;
   transform: scaleX(0); transform-origin: 0 50%;
-  background: var(--spectrum); background-size: 200% auto; animation: hue 8s linear infinite;
+  background: var(--page-accent);
   will-change: transform;
 }
 
@@ -227,7 +239,7 @@ html.intro body { overflow: hidden; }
   position: fixed; top: 0; left: 0; z-index: 200; width: 460px; height: 460px; margin: -230px 0 0 -230px;
   border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: 0; will-change: transform, opacity;
   transition: opacity 0.5s var(--ease);
-  background: radial-gradient(circle, color-mix(in srgb, var(--c-violet) 34%, transparent), color-mix(in srgb, var(--c-cyan) 18%, transparent) 44%, transparent 66%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--page-accent) 36%, transparent), color-mix(in srgb, var(--page-accent) 15%, transparent) 45%, transparent 66%);
   filter: blur(32px);
 }
 .cursor-glow.on { opacity: 0.55; }
