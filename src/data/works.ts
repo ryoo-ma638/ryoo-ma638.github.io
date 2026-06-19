@@ -6,13 +6,15 @@
 
 export type Category = "graphic" | "cg" | "imaging" | "web" | "planning" | "sound";
 
+// 分野＝色（プリズムで分光した1分野＝1色のスペクトル・マップ）。6分野すべて別色にして、
+// サムネ・タグ・番号・フィルタで一貫して使う＝「色々な色＝色々な分野に手を出している」を視覚化する。
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
-  graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--accent)" },
-  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--accent-2)" },
-  imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--accent-3)" },
+  graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--c-violet)" },
+  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--c-red)" },
+  imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--c-cyan)" },
   web:      { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
   planning: { ja: "企画・発表",         en: "Planning & Slides", color: "var(--c-green)" },
-  sound:    { ja: "サウンド・音楽",      en: "Sound & Music", color: "var(--c-violet)" },
+  sound:    { ja: "サウンド・音楽",      en: "Sound & Music", color: "var(--c-orange)" },
 };
 
 export interface Work {
