@@ -71,24 +71,16 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
         <svg class="cor-svg" id="corSvg" aria-hidden="true" preserveAspectRatio="none"></svg>
         <div class="cor-grid">
           {keyBonds.slice(0, 3).map((p) => (
-            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} data-photos={p.photos ? JSON.stringify(p.photos.map(img)) : undefined} style={`--gc:${p.color}`}>
+            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} style={`--gc:${p.color}`}>
               <span class="cor-rel">{p.rel}</span>
-              {p.photos ? (
-                <span class="cor-av cor-av--photo" aria-hidden="true"><img src={img(p.photos[1])} alt="" loading="lazy" /></span>
-              ) : (
-                <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
-              )}
+              <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
               <span class="cor-nm">{p.name}</span>
             </button>
           ))}
           {keyBonds.slice(3, 4).map((p) => (
-            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} data-photos={p.photos ? JSON.stringify(p.photos.map(img)) : undefined} style={`--gc:${p.color}`}>
+            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} style={`--gc:${p.color}`}>
               <span class="cor-rel">{p.rel}</span>
-              {p.photos ? (
-                <span class="cor-av cor-av--photo" aria-hidden="true"><img src={img(p.photos[1])} alt="" loading="lazy" /></span>
-              ) : (
-                <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
-              )}
+              <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
               <span class="cor-nm">{p.name}</span>
             </button>
           ))}
@@ -98,7 +90,7 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
             <span class="cor-hub-crown" aria-hidden="true">♛</span>
             <span class="cor-hub-photo">
               <span class="cor-hub-ring" aria-hidden="true"></span>
-              <img src={img("yumiki-main.jpg")} alt="弓木奈於さん" loading="lazy" onerror="this.src='/assets/yumiki/yumiki-main.png'" />
+              <img src={img("arsha/42.jpg")} alt="弓木奈於さん" loading="lazy" onerror="this.src='/assets/yumiki/arsha/42.jpg'" />
             </span>
             <b>弓木 奈於</b>
             <small>ゆみっきー</small>
@@ -109,13 +101,9 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
           </div>
 
           {keyBonds.slice(4, 8).map((p) => (
-            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} data-photos={p.photos ? JSON.stringify(p.photos.map(img)) : undefined} style={`--gc:${p.color}`}>
+            <button class="cor-node node--link" data-name={p.name} data-sub={p.cat} data-rel={p.rel} data-note={p.note} style={`--gc:${p.color}`}>
               <span class="cor-rel">{p.rel}</span>
-              {p.photos ? (
-                <span class="cor-av cor-av--photo" aria-hidden="true"><img src={img(p.photos[1])} alt="" loading="lazy" /></span>
-              ) : (
-                <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
-              )}
+              <span class="cor-av" aria-hidden="true">{initial(p.name)}</span>
               <span class="cor-nm">{p.name}</span>
             </button>
           ))}

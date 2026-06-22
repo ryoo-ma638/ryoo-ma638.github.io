@@ -2,105 +2,268 @@
 import Base from "../layouts/Base.astro";
 import Lightbox from "../components/Lightbox.astro";
 
-// CEED（シード）= 愛知工業大学のマルチクリエイティブサークル。大崎は副部長。
-// 事実のみ（出典: ガクチカ.docx／CEED_資料 の本人制作スライド・運営資料）。
+// CEED（マルチクリエイティブサークル・愛知工業大学）。部長=中川楓太／大崎=副部長。
+// 方針(本人確認 2026-06-21):
+//  ・「大崎個人の担当（一次資料で確認）」と「CEEDチームの活動」を分離・捏造なし。
+//  ・技術講座=運営のみ／規模=60名規模／中央製作所=社名OK・コラボロゴは伏せる。
+//  ・運動会/ハロウィン/クリスマス/正月/忘年会は別サークル（シスケ天文工学研究会・総務補佐）の企画＝CEEDに混ぜない。
+//  ・写真は活動ごとにまとめて掲載（本人提供・掲載許可済）。AI講座の写真は後日追加予定。
+const socials = [
+  { label: "Instagram", url: "https://www.instagram.com/ceed.create" },
+  { label: "YouTube", url: "https://youtube.com/@ceed_ait" },
+  { label: "X", url: "https://x.com/ceed_create" },
+];
+
+// 私が作った発表（スライドあり・一次資料で担当を確認）
 const decks = [
   {
-    title: "新入生向けプレゼン",
-    tag: "一から制作・登壇",
-    desc: "新入生説明会のプレゼンを一から制作・登壇。CEEDの活動の魅力が伝わるよう、構成・配色・図解までデザインした。",
-    slides: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/nyu-${n}.jpg`),
+    title: "ワークショップ「Amazon Prime CM分析」",
+    role: "企画・登壇・資料制作",
+    date: "2024.12.23",
+    lead: "感覚ではなく“ロジック”でCMを読む90分のチーム戦を、企画から司会台本・61pのスライドまで一人で作り込みました。",
+    article: [
+      "Amazon Prime のCMを4本分解し、プロの思考ツール「3段ロジック（インサイト→ベネフィット→根拠）」と「必然性の設計」を体得。",
+      "メインワークは“ヒントだけでCMの全構成を当てる”推理戦。「なぜゴミ箱が映る？」「なぜHipHop？」を論理で導く。",
+      "締めは「テスト期間の限界大学生を救う15秒CM」をチームで制作・発表。優勝チームには Amazon ギフト券。",
+    ],
+    slides: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/ws-${n}.jpg`),
   },
   {
-    title: "ワークショップ「Amazon Prime CM分析」",
-    tag: "2024.12.23 開催",
-    desc: "Amazon Prime のCMを題材に、構成の必然性を分解・再構築する90分のチーム対抗ワークを企画。スライドも全て制作した。",
-    slides: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/ws-${n}.jpg`),
+    title: "新入生向けプレゼン（サークル説明会）",
+    role: "制作・登壇",
+    date: "2025.4",
+    lead: "「映像制作を学び、つくり、社会につなげる」CEEDの魅力が伝わるよう、構成・配色・図解まで設計して登壇しました。",
+    article: [
+      "活動（火＝講座／木＝制作）、企業コラボ、習得ソフト（Illustrator / Photoshop / Premiere / After Effects / Maya）、年間スケジュールを一つの物語に。",
+      "初心者から経験者まで“置いてけぼりにしない”入口づくりを意識。",
+    ],
+    slides: [1, 2, 3, 4, 5, 6].map((n) => `/assets/slides/nyu-${n}.jpg`),
   },
 ];
 
-const events = [
-  { title: "新歓バーベキュー＆ビンゴ大会", desc: "100名規模の新歓BBQを企画。ビンゴ大会も同時開催し、買い出し・役割分担・当日運営まで主導。" },
-  { title: "運動会", desc: "学年を越えて交流できるレクリエーションとして企画・実施。" },
-  { title: "卒業生を送り出す会", desc: "お世話になった先輩方を送り出す会を企画。" },
+const webPhotos = [
+  { src: "/assets/ceed/web-figma.jpg", cap: "Figmaでの設計" },
+  { src: "/assets/ceed/web-team.jpg", cap: "WEB班の制作風景" },
+  { src: "/assets/ceed/filming.jpg", cap: "撮影・ドローンでの制作" },
+];
+const builds = [
+  {
+    role: "Figma設計・撮影ディレクション・コピー執筆",
+    title: "中央製作所 採用サイト（WEB班）",
+    desc: "若手求職者のエントリー率を上げる企業の採用サイトをチームでリデザイン。技術・営業・品質保証ページのFigmaワイヤーフレーム、撮影イメージの設計、技術紹介ページの文章を担当し、チームの技術面の責任も担っています。",
+    link: "/works#cat-web", linkLabel: "Web制作の実績を見る",
+  },
+  {
+    role: "実装・運用設計（1人＋AI）",
+    title: "CEED 公式サイト",
+    desc: "サークル公式サイトを構築中。実装（コード）を一人＋AIで担い、他メンバーがFigma・文章・写真・告知で関われる運用体制まで設計しました。",
+    status: "公開予定",
+  },
+];
+
+const bbqPhotos = [
+  { src: "/assets/ceed/bbq-group.jpg", cap: "新歓BBQ — 約60名の集合写真" },
+  { src: "/assets/ceed/bbq-grill.jpg", cap: "炭火を囲んで" },
+  { src: "/assets/ceed/bbq-bingo.jpg", cap: "ビンゴ大会の景品" },
+  { src: "/assets/ceed/bbq-seats.jpg", cap: "テラスでの交流" },
+  { src: "/assets/ceed/bbq-pose.jpg", cap: "焼き場で盛り上がる" },
+];
+const lecturePhotos = [
+  { src: "/assets/ceed/lecture.jpg", cap: "満員の701教室（カメラ講座）" },
+  { src: "/assets/ceed/camera-lecture.jpg", cap: "カメラ講座の様子" },
+];
+
+// CEEDの対外活動（チーム制作＝個人の成果としては書かない）
+const team = [
+  { t: "14号館 紹介動画", meta: "学内サイネージ展示", d: "学内14号館の紹介動画をチームで制作・撮影し、入口スクリーンで展示。" },
+  { t: "東京ゲームショウ 2025 出展動画", meta: "幕張メッセ", d: "TGS出展チームの紹介動画をチーム制作。" },
+  { t: "NagoyaHack 広告動画＋チラシ", meta: "成果はSNS掲載", d: "広告動画とチラシをチームで制作。" },
+  { t: "映像コンテスト出品（TYO ほか）", meta: "各AWARD・映画祭", d: "映像コンテスト・映画祭への出品作品をチーム制作。" },
 ];
 
 const principles = [
   { t: "誰も置いてけぼりにしない", d: "新入生の視点でヒアリングを徹底し、部長と意見をすり合わせて運営に反映。" },
   { t: "初心者を孤立させない", d: "技術レベルの差で取り残されないよう、段階的な講座やフォローで橋渡し。" },
-  { t: "交流で距離を縮める", d: "ワークショップ・BBQ・運動会など、学年や技術の壁を越えて話せる場をつくる。" },
+  { t: "交流で距離を縮める", d: "ワークショップ・BBQなど、学年や技術の壁を越えて話せる場をつくる。" },
 ];
+
+const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x.src));
 ---
 
 <Base
   title="CEED — Osaki Ryoma"
-  description="愛知工業大学のマルチクリエイティブサークル CEED（シード）副部長としての活動。発表・スライド制作、イベント企画、WEB制作の実績。"
+  description="愛知工業大学のマルチクリエイティブサークル CEED（シード）副部長としての活動。発表・スライド制作、Web制作、イベント企画・運営の実績。"
 >
   <!-- HERO -->
   <section class="ceed-hero">
     <div class="hero-glow" aria-hidden="true"></div>
-    <div class="container ceed-hero-inner">
-      <div class="ceed-logo reveal"><img src="/assets/ceed-logo.png" alt="CEED ロゴ" loading="eager" /></div>
-      <p class="eyebrow reveal">Activity — サークル活動</p>
-      <h1 class="mega display reveal">
-        <span class="line-mask"><span><span class="spectrum-text">CEED</span> で</span></span>
-        <span class="line-mask"><span>つくる、動かす。</span></span>
-      </h1>
-      <p class="lead reveal" data-delay="1">
-        愛知工業大学のマルチクリエイティブサークル <span class="accent">CEED（シード）</span> で
-        <span class="accent">副部長</span> を務めています。発表・スライド制作、イベント企画、WEB制作まで、
-        「つくって人に届ける」活動を横断的に担当。設立まもない組織を、<span class="accent">60名規模</span>のコミュニティへ育てる過程に関わってきました。
-      </p>
+    <div class="container ceed-hero-grid">
+      <div class="ceed-hero-inner">
+        <div class="ceed-logo reveal"><img src="/assets/ceed-logo.png" alt="CEED ロゴ" loading="eager" /></div>
+        <p class="eyebrow reveal">Activity — 学生団体 CEED</p>
+        <h1 class="ceed-mega reveal">
+          <span class="line-mask"><span>CEEDで、</span></span>
+          <span class="line-mask"><span><span class="spectrum-text">つくって届ける</span>。</span></span>
+        </h1>
+        <p class="lead reveal" data-delay="1">
+          愛知工業大学のマルチクリエイティブサークル <b>CEED（シード）</b> で <b>副部長</b>。
+          発表・スライド制作、Web制作、イベント企画・運営まで「つくって人に届ける」活動を横断し、
+          <span class="spectrum-text">60名規模</span> のコミュニティへ育てる過程に関わってきました。
+        </p>
+        <div class="ceed-meta reveal" data-delay="2">
+          <span class="m"><b>活動</b>火（講座）・木（制作）16:30〜</span>
+          <span class="m"><b>場所</b>1号館 701教室</span>
+          <span class="m"><b>領域</b>映像・CG・デザイン</span>
+          <span class="m"><b>歓迎</b>見学・講座参加もOK</span>
+        </div>
+        <div class="ceed-links reveal" data-delay="2">
+          {socials.map((s) => (
+            <a class="slink" href={s.url} target="_blank" rel="noopener">{s.label}<span aria-hidden="true">↗</span></a>
+          ))}
+          <span class="slink is-soon">公式サイト（公開予定）</span>
+        </div>
+      </div>
+      <figure class="ceed-hero-photo reveal" data-delay="1">
+        <img src="/assets/ceed/filming2.jpg" alt="CEEDの制作風景 — 撮影に集中するメンバー" loading="eager" />
+        <figcaption>つくる現場</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- 発表・スライド（デッキ・ギャラリー） -->
+  <!-- 私が作った発表 -->
   <section class="section">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow">Presentations</span>
-        <h2 class="display">発表・スライド制作</h2>
-        <p class="sec-lead">事業発表やサークルの場で登壇する機会が多く、「何を・どの順で・どう見せるか」を設計したスライドづくりを得意としています。実際のスライドを抜粋で掲載します（横スクロールで全体をご覧いただけます）。</p>
+        <span class="eyebrow">My Role — 私が作った発表</span>
+        <h2 class="sec-title">「何を・どの順で・どう見せるか」を設計する。</h2>
+        <p class="sec-lead">登壇の機会が多く、企画・台本・スライドまで一貫して作るのが得意です。実物を抜粋で掲載します（横スクロール／クリックで拡大）。</p>
       </div>
-      {decks.map((d, i) => (
-        <div class="deck reveal" data-delay={(i % 2) + 1}>
+      {decks.map((d) => (
+        <article class="deck reveal">
           <div class="deck-head">
-            <span class="pill">{d.tag}</span>
-            <h3>{d.title}</h3>
-            <p>{d.desc}</p>
+            <span class="role-tag">{d.role}<i>{d.date}</i></span>
+            <h3 class="deck-title">{d.title}</h3>
+            <p class="deck-lead">{d.lead}</p>
+            <ul class="deck-article">{d.article.map((a) => (<li>{a}</li>))}</ul>
           </div>
           <div class="filmstrip" role="list" aria-label={`${d.title} のスライド`}>
             {d.slides.map((s, j) => (
-              <button
-                class="slide" role="listitem"
-                data-gallery={JSON.stringify(d.slides)} data-index={j} data-caption={d.title}
-                aria-label={`スライド ${j + 1} を拡大（全${d.slides.length}枚）`}
-              >
+              <button class="slide" role="listitem" data-gallery={JSON.stringify(d.slides)} data-index={j} data-caption={d.title} aria-label={`スライド ${j + 1} を拡大`}>
                 <img src={s} alt={`${d.title} スライド ${j + 1}`} loading="lazy" />
               </button>
             ))}
           </div>
-        </div>
+        </article>
       ))}
     </div>
   </section>
 
-  <!-- イベント企画 -->
+  <!-- 私の担当：Web・制作 -->
   <section class="section section--alt">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow">Events</span>
-        <h2 class="display">イベント企画・運営</h2>
-        <p class="sec-lead">副部長として、部員が楽しめる場づくりを企画から運営まで担当しました。</p>
+        <span class="eyebrow">My Role — Web・制作</span>
+        <h2 class="sec-title">つくり、任され、まとめる。</h2>
       </div>
-      <ul class="events">
-        {events.map((e, i) => (
-          <li class="event reveal" data-delay={(i % 3) + 1}>
-            <span class="event-no display">0{i + 1}</span>
-            <div>
-              <h3>{e.title}</h3>
-              <p>{e.desc}</p>
-            </div>
+      <div class="pgrid reveal">
+        {webPhotos.map((p, i) => (
+          <button class="pcard" data-gallery={lightboxData(webPhotos)} data-index={i} data-caption={p.cap} aria-label={`${p.cap} を拡大`}>
+            <img src={p.src} alt={p.cap} loading="lazy" /><span class="pcap">{p.cap}</span>
+          </button>
+        ))}
+      </div>
+      <div class="cards">
+        {builds.map((b) => (
+          <div class="ccard reveal">
+            <span class="role-tag">{b.role}</span>
+            <h3>{b.title}</h3>
+            <p>{b.desc}</p>
+            {b.link && <a class="ccard-link" href={b.link}>{b.linkLabel} →</a>}
+            {b.status && <span class="status">{b.status}</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 私の担当：イベント運営 -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">My Role — イベント運営</span>
+        <h2 class="sec-title">人が集まる場を、つくる。</h2>
+        <p class="sec-lead">副部長として、部員が楽しめて交流が生まれる場を企画から運営まで担当しました。</p>
+      </div>
+      <div class="feat reveal">
+        <button class="pcard pcard--lg" data-gallery={lightboxData(bbqPhotos)} data-index={0} data-caption={bbqPhotos[0].cap} aria-label={`${bbqPhotos[0].cap} を拡大`}>
+          <img src={bbqPhotos[0].src} alt={bbqPhotos[0].cap} loading="lazy" /><span class="pcap">{bbqPhotos[0].cap}</span>
+        </button>
+        <div class="feat-side">
+          <div class="feat-text">
+            <span class="role-tag">企画・運営</span>
+            <h3>新歓バーベキュー ＆ ビンゴ大会</h3>
+            <p>約60名規模の新歓を企画・運営。買い出し・会場図・名札・当日の役割分担まで設計し、現場の進行も担当しました。</p>
+          </div>
+          {bbqPhotos.slice(1).map((p, i) => (
+            <button class="pcard pcard--sm" data-gallery={lightboxData(bbqPhotos)} data-index={i + 1} data-caption={p.cap} aria-label={`${p.cap} を拡大`}>
+              <img src={p.src} alt={p.cap} loading="lazy" /><span class="pcap">{p.cap}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CEEDの活動（チーム） -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">The Circle — CEEDの活動</span>
+        <h2 class="sec-title">サークルとして、社会につなげる。</h2>
+        <p class="sec-lead">CEEDがチームで取り組んできた活動です（個人の成果ではなく、サークルの実績として）。副部長として運営に関わっています。</p>
+      </div>
+
+      <!-- 技術講座（写真あり） -->
+      <div class="block reveal">
+        <div class="block-text">
+          <span class="role-tag">運営担当</span>
+          <h3>クリエイティブ技術講座</h3>
+          <p class="block-meta">Illustrator / Photoshop / カメラ ・ 隔月</p>
+          <p>部員のスキルアップのための講座を隔月で開催。<b>副部長として運営</b>を担当（登壇・資料制作は各担当者）。振り返りアンケートでは「ばっちり理解できた」の声が多数で、「次はポスターやロゴを作りたい」と創作意欲につながっています。</p>
+        </div>
+        <div class="pgrid pgrid--2">
+          {lecturePhotos.map((p, i) => (
+            <button class="pcard" data-gallery={lightboxData(lecturePhotos)} data-index={i} data-caption={p.cap} aria-label={`${p.cap} を拡大`}>
+              <img src={p.src} alt={p.cap} loading="lazy" /><span class="pcap">{p.cap}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- AI講座（記事・写真は後日） -->
+      <div class="block block--rev reveal">
+        <div class="block-text">
+          <span class="role-tag">運営・まとめ担当</span>
+          <h3>AI講座 ― AI時代のデザインの仕事</h3>
+          <p class="block-meta">外部デザイナー登壇</p>
+          <p>現役デザイナーを招き「AIをどう使って、どう価値を出すか」を学ぶ講座を開催。要点を記事にまとめました：</p>
+          <ul class="deck-article">
+            <li>デザインとは“対話で課題を解決”すること。提案は必ず複数案を持っていく。</li>
+            <li>言葉の<b>裏にある意図</b>を読む。リクエストの真の目的を掴む。</li>
+            <li>AIは情報整理・調査・批評の相棒。<b>最終判断は人間</b>が握る。</li>
+          </ul>
+        </div>
+        <div class="ai-photo">
+          <div class="ai-ph" aria-hidden="true"><span>📷 写真は後日追加</span></div>
+        </div>
+      </div>
+
+      <!-- 対外活動（リスト） -->
+      <ul class="team">
+        {team.map((t) => (
+          <li class="titem reveal">
+            <div class="titem-h"><h3>{t.t}</h3><span class="titem-meta">{t.meta}</span></div>
+            <p>{t.d}</p>
           </li>
         ))}
       </ul>
@@ -112,36 +275,19 @@ const principles = [
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Philosophy</span>
-        <h2 class="display">企画で大切にしていること</h2>
-        <p class="sec-lead">イベントやワークショップは「楽しい」だけでなく、交流を深め、組織に人が定着するための手段だと考えています。だからこそ次の3つを意識しています。</p>
+        <h2 class="sec-title">企画で大切にしていること。</h2>
+        <p class="sec-lead">イベントや講座は「楽しい」だけでなく、交流を深め、組織に人が定着するための手段だと考えています。</p>
       </div>
       <div class="principles">
         {principles.map((p, i) => (
           <div class="principle reveal" data-delay={(i % 3) + 1}>
-            <span class="p-no display">0{i + 1}</span>
+            <span class="p-no">0{i + 1}</span>
             <h3>{p.t}</h3>
             <p>{p.d}</p>
           </div>
         ))}
       </div>
-      <p class="result reveal">結果として、心理的安全性の高いコミュニティづくりに貢献し、サークルは <span class="spectrum-text">60名以上</span> の規模へ成長しました。</p>
-    </div>
-  </section>
-
-  <!-- WEB班 -->
-  <section class="section section--alt">
-    <div class="container narrow center">
-      <span class="eyebrow reveal">Web Team</span>
-      <p class="web-copy display reveal">
-        WEB班では、<span class="spectrum-text">クライアントの実案件</span>にも挑戦。
-      </p>
-      <p class="lead reveal" data-delay="1">
-        企業の採用サイト（中央製作所）のリデザインや、CEED公式サイトの構築を進めています。
-      </p>
-      <div class="reveal" data-delay="2">
-        <a href="/works#cat-web" class="btn btn--primary">WEB制作の実績を見る →</a>
-        <a href="/works#cat-planning" class="btn btn--ghost">企画・発表を見る →</a>
-      </div>
+      <p class="result reveal">心理的安全性の高いコミュニティづくりに貢献し、サークルは <span class="spectrum-text">60名規模</span> へ成長しました。</p>
     </div>
   </section>
 
@@ -149,42 +295,99 @@ const principles = [
 
   <style>
     .ceed-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; }
-    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 55% at 80% 0%, color-mix(in srgb, var(--c-green) 22%, transparent), transparent 70%); filter: blur(8px); }
-    .ceed-logo { width: 92px; height: 92px; border-radius: 18px; overflow: hidden; margin-bottom: 1.4rem; border: 1px solid var(--line); background: #0b0b0e; }
+    .ceed-hero .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 55% at 80% 0%, color-mix(in srgb, var(--c-green) 20%, transparent), transparent 70%); filter: blur(8px); -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%); mask-image: linear-gradient(to bottom, #000 60%, transparent 100%); }
+    /* 2カラムのヒーロー（左＝テキスト／右＝制作シーンの写真） */
+    .ceed-hero-grid { display: grid; gap: clamp(1.6rem, 4vw, 3.2rem); grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 920px) { .ceed-hero-grid { grid-template-columns: 1.25fr 0.85fr; } }
+    .ceed-hero-photo { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 5; border: 1px solid var(--line); box-shadow: 0 30px 80px -36px rgba(0,0,0,0.75); }
+    .ceed-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .ceed-hero-photo figcaption { position: absolute; left: 0; bottom: 0; width: 100%; padding: 1.6rem 1rem 0.8rem; font-family: var(--font-display); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; background: linear-gradient(transparent, rgba(5,4,9,0.75)); }
+    @media (max-width: 919px) { .ceed-hero-photo { aspect-ratio: 16 / 10; max-height: 300px; } }
+    .ceed-logo { width: 86px; height: 86px; border-radius: 18px; overflow: hidden; margin-bottom: 1.4rem; border: 1px solid var(--line); background: #0b0b0e; }
     .ceed-logo img { width: 100%; height: 100%; object-fit: cover; }
-    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.98; margin: 0.3rem 0 1.3rem; }
-    .lead { max-width: 62ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); }
-    .sec-lead { color: var(--fg-soft); max-width: 60ch; margin-top: 0.8rem; font-size: var(--fs-small); }
+    .ceed-mega { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(2.4rem, 6.4vw, 5.4rem); line-height: 1.16; letter-spacing: 0.02em; margin: 0.3rem 0 1.3rem; }
+    .lead { max-width: 64ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.9; }
+    .lead b { color: var(--fg); font-weight: 700; }
+    .ceed-meta { display: flex; flex-wrap: wrap; gap: 0.55rem 1.5rem; margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--line); }
+    .ceed-meta .m { font-size: var(--fs-small); color: var(--fg-soft); }
+    .ceed-meta .m b { color: var(--c-green); font-weight: 700; font-size: 0.64rem; letter-spacing: 0.1em; margin-right: 0.5rem; }
+    .ceed-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: var(--space-3); }
+    .slink { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-small); padding: 0.6rem 1.1rem; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); transition: color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease); }
+    .slink:hover { border-color: var(--c-green); color: var(--c-green); transform: translateY(-2px); }
+    .slink.is-soon { opacity: 0.55; pointer-events: none; }
 
-    /* スライドデッキ */
-    .deck { margin-bottom: var(--space-5); }
-    .deck-head { margin-bottom: 1.2rem; }
-    .pill { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c-green); margin-bottom: 0.7rem; }
-    .deck-head h3 { font-size: var(--fs-h3); margin-bottom: 0.5rem; }
-    .deck-head p { color: var(--fg-soft); font-size: var(--fs-small); max-width: 64ch; }
-    .filmstrip { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+    .sec-title { font-family: var(--font-mincho); font-weight: 800; font-size: var(--fs-h2); line-height: 1.25; letter-spacing: 0.02em; }
+    .sec-lead { color: var(--fg-soft); max-width: 62ch; margin-top: 0.9rem; font-size: var(--fs-small); line-height: 1.8; }
+    .role-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); font-weight: 700; font-size: 0.66rem; letter-spacing: 0.06em; color: var(--c-green); background: color-mix(in srgb, var(--c-green) 13%, transparent); border: 1px solid color-mix(in srgb, var(--c-green) 34%, transparent); padding: 0.3rem 0.7rem; border-radius: 999px; }
+    .role-tag i { font-style: normal; color: var(--muted); font-weight: 500; }
+
+    /* 発表デッキ */
+    .deck { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--line); }
+    .deck:first-of-type { border-top: 0; padding-top: 0; }
+    .deck-title { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.3rem, 2.6vw, 1.9rem); margin: 0.7rem 0 0.5rem; }
+    .deck-lead { color: var(--fg); max-width: 64ch; margin-bottom: 0.7rem; }
+    .deck-article { display: grid; gap: 0.4rem; max-width: 66ch; }
+    .deck-article li { position: relative; padding-left: 1.1rem; color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
+    .deck-article li::before { content: "—"; position: absolute; left: 0; color: var(--c-green); }
+    .deck-article b { color: var(--fg); }
+    .filmstrip { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; margin-top: 1.2rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
     .slide { flex: 0 0 auto; width: clamp(260px, 64vw, 460px); aspect-ratio: 842 / 595; padding: 0; display: block; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); scroll-snap-align: start; cursor: zoom-in; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
     .slide img { width: 100%; height: 100%; object-fit: cover; }
     .slide:hover { transform: translateY(-4px); border-color: var(--c-green); }
 
-    .events { display: grid; gap: 1rem; grid-template-columns: 1fr; }
-    @media (min-width: 760px) { .events { grid-template-columns: repeat(3, 1fr); } }
-    .event { display: flex; gap: 1rem; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem 1.4rem; }
-    .event-no { font-size: 1.1rem; color: var(--c-green); font-weight: 700; }
-    .event h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
-    .event p { color: var(--fg-soft); font-size: var(--fs-small); }
+    /* 写真カード（共通・Lightbox対応） */
+    .pcard { position: relative; display: block; padding: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); cursor: zoom-in; aspect-ratio: 4 / 3; }
+    .pcard img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+    .pcard:hover img { transform: scale(1.05); }
+    .pcap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1rem 0.8rem 0.55rem; font-size: 0.68rem; color: #fff; text-align: left; background: linear-gradient(transparent, rgba(5,4,9,0.85)); opacity: 0; transition: opacity 0.3s var(--ease); }
+    .pcard:hover .pcap, .pcard:focus-visible .pcap { opacity: 1; }
+    .pgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: var(--space-4); }
+    @media (min-width: 760px) { .pgrid { grid-template-columns: repeat(3, 1fr); } .pgrid--2 { grid-template-columns: repeat(2, 1fr); } }
+
+    /* イベント feature（大1＋小2） */
+    .feat { display: grid; gap: 0.9rem; grid-template-columns: 1fr; align-items: start; }
+    @media (min-width: 860px) { .feat { grid-template-columns: 1.5fr 1fr; } }
+    .pcard--lg { aspect-ratio: 1 / 1; } /* 集合写真は正方形＝全体表示でクロップしない */
+    .feat-side { display: grid; gap: 0.9rem; grid-template-columns: 1fr 1fr; }
+    .feat-text { grid-column: 1 / -1; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.4rem 1.4rem 1.5rem; }
+    .feat-text h3 { font-family: var(--font-mincho); font-weight: 700; font-size: 1.2rem; margin: 0.7rem 0 0.5rem; }
+    .feat-text p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.85; }
+    .pcard--sm { aspect-ratio: 1 / 1; }
+
+    /* Web/運営カード */
+    .cards { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+    .ccard { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.7rem 1.6rem; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
+    .ccard:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c-green) 45%, var(--line)); }
+    .ccard h3 { font-family: var(--font-mincho); font-weight: 700; font-size: 1.25rem; margin: 0.8rem 0 0.5rem; }
+    .ccard p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.85; }
+    .ccard-link { display: inline-block; margin-top: 0.9rem; color: var(--c-green); font-weight: 700; font-size: var(--fs-small); }
+    .ccard .status { display: inline-block; margin-top: 0.9rem; font-size: 0.7rem; font-weight: 700; color: var(--fg-soft); border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.7rem; }
+
+    /* 活動ブロック（テキスト＋写真・左右） */
+    .block { display: grid; gap: clamp(1.2rem, 3vw, 2.2rem); grid-template-columns: 1fr; align-items: center; margin-bottom: var(--space-5); }
+    @media (min-width: 860px) { .block { grid-template-columns: 1fr 1.1fr; } .block--rev .block-text { order: 2; } }
+    .block-text h3 { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.3rem, 2.6vw, 1.8rem); margin: 0.7rem 0 0.3rem; }
+    .block-meta { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--c-green); margin-bottom: 0.7rem; }
+    .block-text > p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.9; max-width: 60ch; }
+    .block-text b { color: var(--fg); }
+    .ai-photo { display: block; }
+    .ai-ph { aspect-ratio: 4 / 3; border-radius: var(--radius-sm); border: 1px dashed color-mix(in srgb, var(--fg) 22%, transparent); display: grid; place-items: center; color: var(--muted); font-size: var(--fs-small); background: var(--bg-3); }
+
+    /* 対外活動（和の索引） */
+    .team { border-top: 1px solid var(--line); margin-top: var(--space-3); }
+    .titem { border-bottom: 1px solid var(--line); padding: 1.3rem 0.3rem; }
+    .titem-h { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+    .titem-h h3 { font-family: var(--font-mincho); font-weight: 700; font-size: 1.12rem; }
+    .titem-meta { font-family: var(--font-display); font-size: 0.66rem; letter-spacing: 0.08em; color: var(--c-green); }
+    .titem p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; max-width: 70ch; }
 
     .principles { display: grid; gap: 1rem; grid-template-columns: 1fr; }
     @media (min-width: 760px) { .principles { grid-template-columns: repeat(3, 1fr); } }
     .principle { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.5rem; }
-    .p-no { font-size: 0.9rem; color: var(--c-green); font-weight: 700; }
-    .principle h3 { font-size: 1.15rem; margin: 0.5rem 0; }
-    .principle p { color: var(--fg-soft); font-size: var(--fs-small); }
-    .result { margin-top: var(--space-3); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; line-height: 1.6; }
-
-    .center { text-align: center; }
-    .web-copy { font-size: var(--fs-h2); font-weight: 700; line-height: 1.35; margin-bottom: 1rem; }
-    .center .lead { margin: 0 auto 1.8rem; max-width: 50ch; }
-    .center .btn { margin: 0 0.4rem 0.6rem; }
+    .p-no { font-family: var(--font-mincho); font-size: 1.2rem; color: var(--c-green); font-weight: 700; }
+    .principle h3 { font-family: var(--font-mincho); font-size: 1.12rem; margin: 0.5rem 0; }
+    .principle p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
+    .result { margin-top: var(--space-3); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; line-height: 1.6; font-family: var(--font-mincho); }
   </style>
 </Base>

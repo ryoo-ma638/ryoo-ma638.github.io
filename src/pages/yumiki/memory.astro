@@ -2,9 +2,8 @@
 import Yumiki from "../../layouts/Yumiki.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { memories, img } from "../../data/yumiki.ts";
-const livesImgs = memories.lives.map((m) => img(m.img));
-const meetImgs = memories.meet.map((m) => img(m.img));
-const othersImgs = memories.others.map((m) => img(m.img));
+// 自分で撮った/ブログ由来でOKな写真だけ表示。それ以外（会場内・配信・ミーグリ会場）はプレースホルダ。
+const safeMem = new Set(["live_summer2024_goods.jpg", "live_yoda_dome_outside.jpg", "event_stamp_rally.jpg", "event_tgs_pcclub.jpg", "event_nogizaka_cafe.jpg"]);
 const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)", "var(--y-butter)", "var(--y-peach)"];
 ---
 <Yumiki title="思い出 — YUMIKI WORLD">
@@ -38,9 +37,13 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
             <figure class="sb-cheki mem-ticket-cheki sb-taped" style={`--tape:${tapes[i % tapes.length]}`}>
               <span class="sb-tape l" aria-hidden="true"></span>
               <span class="sb-tape r" aria-hidden="true"></span>
-              <div class="mem-photo" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify(livesImgs)} data-index={i} data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
-                <img src={img(m.img)} alt={m.title} loading="lazy" onerror="this.closest('.mem-photo').classList.add('noimg')" />
-              </div>
+              {safeMem.has(m.img) ? (
+                <div class="mem-photo" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify([img(m.img)])} data-index="0" data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
+                  <img src={img(m.img)} alt={m.title} loading="lazy" />
+                </div>
+              ) : (
+                <div class="mem-photo noimg" aria-hidden="true"></div>
+              )}
             </figure>
             <div class="mem-ticket-body">
               <span class="sb-stamp" style={`--cc:${tapes[i % tapes.length]}`}>🎫 {m.date}</span>
@@ -69,9 +72,13 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
           <figure class="sb-cheki mem-shiori-cheki sb-taped" style="--tape:var(--y-mint)">
             <span class="sb-tape l" aria-hidden="true"></span>
             <span class="sb-tape r" aria-hidden="true"></span>
-            <div class="mem-photo mem-photo--tall" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify(meetImgs)} data-index={i} data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
-              <img src={img(m.img)} alt={m.title} loading="lazy" onerror="this.closest('.mem-photo').classList.add('noimg')" />
-            </div>
+            {safeMem.has(m.img) ? (
+              <div class="mem-photo mem-photo--tall" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify([img(m.img)])} data-index="0" data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
+                <img src={img(m.img)} alt={m.title} loading="lazy" />
+              </div>
+            ) : (
+              <div class="mem-photo mem-photo--tall noimg" aria-hidden="true"></div>
+            )}
             <figcaption>{m.date}</figcaption>
           </figure>
           <div class="mem-shiori-text">
@@ -105,9 +112,13 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
           <article class="mem-scatter-item y-reveal" data-delay={(i % 3) + 1} style={`--tilt:${i % 2 === 0 ? "-1.6deg" : "1.4deg"}`}>
             <figure class="sb-cheki mem-scatter-cheki sb-taped" style={`--tape:${tapes[(i + 2) % tapes.length]}`}>
               <span class={i % 2 === 0 ? "sb-tape l" : "sb-tape r"} aria-hidden="true"></span>
-              <div class="mem-photo mem-photo--wide" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify(othersImgs)} data-index={i} data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
-                <img src={img(m.img)} alt={m.title} loading="lazy" onerror="this.closest('.mem-photo').classList.add('noimg')" />
-              </div>
+              {safeMem.has(m.img) ? (
+                <div class="mem-photo mem-photo--wide" style={`--mbg:url(${img(m.img)})`} data-gallery={JSON.stringify([img(m.img)])} data-index="0" data-caption={m.title} role="button" tabindex="0" aria-label={`${m.title} の写真を拡大`}>
+                  <img src={img(m.img)} alt={m.title} loading="lazy" />
+                </div>
+              ) : (
+                <div class="mem-photo mem-photo--wide noimg" aria-hidden="true"></div>
+              )}
             </figure>
             <div class="sb-sticky mem-sticky mem-scatter-note" style={`--cc:${tapes[(i + 2) % tapes.length]}`}>
               <h3>{m.title}</h3>

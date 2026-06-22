@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cursor from "../components/Cursor.astro";
+import BgField from "../components/BgField.astro";
 
 interface Props {
   title?: string;
@@ -35,7 +36,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
 
@@ -55,6 +56,10 @@ const {
     </script>
   </head>
   <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="page-aura" aria-hidden="true"></div>
+    <BgField />
+    <div class="view-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <span class="scroll-progress" id="scrollProgress" aria-hidden="true"></span>
     <div class="site-intro" aria-hidden="true">
       <div class="intro-glow" aria-hidden="true"></div>
@@ -85,17 +90,16 @@ const {
         els.forEach((el) => el.classList.add("is-visible"));
       }
 
-      // スクロール進捗バー
+      // スクロール進捗バー（rAFで間引き＋max値をキャッシュ＝スクロール毎の強制リフローを排除）
       const bar = document.getElementById("scrollProgress");
       if (bar) {
-        const onScrollBar = () => {
-          const h = document.documentElement;
-          const max = h.scrollHeight - h.clientHeight;
-          bar.style.transform = `scaleX(${max > 0 ? Math.min(1, h.scrollTop / max) : 0})`;
-        };
-        onScrollBar();
-        addEventListener("scroll", onScrollBar, { passive: true });
-        addEventListener("resize", onScrollBar);
+        const h = document.documentElement;
+        let max = 1, ticking = false;
+        const calcMax = () => { max = (h.scrollHeight - h.clientHeight) || 1; };
+        const paint = () => { bar.style.transform = `scaleX(${Math.min(1, h.scrollTop / max)})`; ticking = false; };
+        calcMax(); paint();
+        addEventListener("scroll", () => { if (!ticking) { requestAnimationFrame(paint); ticking = true; } }, { passive: true });
+        addEventListener("resize", () => { calcMax(); paint(); });
       }
 
       // スクロールで移ろうアクセント色：data-accent を持つ区画が画面中央の帯に入ると --page-accent を切替
@@ -123,7 +127,7 @@ const {
 
       // 作品動画は preload="none"。画面に入る直前にだけ読み込み→再生する。
       // → 画面外の動画は1バイトもDLしないので、worksページが激軽になる（省電力・省データ）
-      const vids = document.querySelectorAll<HTMLVideoElement>("video[loop]");
+      const vids = document.querySelectorAll<HTMLVideoElement>("video[loop]:not([data-hover])");
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!reduce && "IntersectionObserver" in window && vids.length) {
         const vio = new IntersectionObserver(

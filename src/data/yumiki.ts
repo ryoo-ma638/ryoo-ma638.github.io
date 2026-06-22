@@ -19,7 +19,6 @@ export const nav = [
   { href: "/yumiki/memory", label: "思い出", emoji: "💭" },
   { href: "/yumiki/relations", label: "つながり", emoji: "🤝" },
   { href: "/yumiki/words", label: "ことば", emoji: "🗒" },
-  { href: "/yumiki/gallery", label: "写真", emoji: "📷" },
 ];
 
 export const sns = [

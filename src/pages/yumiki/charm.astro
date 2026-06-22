@@ -1,6 +1,8 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
 import { charms, charmVideos, img } from "../../data/yumiki.ts";
+// 著作権配慮：魅力ページで残せる写真（京都市CM＝bg-world／まとめ＝bg-summary）だけ表示。番組切り抜き（会話力/努力家）は非掲載。
+const safeBg = new Set(["bg-world.jpg", "bg-summary.jpg"]);
 // 最後の1つ（まとめ）は特別な締めカードとして別扱い
 const features = charms.slice(0, -1);
 const summary = charms[charms.length - 1];
@@ -63,17 +65,17 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
               </header>
 
               <div class="cm-page-body">
-                {/* 貼り付けたチェキ写真 */}
-                <figure class="sb-cheki sb-taped cm-page-cheki">
-                  <span class="sb-tape l" aria-hidden="true"></span>
-                  <span class="sb-tape r" aria-hidden="true"></span>
-                  <div class="cm-cheki-img">
-                    <img src={img(c.img)} alt={c.title} loading="lazy" onerror="this.closest('.cm-cheki-img').classList.add('noimg')" />
-                  </div>
-                  <figcaption><span aria-hidden="true">♡</span> {c.tag}</figcaption>
-                </figure>
-
-                {/* 本文 */}
+                {safeBg.has(c.img) && (
+                  <figure class="sb-cheki sb-taped cm-page-cheki">
+                    <span class="sb-tape l" aria-hidden="true"></span>
+                    <span class="sb-tape r" aria-hidden="true"></span>
+                    <div class="cm-cheki-img">
+                      <img src={img(c.img)} alt={c.title} loading="lazy" />
+                    </div>
+                    <figcaption><span aria-hidden="true">♡</span> {c.tag}</figcaption>
+                  </figure>
+                )}
+                {/* 本文（番組由来の写真は非掲載・公式/CM/ブログのみ掲載） */}
                 <div class="cm-page-text">
                   <p class="cm-lead"><span class="cm-q" aria-hidden="true">❝</span>{lead}</p>
                   {rest.map((p) => <p class="cm-p">{p}</p>)}
@@ -139,20 +141,17 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
             <h2>弓木さんの<span class="sb-mark" style="--cc:var(--y-pink)">名場面</span>クリップ</h2>
           </span>
         </header>
-        <p class="cm-clips-intro sb-note">バラエティ・ラジオ・ライブでの“弓木ワールド全開”な名場面を集めました。サムネイルを押すと再生（音が出ます）。</p>
+        <p class="cm-clips-intro sb-note">バラエティ・ラジオ・ライブでの“弓木ワールド全開”な名場面を、エピソードでご紹介します。</p>
         <div class="cm-clips-grid">
           {funClips.map((c, i) => (
-            <figure id={`clip-${c.f}`} class="cm-clip sb-cheki sb-taped y-reveal" data-delay={(i % 3) + 1} style={`--tape:${clipTapes[i % clipTapes.length]}; transform: rotate(${i % 2 === 0 ? -1.1 : 1}deg); scroll-margin-top: 90px`}>
-              <span class={`sb-tape ${i % 2 === 0 ? "l" : "r"}`} aria-hidden="true"></span>
-              <video class="cm-clip-v" controls preload="none" playsinline poster={img(`video/${c.f}-poster.jpg`)}>
-                <source src={img(`video/${c.f}.mp4`)} type="video/mp4" />
-              </video>
-              <figcaption class="cm-clip-cap"><span aria-hidden="true">▶</span> {c.title}</figcaption>
+            <figure id={`clip-${c.f}`} class="cm-clip cm-clip--text y-reveal" data-delay={(i % 3) + 1} style={`--cc:${clipTapes[i % clipTapes.length]}; transform: rotate(${i % 2 === 0 ? -0.6 : 0.6}deg); scroll-margin-top: 90px`}>
+              <span class="cm-clip-badge" aria-hidden="true">▶ EPISODE</span>
+              <figcaption class="cm-clip-cap">{c.title}</figcaption>
               <p class="cm-clip-desc">{c.desc}</p>
             </figure>
           ))}
         </div>
-        <p class="cm-clips-foot sb-note">※ 動画の著作権は各権利者に帰属します。</p>
+        <p class="cm-clips-foot sb-note">※ 番組・配信の名場面を、エピソードとして文章でご紹介しています。著作権は各権利者に帰属します。</p>
       </section>
 
       <!-- 締め：ファンからの“寄せ書き／色紙”（色違いの付箋を貼った風） -->
@@ -160,11 +159,13 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
         <span class="sb-doodle cm-sum-doodle cm-sum-doodle--1" style="--cc:var(--y-pink)" aria-hidden="true">♡</span>
         <span class="sb-doodle cm-sum-doodle cm-sum-doodle--2" style="--cc:var(--y-mint)" aria-hidden="true">✦</span>
 
-        <figure class="sb-cheki sb-taped cm-sum-cheki">
-          <span class="sb-tape" aria-hidden="true"></span>
-          <img src={img(summary.img)} alt={summary.title} loading="lazy" onerror="this.closest('.cm-sum-cheki').style.display='none'" />
-          <figcaption><span aria-hidden="true">♡</span> {summary.tag}</figcaption>
-        </figure>
+        {safeBg.has(summary.img) && (
+          <figure class="sb-cheki sb-taped cm-sum-cheki">
+            <span class="sb-tape" aria-hidden="true"></span>
+            <img src={img(summary.img)} alt={summary.title} loading="lazy" />
+            <figcaption><span aria-hidden="true">♡</span> {summary.tag}</figcaption>
+          </figure>
+        )}
 
         <div class="cm-sum-board">
           <span class="sb-stamp cm-sum-stamp" style="--cc:var(--y-peach)" aria-hidden="true">My Conclusion</span>
@@ -295,6 +296,13 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
     .cm-clip-cap { font-family: var(--y-font-jp); font-weight: 700; margin: 0.65rem 0 0.3rem; color: var(--y-ink); font-size: 0.96rem; line-height: 1.5; }
     .cm-clip-desc { margin: 0; color: var(--y-ink-soft); font-size: 0.84rem; line-height: 1.75; }
     .cm-clips-foot { display: block; text-align: center; color: var(--y-muted); font-size: 0.74rem; margin-top: 1.6rem; }
+    /* 名場面＝テキスト・エピソードカード（番組クリップの自配信をやめ、文章で紹介） */
+    .cm-clip--text { background: #fff; border: 2px solid var(--y-line); border-left: 5px solid var(--cc, var(--y-pink)); border-radius: var(--y-radius-sm); padding: 1rem 1.15rem 1.2rem; box-shadow: var(--y-shadow-sm); }
+    .cm-clip--text:hover { transform: rotate(0) translateY(-4px) !important; box-shadow: var(--y-shadow); }
+    .cm-clip-badge { display: inline-block; font-family: var(--y-font-en); font-weight: 700; font-size: 0.64rem; letter-spacing: .08em; color: var(--y-ink-soft); background: var(--y-cream-2); border-radius: 999px; padding: .25rem .7rem; margin-bottom: .55rem; }
+    .cm-clip--text .cm-clip-cap { margin: 0 0 0.4rem; font-size: 1.02rem; }
+    /* 魅力ページ：写真は1カラムで本文の上に（番組由来は非掲載・公式/CM/ブログのみ掲載） */
+    @media (min-width: 880px) { .cm-page-body { grid-template-columns: 1fr; } }
 
     /* ===== 締め：寄せ書き／色紙 ===== */
     .cm-sum { position: relative; overflow: hidden; margin-top: clamp(3.2rem, 8vw, 5rem);

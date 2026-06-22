@@ -185,11 +185,11 @@ const data = works.map((w) => ({
           const imgs = grp.images.map((src, i) =>
             `<img class="wm-slide" src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(grp.images)}' data-index="${i}" data-caption="${esc(grp.title)}">`).join("");
           sg.insertAdjacentHTML("beforeend",
-            `<div class="wm-sgroup"><h4 class="wm-sgroup-title">${esc(grp.title)}<span>${grp.images.length}枚 ・ 横スクロール →</span></h4><div class="wm-strip">${imgs}</div></div>`);
+            `<div class="wm-sgroup"><h4 class="wm-sgroup-title">${esc(grp.title)}${grp.images.length > 1 ? `<span>${grp.images.length}枚 ・ 横スクロール →</span>` : ""}</h4><div class="wm-strip">${imgs}</div></div>`);
         });
       }
       const link = $("wmLink");
-      if (w.link) { link.hidden = false; link.href = w.link; } else link.hidden = true;
+      if (w.link) { link.hidden = false; link.href = w.link; const ext = /^https?:/.test(w.link); link.target = ext ? "_blank" : ""; link.rel = ext ? "noopener noreferrer" : ""; } else link.hidden = true;
 
       lastFocused = document.activeElement;
       modal.classList.add("open");

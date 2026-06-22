@@ -38,6 +38,8 @@
   --font-display: "Space Grotesk", "Zen Kaku Gothic New", system-ui, sans-serif;
   --font-jp: "Zen Kaku Gothic New", "Noto Sans JP", system-ui, sans-serif;
   --font-body: "Zen Kaku Gothic New", "Noto Sans JP", system-ui, sans-serif;
+  /* 明朝＝和・東映の劇的な見出し用（中盤セクション見出し等） */
+  --font-mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
 
   --fs-mega: clamp(3.2rem, 13vw, 12rem);
   --fs-hero: clamp(2.6rem, 9vw, 8rem);
@@ -120,7 +122,9 @@ body::after {
 :root[data-theme="light"] body::after { opacity: 0.35; mix-blend-mode: multiply; }
 
 /* ---------- Typography ---------- */
-h1, h2, h3, h4 { line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; font-family: var(--font-jp); }
+h1, h2, h3, h4 { line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; font-family: var(--font-jp); font-feature-settings: "palt"; }
+/* 約物詰め（括弧・読点・中黒を半角アキに）＝和の組版。見出し・本文に適用 */
+body { font-feature-settings: "palt"; }
 .display { font-family: var(--font-display); }
 .eyebrow {
   font-family: var(--font-display);
@@ -142,7 +146,8 @@ h1, h2, h3, h4 { line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; f
 .container { width: min(100% - 2.5rem, var(--maxw)); margin-inline: auto; }
 .narrow { max-width: var(--maxw-narrow); }
 .section { padding-block: var(--space-6); position: relative; }
-.section--alt { background: var(--bg-2); }
+/* “ひと続きの背景”の上に区画を置く。alt はごく僅かな差で分節（段差・色帯を作らない＝滑らかな繋ぎ） */
+.section--alt { background: color-mix(in srgb, var(--bg-2) 38%, transparent); }
 
 .section-head { margin-bottom: var(--space-4); }
 .section-head .eyebrow { margin-bottom: var(--space-2); }
@@ -212,6 +217,41 @@ body { animation: pageFade 0.5s var(--ease) both; }
   background: var(--page-accent);
   will-change: transform;
 }
+
+/* ---------- 反応する背景オーラ（現在地の分野色を淡く帯び、スクロールで移ろう） ---------- */
+.page-aura {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(85% 65% at 50% -18%, color-mix(in srgb, var(--page-accent) 7%, transparent), transparent 62%),
+    radial-gradient(70% 60% at 100% 115%, color-mix(in srgb, var(--page-accent) 5%, transparent), transparent 60%);
+}
+:root[data-theme="light"] .page-aura {
+  background:
+    radial-gradient(85% 65% at 50% -18%, color-mix(in srgb, var(--page-accent) 4%, transparent), transparent 62%),
+    radial-gradient(70% 60% at 100% 115%, color-mix(in srgb, var(--page-accent) 3%, transparent), transparent 60%);
+}
+
+/* ---------- 方眼ドット・グリッド（設計図のような構造テクスチャ。固定＋上から下へフェード） ---------- */
+.bg-grid {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--fg) 10%, transparent) 1px, transparent 1.6px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(145% 120% at 50% -4%, #000 42%, rgba(0,0,0,0.5) 72%, transparent 96%);
+  mask-image: radial-gradient(145% 120% at 50% -4%, #000 42%, rgba(0,0,0,0.5) 72%, transparent 96%);
+}
+:root[data-theme="light"] .bg-grid {
+  background-image: radial-gradient(circle, color-mix(in srgb, #14141c 8%, transparent) 1px, transparent 1.6px);
+}
+@media (max-width: 600px) { .bg-grid { background-size: 26px 26px; } }
+
+/* ---------- ビューファインダー風の四隅フレーム（作品集＝構図の格） ---------- */
+.view-frame { position: fixed; inset: 16px; z-index: 200; pointer-events: none; }
+.view-frame i { position: absolute; width: 20px; height: 20px; border: 0 solid color-mix(in srgb, var(--fg) 26%, transparent); }
+.view-frame i:nth-child(1) { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; }
+.view-frame i:nth-child(2) { top: 0; right: 0; border-top-width: 1.5px; border-right-width: 1.5px; }
+.view-frame i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.view-frame i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+@media (max-width: 600px) { .view-frame { inset: 9px; } .view-frame i { width: 13px; height: 13px; } }
 
 /* ---------- シネマティック・イントロ（初回のみ／reduced-motion時はスキップ） ---------- */
 .site-intro { position: fixed; inset: 0; z-index: 2000; display: none; place-items: center; background: var(--bg); overflow: hidden; }

@@ -24,7 +24,7 @@ const cardCheki: Record<
   { img: string; alt: string; cap: string; cta: string; note: string; stamp: string }
 > = {
   "/yumiki/profile": {
-    img: "top-profile.jpg",
+    img: "card_profile.jpg",
     alt: "弓木奈於さん",
     cap: "NAO YUMIKI",
     cta: "沼の入口へ →",
@@ -32,7 +32,7 @@ const cardCheki: Record<
     stamp: "PROFILE",
   },
   "/yumiki/charm": {
-    img: "top-charm.jpg",
+    img: "bg-summary.jpg",
     alt: "弓木奈於さん",
     cap: "YUMIKI WORLD",
     cta: "魅力にハマる →",
@@ -40,31 +40,23 @@ const cardCheki: Record<
     stamp: "CHARM ♡",
   },
   "/yumiki/memory": {
-    img: "live_13th_stage.jpg",
-    alt: "13th YEAR BIRTHDAY LIVE のステージ",
+    img: "fav_shot_03.jpg",
+    alt: "弓木奈於さん",
     cap: "LIVE & EVENT",
     cta: "現場レポへ →",
     note: "全ツ・ミーグリの記録",
     stamp: "MEMORY",
   },
   "/yumiki/relations": {
-    img: "fav_shot_01.jpg",
-    alt: "弓木奈於さんのお気に入りショット",
+    img: "card_relations.jpg",
+    alt: "弓木奈於さん",
     cap: "RELATIONS",
     cta: "首ンセス図鑑へ →",
     note: "軍団＆お世話になった方々",
     stamp: "RELATIONS",
   },
-  "/yumiki/gallery": {
-    img: "photobook_cover.jpg",
-    alt: "1st写真集『天使だったのか』の表紙",
-    cap: "PHOTO ALBUM",
-    cta: "アルバムを開く →",
-    note: "写真集・生写真・お気に入り",
-    stamp: "PHOTO",
-  },
   "/yumiki/words": {
-    img: "kotoba-hero.jpg",
+    img: "card_words.jpg",
     alt: "弓木奈於さん",
     cap: "HER WORDS",
     cta: "言葉を読む →",
@@ -120,7 +112,7 @@ const now = [
         <span class="y-photo-card" aria-hidden="true"></span>
         <span class="y-photo-ring" aria-hidden="true"></span>
         <div class="y-photo-frame">
-          <img src={img("yumiki-main.jpg")} alt="弓木奈於さん" fetchpriority="high" width="757" height="991" onerror="this.src='/assets/yumiki/yumiki-main.png'" />
+          <img src={img("arsha/42.jpg")} alt="弓木奈於さん（42ndシングル アー写）" fetchpriority="high" onerror="this.src='/assets/yumiki/arsha/42.jpg'" />
         </div>
         <span class="y-photo-badge" aria-hidden="true"><b>♡</b><i>MY OSHI</i></span>
         <span class="y-blob y-blob--1">♡</span>
@@ -146,7 +138,7 @@ const now = [
       <div class="y-bday y-reveal" id="y-bday">
         <span class="y-bday-tape" aria-hidden="true"></span>
         <figure class="sb-cheki y-bday-photo" style="--tape:var(--y-pink)">
-          <img src={img("birthday-26.jpg")} alt="弓木奈於さんの誕生日を4期生とお祝いする様子" loading="lazy" />
+          <img src={img("birthday-26.jpg")} alt="弓木奈於さんの誕生日をお祝いする様子" loading="lazy" />
           <figcaption>🎂 Happy Birthday なお</figcaption>
         </figure>
         <div class="y-bday-body">
@@ -352,10 +344,10 @@ const now = [
 
     /* 代表チェキ（サイズ違い・テープ留め） */
     .sb-album-cheki { display: block; width: 100%; padding: .6rem .6rem 1.5rem; transition: box-shadow .35s var(--y-ease); }
-    .sb-album-cheki > img { aspect-ratio: 4 / 5; object-position: center top; }
+    .sb-album-cheki > img { aspect-ratio: 3 / 2; object-position: center top; }
     .sb-album-cheki figcaption { letter-spacing: .12em; }
     /* 偶数番目のチェキは少し縦長＝サイズ違いで単調さを崩す */
-    .sb-album-item:nth-child(even) .sb-album-cheki > img { aspect-ratio: 3 / 4; }
+    .sb-album-item:nth-child(even) .sb-album-cheki > img { aspect-ratio: 3 / 2; }
     .sb-album-stamp { position: absolute; top: -10px; right: -8px; z-index: 4; background: #fff;
       font-size: .62rem; padding: .22rem .55rem; box-shadow: var(--y-shadow-sm); }
 

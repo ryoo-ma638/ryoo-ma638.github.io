@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import Lightbox from "../components/Lightbox.astro";
 
 // 事実のみ。資格・職歴のねつ造は厳禁。
 const skills = [
@@ -9,11 +10,47 @@ const skills = [
   { group: "Web", items: ["HTML / CSS", "JavaScript（学習中）", "Astro（このサイト）"], c: "var(--c-blue)" },
 ];
 
+// 経歴：2006年の誕生から現在、そしてこれから。ドットは虹色に進行（＝出せる色が増えていく）。
 const timeline = [
-  { year: "2024.4", text: "愛知工業大学 情報科学部 入学（コンピューターシステム専攻 / KKA）" },
-  { year: "2025.4", text: "メディア情報専攻（KX）へ転専攻" },
-  { year: "2025", text: "サークル CEED（シード）に所属" },
-  { year: "2026", text: "3年次に進級。水野慎士研究室（CGメディア）に所属／CEED 副部長" },
+  { num: "2006", tag: "誕生", title: "名古屋に生まれる", text: "1月1日、名古屋市で生まれる。", c: "var(--c-violet)" },
+  { num: "2012", tag: "小学校時代", title: "ムードメーカー、そして児童会長", text: "クラスを明るくする盛り上げ役。児童会長を務め、人をまとめ、場をつくる楽しさを知る。", c: "var(--c-blue)" },
+  { num: "2018", tag: "中学校時代", title: "野球と、生徒会長", text: "野球チームに所属。生徒会長として学校を盛り上げ、リーダーとしての土台をつくる。", c: "var(--c-cyan)" },
+  { num: "2021", tag: "高校時代", title: "学業に励んだ3年間", text: "進路を見据えながら、3年間しっかりと学業に打ち込む。", c: "var(--c-green)" },
+  { num: "2024", tag: "愛知工業大学 入学", title: "情報科学部へ", text: "情報科学部に入学（コンピュータシステム専攻・KKA）。", c: "var(--c-yellow)" },
+  { num: "2025", tag: "転機", title: "転専攻、そしてCEED", text: "ものづくりへの興味から、メディア情報専攻（KX）へ転専攻。マルチクリエイティブサークル CEED に所属する。", c: "var(--c-orange)" },
+  { num: "2026", tag: "現在", title: "研究室と、副部長", text: "水野慎士研究室（CGメディア）でCG・画像処理を専門に。CEED副部長として、60名規模のサークルを牽引している。", c: "var(--c-red)" },
+  { num: "これから", tag: "Future", title: "つくって、光を放つ。", text: "いろんなことに挑戦したい。人生は一度きりだから、後悔のないよう、たくさんの壁を越えていく。", c: "var(--accent-ink)", future: true },
+];
+
+// 信条（座右の銘・尊敬する人・原点・流儀）— すべて本人の言葉に基づく
+const credo = [
+  { tag: "尊敬する人", title: "戸塚優斗選手（スノーボード）", text: "2026年の冬季オリンピック金メダリスト。怪我を乗り越えて挑み続けるその姿に、勇気をもらった。自分も頑張ろう、と思える存在。", c: "var(--c-cyan)" },
+  { tag: "ものづくりの原点", title: "「やりたい」に、突き進む", text: "「自分がやりたい」という気持ちに、ただ突き進んできた。その積み重ねが、今の自分をつくっている。", c: "var(--c-blue)" },
+  { tag: "制作の流儀", title: "満足するまで、諦めない", text: "自分を、作品を客観視する。厳しい評価を受け止めてから、納得のいくものに仕上がるまで徹底的に。最後は根気と、根性。", c: "var(--c-violet)" },
+];
+
+// 一問一答（人となり）
+const qa = [
+  { q: "ONE WORD / 一言で言うと", a: "真面目バカ。" },
+  { q: "FILMS / 好きな映画", a: "『スター・ウォーズ』『バック・トゥ・ザ・フューチャー』。感性に、新しい気づきとひらめきをくれた。" },
+  { q: "DRAMA / 好きなドラマ", a: "『ROOKIES（ルーキーズ）』。" },
+  { q: "DRAGONS / 中日の推し", a: "捕手・加藤匠馬選手。かつては堂上直倫選手。" },
+  { q: "OSHI / 推しのきっかけ", a: "TBS『ラヴィット！』で弓木奈於さんの面白さと可愛らしさに惹かれ、乃木坂46の虜に。" },
+  { q: "DAYS OFF / 休日", a: "寝る。推し活。新しいことに挑戦する。つくりたいものをつくる。" },
+  { q: "FOOD / 好きな食べ物", a: "餃子・お寿司・焼肉。" },
+  { q: "HOME / 落ち着く場所", a: "家。" },
+];
+
+// 取扱説明書（友人の評価より、"言っていい範囲"＝いいところを抜粋）
+const traits = [
+  { t: "好きなものに一直線", d: "「好き」と決めたものに、最上級の熱を注ぐ。", c: "var(--c-violet)" },
+  { t: "行動力のかたまり", d: "飛び込む勇気が強い。別サークルでも転専攻でも、友達をつくってやり切る。", c: "var(--c-blue)" },
+  { t: "こだわりが強い", d: "納得いくまで加筆・修正。自分のセンスと価値観で、ものをつくる。", c: "var(--c-cyan)" },
+  { t: "“見せるもの”で輝く", d: "人に見せる制作になると、本気のギアが入る。実際、選ばれることも多い。", c: "var(--c-green)" },
+  { t: "裏表がない", d: "喜怒哀楽が全部、顔に出る。リアクションが大きくて面白い。", c: "var(--c-yellow)" },
+  { t: "猪突猛進", d: "関わることに全力。一生懸命で、元気いっぱい。", c: "var(--c-orange)" },
+  { t: "基本、やさしい", d: "頼まれごとは、大抵引き受ける。", c: "var(--c-red)" },
+  { t: "人懐っこい", d: "すぐ人に近づいて話しかける。元気な犬みたい。", c: "var(--c-violet)" },
 ];
 
 // 実績ハイライト（すべて事実・ガクチカ準拠）
@@ -21,44 +58,207 @@ const highlights = [
   { n: "60名", l: "規模へ拡大", d: "CEED副部長として「誰も置いてけぼりにしない」体制づくりを進め、サークルを60名規模のコミュニティへ。", href: "/ceed", c: "var(--c-green)" },
   { n: "企業賞", l: "ハッカソン", d: "割り勘アプリ「Settlo」を開発し企業賞を受賞。これが企業からのアプリ受託にもつながった。", href: "/works#cat-web", c: "var(--c-blue)" },
   { n: "出展", l: "TGS 他", d: "体感型ゲーム「虫歯アニマルズ」をデザイン・造形で担当。東京ゲームショウ・ゲームマーケット・安城Eフェスで出展。", href: "/works#cat-cg", c: "var(--c-red)" },
-  { n: "接客", l: "ビール売り子", d: "バンテリンドームで「応援したくなる接客」を追求。発信や会話まで含めた自己プロデュースに挑戦。", href: null, c: "var(--c-orange)" },
+  { n: "接客", l: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。通る声・笑顔・野球トークで「応援したくなる接客」を工夫している。", href: null, c: "var(--c-orange)" },
 ];
 ---
 
-<Base title="About — Osaki Ryoma">
-  <section class="about-hero">
-    <div class="hero-glow" aria-hidden="true"></div>
+<Base title="About — Osaki Ryoma" description="名古屋のムードメーカーから、ものづくりの人へ。愛知工業大学 情報科学部 メディア情報専攻・水野慎士研究室の大崎稜馬。CG・映像・グラフィック・画像処理・Web・企画を横断する歩みと、その人となり。座右の銘は「謙虚」。">
+  <!-- ============ ヒーロー ============ -->
+  <section class="ab-hero" data-accent="var(--c-violet)">
     <div class="container">
-      <p class="eyebrow reveal">About — 自己紹介</p>
-      <h1 class="mega display reveal">
-        <span class="line-mask"><span>大崎 稜馬</span></span>
-        <span class="sub display">Osaki Ryoma</span>
-      </h1>
-      <div class="about-hero-grid">
-        <p class="lead reveal" data-delay="1">
-          愛知工業大学 情報科学部 メディア情報専攻の学生です。1年次はコンピューターシステム専攻に在籍し、
-          ものづくりへの興味からメディア情報専攻へ転専攻しました。現在は<span class="accent">水野慎士研究室（CGメディア）</span>に所属し、
-          CG・画像処理を軸に、手を動かしながら表現の幅を広げています。
-        </p>
-        <div class="about-photo reveal" data-delay="2">
-          <img src="/assets/works/profile.jpg" alt="大崎稜馬" loading="lazy" />
+      <div class="ab-hero-grid">
+        <div class="ab-hero-text">
+          <p class="eyebrow reveal">About — 自己紹介</p>
+          <h1 class="ab-name reveal" data-delay="1">
+            <span class="line-mask"><span>大崎 稜馬</span></span>
+            <span class="ab-roman">Osaki&nbsp;Ryoma</span>
+          </h1>
+          <p class="ab-role reveal" data-delay="2">
+            愛知工業大学 情報科学部 メディア情報専攻／<span class="accent">水野慎士研究室</span><br />
+            CG・映像・グラフィック・画像処理・Web・企画を横断するクリエイター。
+          </p>
+          <p class="ab-lead reveal" data-delay="2">
+            ひとつの専門に絞らず、面白いと思ったものに片っ端から手を出してきました。
+            CGから映像、グラフィック、Web、そして企画まで——
+            <span class="accent">手を広げるほど、出せる色が増えていく。</span>
+            そう信じて、つくり続けています。
+          </p>
+        </div>
+        <figure class="ab-portrait reveal" data-delay="2">
+          <div class="ab-portrait-media" style="--bg-img:url('/assets/about/portrait.jpg')"
+               data-gallery='["/assets/about/portrait.jpg"]' data-caption="大崎 稜馬 — Osaki Ryoma" tabindex="0" role="button" aria-label="ポートレートを拡大">
+            <img src="/assets/about/portrait.jpg" alt="大崎稜馬のポートレート" loading="eager" />
+          </div>
+          <figcaption class="ab-portrait-cap">ものをつくる人。<span>応援する人。</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ これまで（経歴タイムライン） ============ -->
+  <section class="section section--alt" data-accent="var(--c-blue)">
+    <div class="container narrow">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Biography</span>
+        <h2 class="sec-title">これまでの、話。</h2>
+        <p class="sec-sub">名古屋のムードメーカーが、ものづくりに出会うまで。そして、これから。</p>
+      </div>
+      <ol class="tl">
+        {timeline.map((t) => (
+          <li class:list={["tl-item", "reveal", { future: t.future }]} style={`--dot:${t.c}`}>
+            <span class="tl-num">{t.num}</span>
+            <div class="tl-body">
+              <span class="tl-tag">{t.tag}</span>
+              <h3 class="tl-title">{t.title}</h3>
+              <p class="tl-text">{t.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 信条（座右の銘・尊敬する人・原点・流儀） ============ -->
+  <section class="section" data-accent="var(--c-cyan)">
+    <div class="container">
+      <div class="sec-head center reveal">
+        <span class="eyebrow" style="justify-content:center">Credo — 信条</span>
+      </div>
+      <div class="motto reveal">
+        <span class="motto-label">座右の銘</span>
+        <p class="motto-word">「謙虚」</p>
+        <p class="motto-reason">中学の野球部時代に、繰り返し言われてきた言葉。そして、尊敬する大先輩・栗林良吏選手（広島東洋カープ）が大切にしている言葉でもある。</p>
+      </div>
+      <div class="credo-cards">
+        {credo.map((c, i) => (
+          <div class="credo-card reveal" data-delay={(i % 3) + 1} style={`--cc:${c.c}`}>
+            <span class="tl-tag">{c.tag}</span>
+            <h3 class="credo-title">{c.title}</h3>
+            <p class="credo-text">{c.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ つくる以外のわたし（人となり） ============ -->
+  <section class="section section--alt" data-accent="var(--c-green)">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Beyond Work</span>
+        <h2 class="sec-title">つくる以外の、わたし。</h2>
+        <p class="sec-sub">つくる原動力は、夢中になれる「好き」があること。盛り上げ役の血は、現場でも変わりません。</p>
+      </div>
+
+      <div class="persona-photos">
+        <figure class="pcard reveal" data-delay="1" style="--cc:var(--c-blue)">
+          <div class="pcard-media" style="--bg-img:url('/assets/about/baseball.jpg')"
+               data-gallery='["/assets/about/baseball.jpg"]' data-caption="バンテリンドームナゴヤにて — 中日ドラゴンズを応援。" tabindex="0" role="button" aria-label="写真を拡大">
+            <img src="/assets/about/baseball.jpg" alt="バンテリンドームで中日ドラゴンズを応援する大崎稜馬" loading="lazy" />
+            <span class="pcard-chip">⚾ 野球観戦</span>
+          </div>
+          <figcaption class="pcard-body">
+            <h3 class="pcard-title">中日ドラゴンズと、バンテリンドーム</h3>
+            <p class="pcard-text">生まれも育ちも名古屋。中日ドラゴンズのファンとして球場へ。推しは捕手の加藤匠馬選手（かつては堂上直倫選手）。スタンドで浴びる熱気が、明日への活力です。</p>
+          </figcaption>
+        </figure>
+
+        <figure class="pcard reveal" data-delay="2" style="--cc:var(--c-violet)">
+          <div class="pcard-media" style="--bg-img:url('/assets/about/oshikatsu.jpg')"
+               data-gallery='["/assets/about/oshikatsu.jpg"]' data-caption="14th YEAR BIRTHDAY LIVE — 弓木奈於さんを応援。" tabindex="0" role="button" aria-label="写真を拡大">
+            <img src="/assets/about/oshikatsu.jpg" alt="ライブ会場でタオルを掲げて推し活をする大崎稜馬" loading="lazy" />
+            <span class="pcard-chip">💜 推し活</span>
+          </div>
+          <figcaption class="pcard-body">
+            <h3 class="pcard-title">乃木坂46・弓木奈於さんの応援</h3>
+            <p class="pcard-text">『ラヴィット！』をきっかけに乃木坂46の虜に。応援する熱が高じて、ファンサイト「YUMIKI WORLD」を自作するほど。"好き"が、そのまま制作の原動力になりました。</p>
+            <a class="pcard-link" href="/yumiki/">YUMIKI WORLD を見る <span aria-hidden="true">↗</span></a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="persona-band reveal" data-delay="1">
+        <div class="band-mark" aria-hidden="true">応援</div>
+        <div class="band-body">
+          <span class="tl-tag">課外活動 — Beer Vendor</span>
+          <p class="band-quote">「応援したくなる」を、めざして。</p>
+          <p class="band-text">
+            バンテリンドームナゴヤで、ビールの売り子として活動。通る声と笑顔、そして野球の話題で、
+            球場での時間がもっと楽しくなるような接客を心がけています。
+          </p>
+          <a class="pcard-link" href="https://uriko-v-dome-ryoma.vercel.app" target="_blank" rel="noopener noreferrer">売り子 応援サイト <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ============ もっと知る（一問一答＋取扱説明書） ============ -->
+  <section class="section" data-accent="var(--c-yellow)">
     <div class="container">
-      <div class="section-head reveal">
+      <div class="sec-head reveal">
+        <span class="eyebrow">More About Me</span>
+        <h2 class="sec-title">もっと、知る。</h2>
+      </div>
+
+      <dl class="qa">
+        {qa.map((item, i) => (
+          <div class="qa-item reveal" data-delay={(i % 3) + 1}>
+            <dt class="qa-q">{item.q}</dt>
+            <dd class="qa-a">{item.a}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="torisetsu reveal">
+        <div class="torisetsu-head">
+          <h3 class="torisetsu-title">大崎稜馬 取扱説明書</h3>
+          <span class="torisetsu-note">※ 友人の評価より、いいところを抜粋</span>
+        </div>
+        <ul class="traits">
+          {traits.map((tr, i) => (
+            <li class="trait reveal" data-delay={(i % 3) + 1} style={`--cc:${tr.c}`}>
+              <span class="trait-dot" aria-hidden="true"></span>
+              <span class="trait-t">{tr.t}</span>
+              <span class="trait-d">{tr.d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ できること（スキル） ============ -->
+  <section class="section section--alt" data-accent="var(--c-orange)">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Skills</span>
+        <h2 class="sec-title">できること。</h2>
+      </div>
+      <div class="skills">
+        {skills.map((s, i) => (
+          <div class="skill-card reveal" data-delay={(i % 3) + 1}>
+            <span class="skill-bar" style={`background:${s.c}`}></span>
+            <h3 class="skill-h">{s.group}</h3>
+            <ul>{s.items.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 主な実績（ハイライト） ============ -->
+  <section class="section" data-accent="var(--c-red)">
+    <div class="container">
+      <div class="sec-head reveal">
         <span class="eyebrow">Highlights</span>
-        <h2 class="display">主な実績</h2>
+        <h2 class="sec-title">主な実績。</h2>
       </div>
       <div class="highlights">
         {highlights.map((h, i) => {
           const Tag = h.href ? "a" : "div";
           return (
             <Tag class:list={["hl", "reveal", { "hl--link": !!h.href }]} href={h.href ?? undefined} data-delay={(i % 4) + 1} style={`--hc:${h.c}`}>
-              <span class="hl-num display">{h.n}</span>
+              <span class="hl-num">{h.n}</span>
               <span class="hl-label">{h.l}</span>
               <p class="hl-desc">{h.d}</p>
               {h.href && <span class="hl-arrow">詳しく ↗</span>}
@@ -69,96 +269,157 @@ const highlights = [
     </div>
   </section>
 
-  <section class="section section--alt">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Skills</span>
-        <h2 class="display">できること</h2>
-      </div>
-      <div class="skills">
-        {skills.map((s, i) => (
-          <div class="skill-card reveal" data-delay={(i % 3) + 1}>
-            <span class="skill-bar" style={`background:${s.c}`}></span>
-            <h3>{s.group}</h3>
-            <ul>{s.items.map((it) => <li>{it}</li>)}</ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container narrow">
-      <div class="section-head reveal">
-        <span class="eyebrow">Timeline</span>
-        <h2 class="display">これまで</h2>
-      </div>
-      <ol class="timeline">
-        {timeline.map((t) => (
-          <li class="reveal">
-            <span class="t-year display">{t.year}</span>
-            <span class="t-text">{t.text}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section--alt">
+  <!-- ============ 締め ============ -->
+  <section class="section ab-cta" data-accent="var(--c-violet)">
     <div class="container narrow center reveal">
-      <span class="eyebrow">Activity</span>
-      <p class="activity display">
-        サークル <span class="spectrum-text">CEED（シード）</span> では<br />副部長として活動しています。
-      </p>
-      <p class="lead">研究室では CG・画像処理の学びを深め、課題制作や個人制作を続けています。
-        サークルでは発表・スライド制作やイベント企画、WEB制作のクライアント案件にも取り組んでいます。</p>
-      <p class="lead">学外では、バンテリンドームナゴヤで<span class="accent">ビールの売り子</span>として、
-        「応援したくなる接客」をテーマに身だしなみ・発信・会話まで含めた“自己プロデュース”にも挑戦しています。</p>
-      <div>
-        <a href="/ceed" class="btn btn--primary">CEEDでの活動を見る →</a>
+      <span class="eyebrow" style="justify-content:center">Let's Create</span>
+      <p class="ab-cta-line">一緒に、<span class="spectrum-text">何か</span>つくりましょう。</p>
+      <div class="ab-cta-btns">
+        <a href="/works" class="btn btn--primary">作品を見る →</a>
+        <a href="/ceed" class="btn btn--ghost">CEEDでの活動 →</a>
         <a href="/contact" class="btn btn--ghost">連絡する →</a>
       </div>
     </div>
   </section>
 
-  <style>
-    .about-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; }
-    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 50% at 85% 0%, color-mix(in srgb, var(--c-cyan) 24%, transparent), transparent 70%); filter: blur(8px); }
-    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1.3rem; }
-    .sub { display: block; font-size: clamp(1rem, 2vw, 1.6rem); color: var(--muted); font-weight: 500; letter-spacing: 0.05em; margin-top: 0.4rem; }
-    .lead { max-width: 60ch; color: var(--fg-soft); font-size: clamp(1rem, 1.3vw, 1.15rem); }
-    .about-hero-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; margin-top: 1.5rem; }
-    @media (min-width: 820px) { .about-hero-grid { grid-template-columns: 1.4fr 0.6fr; } }
-    .about-photo img { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
+  <Lightbox />
 
+  <style>
+    /* ====== ヒーロー ====== */
+    .ab-hero { position: relative; padding-top: calc(72px + var(--space-5)); padding-bottom: var(--space-6); overflow: hidden; }
+    .ab-hero-grid { display: grid; gap: clamp(2rem, 5vw, 4.5rem); grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 880px) { .ab-hero-grid { grid-template-columns: 1.3fr 0.7fr; } }
+    .ab-name { font-family: var(--font-mincho); font-weight: 800; line-height: 1; margin: 0.5rem 0 1.3rem; letter-spacing: 0.01em; }
+    .ab-name .line-mask > span { font-size: clamp(2.8rem, 8.5vw, 6.2rem); display: block; }
+    .ab-roman { display: block; font-family: var(--font-display); font-size: clamp(0.9rem, 2vw, 1.4rem); color: var(--muted); font-weight: 500; letter-spacing: 0.22em; margin-top: 0.7rem; }
+    .ab-role { color: var(--fg); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.7; margin-bottom: 1.2rem; font-weight: 500; }
+    .ab-lead { max-width: 54ch; color: var(--fg-soft); font-size: clamp(0.98rem, 1.3vw, 1.12rem); line-height: 1.9; }
+
+    .ab-portrait { position: relative; margin: 0; display: flex; flex-direction: column; gap: 0.9rem; max-width: 420px; width: 100%; justify-self: center; }
+    /* 背後にスペクトラムの光を放つ（“光を放つ”＝ブランド／モノクロをやめ色で品よく） */
+    .ab-portrait::before { content: ""; position: absolute; left: 50%; top: 44%; width: 122%; height: 92%; transform: translate(-50%, -50%); z-index: 0; background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--c-violet) 55%, transparent), color-mix(in srgb, var(--c-blue) 22%, transparent) 55%, transparent 76%); filter: blur(44px); opacity: 0.5; pointer-events: none; }
+    .ab-portrait-media { position: relative; z-index: 1; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; border: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); box-shadow: 0 30px 70px rgba(0,0,0,0.45); }
+    .ab-portrait-media::before { content: ""; position: absolute; inset: 0; background: var(--bg-img) center/cover no-repeat; filter: blur(30px) brightness(0.55) saturate(1.2); transform: scale(1.25); }
+    .ab-portrait-media img { position: relative; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; filter: contrast(1.04) saturate(1.06); transition: transform 0.6s var(--ease); }
+    /* 上品な額装：内側の細枠＋下に向けたわずかな陰影 */
+    .ab-portrait-media::after { content: ""; position: absolute; inset: 0; z-index: 2; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 -60px 60px -40px rgba(0,0,0,0.5); pointer-events: none; }
+    .ab-portrait-cap { font-family: var(--font-mincho); font-size: 1rem; color: var(--fg-soft); letter-spacing: 0.04em; text-align: center; position: relative; z-index: 1; }
+    .ab-portrait-cap span { color: var(--accent-ink); }
+
+    /* ====== セクション見出し（明朝） ====== */
+    .sec-head { margin-bottom: var(--space-4); }
+    .sec-head.center { text-align: center; }
+    .sec-title { font-family: var(--font-mincho); font-weight: 800; font-size: var(--fs-h2); line-height: 1.2; letter-spacing: 0.01em; }
+    .sec-sub { color: var(--fg-soft); margin-top: 0.7rem; max-width: 56ch; font-size: clamp(0.92rem, 1.2vw, 1.05rem); line-height: 1.8; }
+
+    /* ====== タイムライン（森山式：大型アウトライン年号＋縦罫） ====== */
+    .tl { display: block; }
+    .tl-item { display: grid; grid-template-columns: clamp(3.2rem, 12vw, 6.6rem) 1fr; gap: clamp(0.8rem, 3vw, 2rem); }
+    .tl-num {
+      font-family: var(--font-mincho); font-weight: 800; line-height: 0.95; text-align: right;
+      font-size: clamp(1.5rem, 4.4vw, 3rem); letter-spacing: -0.02em;
+      color: transparent; -webkit-text-stroke: 1px var(--muted); padding-top: 0.05em;
+    }
+    .tl-body { position: relative; border-left: 1px solid var(--line); padding: 0.1em 0 clamp(1.8rem, 4vw, 3rem) clamp(1.1rem, 3vw, 1.9rem); }
+    .tl-item:last-child .tl-body { padding-bottom: 0; }
+    .tl-body::before {
+      content: ""; position: absolute; left: -6.5px; top: 0.35em; width: 12px; height: 12px; border-radius: 50%;
+      background: var(--dot); box-shadow: 0 0 0 4px color-mix(in srgb, var(--dot) 20%, transparent);
+    }
+    .tl-tag { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+    .tl-title { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.15rem, 2.5vw, 1.7rem); margin: 0.2rem 0 0.45rem; line-height: 1.35; }
+    .tl-text { color: var(--fg-soft); font-size: var(--fs-small); max-width: 50ch; line-height: 1.8; }
+    .tl-item.future .tl-body { border-left-style: dashed; }
+    .tl-item.future .tl-num { -webkit-text-stroke: 0; color: var(--accent-ink); font-size: clamp(1rem, 2.6vw, 1.5rem); padding-top: 0.25em; }
+    .tl-item.future .tl-body::before { background: var(--spectrum); box-shadow: 0 0 14px color-mix(in srgb, var(--accent-ink) 60%, transparent); }
+    .tl-item.future .tl-title { color: var(--fg); }
+
+    /* ====== 信条 ====== */
+    .motto { text-align: center; margin-bottom: var(--space-5); position: relative; }
+    .motto-label { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+    .motto-word { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(3.2rem, 13vw, 8rem); line-height: 1.05; letter-spacing: 0.06em; margin: 0.4rem 0 1rem; }
+    .motto-reason { color: var(--fg-soft); max-width: 50ch; margin: 0 auto; line-height: 1.9; font-size: clamp(0.92rem, 1.2vw, 1.05rem); }
+    .credo-cards { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .credo-cards { grid-template-columns: repeat(3, 1fr); } }
+    .credo-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.7rem 1.5rem; overflow: hidden; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .credo-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--cc); }
+    .credo-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--cc) 45%, var(--line)); }
+    .credo-title { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.4rem); margin: 0.3rem 0 0.6rem; line-height: 1.4; }
+    .credo-text { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.85; }
+
+    /* ====== 人となり（写真カード／バンド） ====== */
+    .persona-photos { display: grid; gap: clamp(1.2rem, 3vw, 2rem); grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .persona-photos { grid-template-columns: 1fr 1fr; } }
+    .pcard { margin: 0; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform 0.4s var(--ease), border-color 0.4s var(--ease); }
+    .pcard:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--cc, var(--accent-ink)) 50%, var(--line)); }
+    .pcard-media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+    .pcard-media::before { content: ""; position: absolute; inset: 0; background: var(--bg-img) center/cover no-repeat; filter: blur(28px) brightness(0.5) saturate(1.15); transform: scale(1.2); }
+    .pcard-media img { position: relative; width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s var(--ease); }
+    .pcard-chip { position: absolute; left: 0.9rem; top: 0.9rem; z-index: 2; font-size: 0.78rem; font-weight: 700; padding: 0.32rem 0.7rem; border-radius: 999px; background: color-mix(in srgb, #05050a 60%, transparent); border: 1px solid color-mix(in srgb, var(--cc) 60%, transparent); color: #fff; backdrop-filter: blur(6px); }
+    .pcard-body { padding: 1.3rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .pcard-title { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.4; }
+    .pcard-text { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
+    .pcard-link { margin-top: 0.3rem; font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; color: var(--fg); width: fit-content; border-bottom: 1px solid color-mix(in srgb, var(--accent-ink) 50%, transparent); padding-bottom: 1px; transition: color 0.25s var(--ease), border-color 0.25s var(--ease); }
+    .pcard-link:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+
+    .persona-band { margin-top: clamp(1.2rem, 3vw, 2rem); position: relative; display: grid; grid-template-columns: 1fr; gap: clamp(1.2rem, 3vw, 2rem); align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.4rem, 3.5vw, 2.2rem); overflow: hidden; }
+    @media (min-width: 720px) { .persona-band { grid-template-columns: auto 1fr; gap: clamp(1.5rem, 4vw, 3rem); } }
+    .persona-band::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(var(--c-orange), var(--c-red)); }
+    .band-mark { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(3rem, 9vw, 5.5rem); line-height: 0.9; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--c-orange) 55%, transparent); writing-mode: vertical-rl; letter-spacing: 0.05em; justify-self: center; }
+    .band-quote { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.2rem, 2.6vw, 1.7rem); line-height: 1.45; margin: 0.4rem 0 0.6rem; }
+    .band-text { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.85; margin-bottom: 0.7rem; max-width: 60ch; }
+
+    /* 写真は常にカラー（モノクロ廃止）。ホバーでわずかにズーム＝上品な動き。 */
+    @media (hover: hover) and (pointer: fine) {
+      .ab-portrait-media:hover img, .pcard:hover .pcard-media img { transform: scale(1.04); }
+    }
+
+    /* ====== 一問一答 ====== */
+    .qa { display: grid; gap: 0; grid-template-columns: 1fr; margin-bottom: var(--space-5); }
+    @media (min-width: 720px) { .qa { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 4rem); } }
+    .qa-item { padding: 1.1rem 0; border-top: 1px solid var(--line); }
+    .qa-q { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .qa-a { font-family: var(--font-mincho); font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--fg); line-height: 1.6; }
+
+    /* ====== 取扱説明書 ====== */
+    .torisetsu { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.6rem, 4vw, 2.6rem); position: relative; overflow: hidden; }
+    .torisetsu::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--spectrum); }
+    .torisetsu-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; margin-bottom: 1.4rem; }
+    .torisetsu-title { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(1.3rem, 3vw, 2rem); }
+    .torisetsu-note { font-size: 0.78rem; color: var(--muted); }
+    .traits { display: grid; gap: 0.9rem 1.6rem; grid-template-columns: 1fr; }
+    @media (min-width: 680px) { .traits { grid-template-columns: 1fr 1fr; } }
+    .trait { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 0.2rem 0.7rem; }
+    .trait-dot { grid-row: 1 / 3; width: 9px; height: 9px; border-radius: 50%; background: var(--cc); margin-top: 0.5em; box-shadow: 0 0 0 4px color-mix(in srgb, var(--cc) 18%, transparent); }
+    .trait-t { font-family: var(--font-mincho); font-weight: 700; font-size: 1.05rem; }
+    .trait-d { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.7; }
+
+    /* ====== スキル ====== */
+    .skills { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 540px) { .skills { grid-template-columns: 1fr; } }
+    @media (min-width: 900px) { .skills { grid-template-columns: repeat(4, 1fr); } }
+    .skill-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; overflow: hidden; transition: transform 0.3s var(--ease); }
+    .skill-card:hover { transform: translateY(-4px); }
+    .skill-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+    .skill-h { font-family: var(--font-mincho); font-weight: 700; font-size: var(--fs-h3); margin-bottom: 0.8rem; }
+    .skill-card li { color: var(--fg-soft); font-size: var(--fs-small); padding: 0.3rem 0; border-bottom: 1px solid var(--line); }
+    .skill-card li:last-child { border-bottom: none; }
+
+    /* ====== ハイライト ====== */
     .highlights { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
     @media (min-width: 900px) { .highlights { grid-template-columns: repeat(4, 1fr); } }
     .hl { position: relative; display: flex; flex-direction: column; gap: 0.5rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; overflow: hidden; transition: transform 0.3s var(--ease), border-color 0.3s var(--ease); }
     .hl::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--hc); }
     .hl--link:hover { transform: translateY(-4px); border-color: var(--hc); }
-    .hl-num { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; line-height: 1; color: var(--hc); letter-spacing: -0.02em; }
+    .hl-num { font-family: var(--font-mincho); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1; color: var(--hc); letter-spacing: -0.02em; }
     .hl-label { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
-    .hl-desc { color: var(--fg-soft); font-size: var(--fs-small); margin-top: 0.3rem; }
+    .hl-desc { color: var(--fg-soft); font-size: var(--fs-small); margin-top: 0.3rem; line-height: 1.75; }
     .hl-arrow { margin-top: auto; padding-top: 0.6rem; font-family: var(--font-display); font-size: 0.78rem; font-weight: 600; color: var(--fg-soft); transition: color 0.25s var(--ease); }
     .hl--link:hover .hl-arrow { color: var(--fg); }
 
-    .skills { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 540px) { .skills { grid-template-columns: 1fr; } }
-    @media (min-width: 900px) { .skills { grid-template-columns: repeat(4, 1fr); } }
-    .skill-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; overflow: hidden; }
-    .skill-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
-    .skill-card h3 { font-size: var(--fs-h3); margin-bottom: 0.8rem; }
-    .skill-card li { color: var(--fg-soft); font-size: var(--fs-small); padding: 0.2rem 0; border-bottom: 1px solid var(--line); }
-    .skill-card li:last-child { border-bottom: none; }
-
-    .timeline { display: grid; gap: 0; }
-    .timeline li { display: grid; grid-template-columns: 6rem 1fr; gap: 1.5rem; padding: 1.4rem 0; border-top: 1px solid var(--line); align-items: baseline; }
-    .timeline li:last-child { border-bottom: 1px solid var(--line); }
-    .t-year { color: var(--accent-ink); font-size: 1.05rem; letter-spacing: 0.03em; }
-    .t-text { color: var(--fg-soft); }
-
+    /* ====== 締め ====== */
     .center { text-align: center; }
-    .activity { font-size: var(--fs-h2); font-weight: 700; line-height: 1.35; margin-bottom: 1rem; }
-    .center .lead { margin: 0 auto 1.8rem; }
+    .ab-cta-line { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(1.8rem, 5vw, 3.4rem); line-height: 1.3; margin: 0.8rem 0 1.8rem; }
+    .ab-cta-btns { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
   </style>
 </Base>

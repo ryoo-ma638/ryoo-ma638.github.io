@@ -76,7 +76,7 @@ const total = works.length;
                   {w.tools && <div><dt>使用ツール</dt><dd>{w.tools.join(" / ")}</dd></div>}
                   {w.duration && <div><dt>制作時間</dt><dd>{w.duration}</dd></div>}
                 </dl>
-                {w.link && <a class="btn btn--ghost" href={w.link}>サイトを見る →</a>}
+                {w.link && <a class="btn btn--ghost" href={w.link} target={w.link.startsWith("http") ? "_blank" : undefined} rel={w.link.startsWith("http") ? "noopener noreferrer" : undefined}>サイトを見る →</a>}
               </div>
             </article>
           );})}
