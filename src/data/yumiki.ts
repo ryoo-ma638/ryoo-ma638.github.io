@@ -269,12 +269,13 @@ export const relations = {
   ],
 };
 
+// link = 番組公式サイト（実在をHTTP確認済み。embed可否は問わず公式ページへ誘導）。
 export const shows = [
-  { name: "乃木坂工事中", desc: "グループの冠番組で天然トークが炸裂" },
-  { name: "沈黙の金曜日", desc: "アルコ&ピース酒井とMC。鋭いツッコミも話題" },
-  { name: "ラヴィット！", desc: "TBS朝の人気バラエティ。明るさが光る" },
-  { name: "東京パソコンクラブ", desc: "意外なITスキルを発揮" },
-  { name: "ミュージックジェネレーション", desc: "フジ系の音楽バラエティ。準レギュラーとして、たびたびゲスト出演（“歌声がすごいアーティストSP”等）" },
+  { name: "乃木坂工事中", desc: "グループの冠番組で天然トークが炸裂", link: "https://tv-aichi.co.jp/nogi-kou/" },
+  { name: "沈黙の金曜日", desc: "アルコ&ピース酒井とMC。鋭いツッコミも話題", link: "https://radiko.jp/r_seasons/10001392" },
+  { name: "ラヴィット！", desc: "TBS朝の人気バラエティ。明るさが光る", link: "https://www.tbs.co.jp/loveit/" },
+  { name: "東京パソコンクラブ", desc: "意外なITスキルを発揮", link: "https://www.bs-tvtokyo.co.jp/nogi_paso/" },
+  { name: "ミュージックジェネレーション", desc: "フジ系の音楽バラエティ。準レギュラーとして、たびたびゲスト出演（“歌声がすごいアーティストSP”等）", link: "https://www.fujitv.co.jp/musicgeneration/" },
 ];
 
 // 本人が書いた「魅力」の文章
@@ -362,21 +363,21 @@ export const memories = {
   ],
 };
 
-export const gallery = {
-  photobook: {
-    title: "1st 写真集『天使だったのか』",
-    cover: "photobook_cover.jpg",
-    text: "25歳の誕生日に夢が叶った一冊。「素の表情」をテーマにタイのプーケットとバンコクで撮影。大人びた表情から太陽のような笑顔まで、彼女の魅力が凝縮。タイトルは秋元康氏が命名し、「大人の色気とかわいらしさが同居する“天使”」という意味が込められています。",
-    offshots: ["photobook_offshot_1.jpg","photobook_offshot_2.jpg","photobook_offshot_3.jpg","photobook_offshot_4.jpg","photobook_offshot_5.jpg","photobook_offshot_6.jpg","photobook_offshot_7.jpg","photobook_offshot_8.jpg","photobook_offshot_9.jpg","photobook_offshot_10.jpg","photobook_offshot_11.jpg","photobook_offshot_12.jpg","photobook_offshot_13.jpg","photobook_offshot_14.jpg","photobook_offshot_15.jpg"],
-  },
-  namashashin: [
-    { label: "ヨリ", img: "namashashin_yori.jpg" },
-    { label: "チュウ", img: "namashashin_chuu.jpg" },
-    { label: "ヒキ", img: "namashashin_hiki.jpg" },
-    { label: "座りヨリ", img: "namashashin_suwariyori.jpg", rare: true },
-    { label: "座りチュウ", img: "namashashin_suwarichuu.jpg", rare: true },
-  ],
-  favs: ["fav_shot_01.jpg","fav_shot_02.jpg","fav_shot_03.jpg","fav_shot_04.jpg","fav_shot_05.jpg","fav_shot_06.jpg","fav_shot_07.jpg","fav_shot_08.jpg","with-yoda.jpg"],
+// 生写真・お気に入りギャラリーは著作権配慮で非掲載（/yumiki/gallery 撤去済み）。
+// 1st写真集は本人の代表的な公式の仕事として掲載（情報・表紙は公式ニュースより。出典 link）。
+export const photobook = {
+  title: "天使だったのか",
+  release: "2024.7.23",
+  location: "タイ・プーケット",
+  publisher: "ワン・パブリッシング",
+  price: "2,500円（税込）",
+  photographer: "三瓶康友",
+  spec: "A4判 / 144ページ",
+  covers: "通常版＋限定版3種（セブンネット／楽天ブックス／紀伊國屋書店）の全4種",
+  cover: "photobook_tenshi.jpg",
+  link: "https://www.nogizaka46.com/s/n46/news/detail/100342",
+  desc: "2024年7月、25歳で発売した弓木さんの1st写真集。本人の希望イメージは「ふわやか」。タイ・プーケットのラグジュアリーなホテルやプール、ビーチ、街歩きまで、“まだ知らない弓木さん”の表情が詰まっています。アイスクリームを頬張る通常版をはじめ、限定版では散歩・タイ式マッサージ・入浴など多彩なカットも収録。",
+  quote: "まだ知らない自分に出会えたり、自分らしい表情だったり、少しでも近くに感じてほしい",
 };
 
 // 動画で知る弓木さん（魅力ページ）

@@ -1,7 +1,7 @@
 ---
 import Yumiki from "../../layouts/Yumiki.astro";
 import Lightbox from "../../components/Lightbox.astro";
-import { profile, timeline, shows, sns, singles, img } from "../../data/yumiki.ts";
+import { profile, timeline, shows, sns, singles, photobook, img } from "../../data/yumiki.ts";
 import fs from "node:fs";
 
 // 各シングルの画像（public/assets/yumiki/singles/{no}-{cover|photo|mv}.jpg）が
@@ -279,11 +279,48 @@ const spineColors = [
     </div>
   </section>
 
+  <!-- ===== 1st写真集『天使だったのか』 ===== -->
+  <section class="y-section pf-sheet sb-grid" style="padding-top:0">
+    <div class="y-container">
+      <div class="sb-head y-reveal">
+        <span class="sb-head-num sb-num" style="--cc:var(--y-peach)" aria-hidden="true">04</span>
+        <span class="sb-head-tt">
+          <span class="sb-head-eyebrow">1st Photobook</span>
+          <h2>📸 1st<span class="sb-mark" style="--cc:var(--y-peach)">写真集</span></h2>
+        </span>
+      </div>
+      <div class="pf-pb y-reveal">
+        <figure class="sb-cheki sb-taped pf-pb-cover" style="--tape:var(--y-peach)"
+          data-gallery={JSON.stringify([img(photobook.cover)])} data-index="0" data-caption={`1st写真集『${photobook.title}』`}
+          role="button" tabindex="0" aria-label="写真集の表紙を拡大">
+          <span class="sb-tape l" aria-hidden="true"></span>
+          <img src={img(photobook.cover)} alt={`弓木奈於 1st写真集『${photobook.title}』表紙`} loading="lazy" />
+          <figcaption>📸 1st PHOTOBOOK</figcaption>
+        </figure>
+        <div class="pf-pb-info">
+          <span class="sb-stamp" style="--cc:var(--y-peach)">♡ 夢が叶った一冊</span>
+          <h3 class="pf-pb-title">『<span class="sb-mark" style="--cc:var(--y-butter)">{photobook.title}</span>』</h3>
+          <p class="pf-pb-desc">{photobook.desc}</p>
+          <blockquote class="pf-pb-quote">「{photobook.quote}」<cite>— 弓木奈於（本人コメント）</cite></blockquote>
+          <dl class="pf-pb-facts">
+            <div><dt>発売</dt><dd>{photobook.release}</dd></div>
+            <div><dt>撮影地</dt><dd>{photobook.location}</dd></div>
+            <div><dt>撮影</dt><dd>{photobook.photographer}</dd></div>
+            <div><dt>仕様</dt><dd>{photobook.spec}</dd></div>
+            <div><dt>価格</dt><dd>{photobook.price}</dd></div>
+          </dl>
+          <p class="pf-pb-note">表紙は{photobook.covers}。発行＝{photobook.publisher}。</p>
+          <a class="pf-show-link pf-pb-link" href={photobook.link} target="_blank" rel="noopener noreferrer">公式サイトで見る <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 主な出演番組：付箋メモのコルクボード ===== -->
   <section class="y-section pf-sheet-ruled sb-ruled" style="padding-top:0">
     <div class="y-container">
       <div class="sb-head y-reveal">
-        <span class="sb-head-num sb-num" style="--cc:var(--y-butter)" aria-hidden="true">04</span>
+        <span class="sb-head-num sb-num" style="--cc:var(--y-butter)" aria-hidden="true">05</span>
         <span class="sb-head-tt">
           <span class="sb-head-eyebrow">On TV</span>
           <h2>📺 主な<span class="sb-mark" style="--cc:var(--y-butter)">出演番組</span></h2>
@@ -315,6 +352,7 @@ const spineColors = [
               <span class="sb-tape" aria-hidden="true"></span>
               <h3>{s.name}</h3>
               <p>{s.desc}</p>
+              {s.link && <a class="pf-show-link" href={s.link} target="_blank" rel="noopener noreferrer">公式サイト <span aria-hidden="true">↗</span></a>}
             </div>
           </div>
         ))}
@@ -482,6 +520,31 @@ const spineColors = [
     .pf-show-sticky { padding-top: 1.3rem; height: 100%; }
     .pf-show-sticky h3 { font-size: 1.15rem; margin-bottom: .35rem; }
     .pf-show-sticky p { color: var(--y-ink-soft); font-size: .88rem; }
+    .pf-show-link { display: inline-flex; align-items: center; gap: .25rem; margin-top: .6rem; font-family: var(--y-font-en); font-weight: 700; font-size: .76rem;
+      color: color-mix(in srgb, var(--y-ink) 45%, var(--y-peach)); background: color-mix(in srgb, var(--y-peach) 18%, #fff);
+      padding: .3rem .75rem; border-radius: 999px; transition: transform .25s var(--y-ease), background .25s var(--y-ease); }
+    .pf-show-link:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--y-peach) 34%, #fff); }
+
+    /* ── 1st写真集カード ── */
+    .pf-pb { display: grid; gap: 1.6rem; grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 640px) { .pf-pb { grid-template-columns: minmax(200px, 270px) 1fr; gap: 2.2rem; } }
+    .pf-pb-cover { margin: 0; padding: .5rem .5rem 1rem; transform: rotate(-1.8deg); width: 100%; max-width: 290px; justify-self: center; cursor: zoom-in;
+      transition: transform .35s var(--y-ease), box-shadow .35s var(--y-ease); }
+    .pf-pb-cover:hover { transform: rotate(0) scale(1.02); box-shadow: var(--y-shadow); }
+    .pf-pb-cover img { width: 100%; aspect-ratio: 848 / 1200; object-fit: cover; border-radius: 3px; }
+    .pf-pb-cover figcaption { font-family: var(--y-font-en); font-weight: 700; text-align: center; margin-top: .45rem; color: var(--y-peach); font-size: .76rem; letter-spacing: .1em; }
+    .pf-pb-title { font-size: clamp(1.3rem, 3.6vw, 1.8rem); margin: .55rem 0 .8rem; }
+    .pf-pb-desc { color: var(--y-ink-soft); font-size: .92rem; line-height: 1.9; margin: 0 0 .9rem; }
+    .pf-pb-quote { margin: 0 0 1.1rem; padding: .75rem 1rem; background: color-mix(in srgb, var(--y-peach) 12%, #fff);
+      border-left: 3px solid color-mix(in srgb, var(--y-peach) 55%, #fff); border-radius: 4px 13px 13px 4px;
+      font-family: var(--y-font-hand); color: var(--y-ink); font-size: .9rem; line-height: 1.85; }
+    .pf-pb-quote cite { display: block; margin-top: .35rem; font-style: normal; font-family: var(--y-font-en); font-weight: 700; font-size: .72rem; color: var(--y-peach); }
+    .pf-pb-facts { display: grid; grid-template-columns: repeat(2, auto); gap: .55rem 1.6rem; justify-content: start; margin: 0 0 1rem; }
+    .pf-pb-facts > div { display: flex; flex-direction: column; }
+    .pf-pb-facts dt { font-family: var(--y-font-en); font-weight: 700; font-size: .66rem; color: var(--y-peach); letter-spacing: .04em; }
+    .pf-pb-facts dd { margin: 0; font-size: .92rem; font-weight: 700; color: var(--y-ink); }
+    .pf-pb-note { color: var(--y-ink-soft); font-size: .86rem; line-height: 1.85; margin: 0 0 1rem; }
+    .pf-pb-link { margin-top: 0; }
 
     @media (prefers-reduced-motion: reduce) {
       .pf-rec, .pf-show, .pf-fact { transform: none !important; }
