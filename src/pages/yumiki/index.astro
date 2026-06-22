@@ -21,7 +21,7 @@ const cardColor: Record<string, string> = {
 // 各ナビを「アルバムに貼ったチェキ／シール」に。代表チェキの実在画像・キャプション・口語CTA・付箋メモを紐付け（事実とdataは不変・見せ方のみ）。
 const cardCheki: Record<
   string,
-  { img: string; alt: string; cap: string; cta: string; note: string; stamp: string }
+  { img: string; alt: string; cap: string; cta: string; note: string; stamp: string; pos?: string }
 > = {
   "/yumiki/profile": {
     img: "card_profile.jpg",
@@ -30,6 +30,7 @@ const cardCheki: Record<
     cta: "沼の入口へ →",
     note: "京都府・2/3生まれ",
     stamp: "PROFILE",
+    pos: "center 42%",
   },
   "/yumiki/charm": {
     img: "bg-summary.jpg",
@@ -40,7 +41,7 @@ const cardCheki: Record<
     stamp: "CHARM ♡",
   },
   "/yumiki/memory": {
-    img: "fav_shot_03.jpg",
+    img: "card_relations.jpg",
     alt: "弓木奈於さん",
     cap: "LIVE & EVENT",
     cta: "現場レポへ →",
@@ -48,7 +49,7 @@ const cardCheki: Record<
     stamp: "MEMORY",
   },
   "/yumiki/relations": {
-    img: "card_relations.jpg",
+    img: "fav_shot_03.jpg",
     alt: "弓木奈於さん",
     cap: "RELATIONS",
     cta: "首ンセス図鑑へ →",
@@ -62,6 +63,7 @@ const cardCheki: Record<
     cta: "言葉を読む →",
     note: "ブログ・発言から",
     stamp: "WORDS ✍",
+    pos: "center 40%",
   },
 };
 const heroLead =
@@ -205,7 +207,7 @@ const now = [
               <figure class="sb-cheki sb-taped sb-album-cheki" style={`--tape:${cardColor[c.href]}`}>
                 <span class={`sb-tape ${i % 2 === 0 ? "l" : "r"}`} aria-hidden="true"></span>
                 <span class="sb-stamp sb-album-stamp" aria-hidden="true">{c.emoji} {ck.stamp}</span>
-                <img src={img(ck.img)} alt={ck.alt} loading="lazy" />
+                <img src={img(ck.img)} alt={ck.alt} loading="lazy" style={ck.pos ? `object-position:${ck.pos}` : undefined} />
                 <figcaption>{ck.cap}</figcaption>
               </figure>
               <div class="sb-sticky sb-album-sticky">
