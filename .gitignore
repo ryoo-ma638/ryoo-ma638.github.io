@@ -32,3 +32,7 @@ public/assets/yumiki/ジャケ写/
 
 # Playwright MCP のスクショ/スナップショット（確認用の一時生成物・非公開）
 .playwright-mcp/
+
+# 開発用の参考スクショ（公開リポジトリには載せない）
+cards.jpeg
+gundam-hero.jpeg
