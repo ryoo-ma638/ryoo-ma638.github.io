@@ -35,6 +35,22 @@ const funClips = [
   { f: "lavit-ota-yabai", title: "『ラヴィット！』「マジでやばいから」", desc: "ジャングルポケット太田さん考案のオリジナルゲーム（ロマンチックにお題の言葉を言う）で、立ち上がって大絶叫。「マジでやばいから」と大ウケした場面。" },
 ];
 const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-butter)", "var(--y-lav)", "var(--y-peach)"];
+
+// 番組切り抜き写真を載せない魅力ポイント（会話力／努力家）は、写真の代わりに“ノートの挿絵パネル”で埋める。
+const charmDeco: Record<string, { icon: string; sub: string; doodles: string[] }> = {
+  "会話力": { icon: "🗣️", sub: "TALK MAGIC", doodles: ["♪", "❝", "✦"] },
+  "努力家": { icon: "🌱", sub: "QUIET EFFORT", doodles: ["✎", "♡", "✦"] },
+};
+// 名場面カードに添える大きな絵文字シール（テロップ・企画名から内容に合うものを割当）。
+const clipIcon: Record<string, string> = {
+  donene: "🎤", "lavit-dance": "🍳", kaidan: "👻", "mste-cheatday": "🎸",
+  "sumo-kanagawa": "🤼", "lavit-cookie": "🎧", "lavit-tsumasaki": "🎯",
+  "lavit-sugawara": "💕", "lavit-ota-hammer": "🔨", "lavit-ota-yabai": "📣",
+};
+// 検証済みの公式/本人提供リンクがある名場面だけリンクを付ける（未検証リンクは付けない＝誤情報防止）。
+const clipLink: Record<string, { href: string; label: string }> = {
+  donene: { href: "https://www.instagram.com/reel/DJRKfD9TgSm/", label: "▶ ドンエネを見る" },
+};
 ---
 <Yumiki title="魅力 — YUMIKI WORLD">
   <section class="y-section cm-sec sb-grid">
@@ -65,7 +81,7 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
               </header>
 
               <div class="cm-page-body">
-                {safeBg.has(c.img) && (
+                {safeBg.has(c.img) ? (
                   <figure class="sb-cheki sb-taped cm-page-cheki">
                     <span class="sb-tape l" aria-hidden="true"></span>
                     <span class="sb-tape r" aria-hidden="true"></span>
@@ -73,6 +89,17 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
                       <img src={img(c.img)} alt={c.title} loading="lazy" />
                     </div>
                     <figcaption><span aria-hidden="true">♡</span> {c.tag}</figcaption>
+                  </figure>
+                ) : (
+                  <figure class="cm-deco sb-taped" style={`--cc:${accents[i % 3]}`} aria-hidden="true">
+                    <span class="sb-tape l" aria-hidden="true"></span>
+                    <span class="sb-tape r" aria-hidden="true"></span>
+                    <span class="cm-deco-emoji sb-decal sb-jiggle">{charmDeco[c.tag]?.icon ?? "♡"}</span>
+                    <span class="sb-stamp cm-deco-stamp" style={`--cc:${accents[i % 3]}`}>♡ {c.tag}</span>
+                    <span class="cm-deco-sub">{charmDeco[c.tag]?.sub ?? "YUMIKI"}</span>
+                    {(charmDeco[c.tag]?.doodles ?? []).map((d, di) => (
+                      <span class={`sb-doodle cm-deco-d cm-deco-d--${di + 1}`} style={`--cc:${tapes[i % 3]}`}>{d}</span>
+                    ))}
                   </figure>
                 )}
                 {/* 本文（番組由来の写真は非掲載・公式/CM/ブログのみ掲載） */}
@@ -145,9 +172,13 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
         <div class="cm-clips-grid">
           {funClips.map((c, i) => (
             <figure id={`clip-${c.f}`} class="cm-clip cm-clip--text y-reveal" data-delay={(i % 3) + 1} style={`--cc:${clipTapes[i % clipTapes.length]}; transform: rotate(${i % 2 === 0 ? -0.6 : 0.6}deg); scroll-margin-top: 90px`}>
+              <span class="cm-clip-emoji sb-decal sb-jiggle" aria-hidden="true">{clipIcon[c.f] ?? "▶"}</span>
               <span class="cm-clip-badge" aria-hidden="true">▶ EPISODE</span>
               <figcaption class="cm-clip-cap">{c.title}</figcaption>
               <p class="cm-clip-desc">{c.desc}</p>
+              {clipLink[c.f] && (
+                <a class="cm-clip-link" href={clipLink[c.f].href} target="_blank" rel="noopener noreferrer">{clipLink[c.f].label}</a>
+              )}
             </figure>
           ))}
         </div>
@@ -301,6 +332,29 @@ const clipTapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-sky)", "var(--y-bu
     .cm-clip--text:hover { transform: rotate(0) translateY(-4px) !important; box-shadow: var(--y-shadow); }
     .cm-clip-badge { display: inline-block; font-family: var(--y-font-en); font-weight: 700; font-size: 0.64rem; letter-spacing: .08em; color: var(--y-ink-soft); background: var(--y-cream-2); border-radius: 999px; padding: .25rem .7rem; margin-bottom: .55rem; }
     .cm-clip--text .cm-clip-cap { margin: 0 0 0.4rem; font-size: 1.02rem; }
+    /* 名場面カードの絵文字シール＆検証済みリンク */
+    .cm-clip { position: relative; }
+    .cm-clip-emoji { position: absolute; top: -16px; right: 12px; z-index: 4; font-size: clamp(1.8rem, 5vw, 2.3rem); line-height: 1; }
+    .cm-clip-link { align-self: flex-start; margin-top: .85rem; font-family: var(--y-font-en); font-weight: 700; font-size: .78rem;
+      color: color-mix(in srgb, var(--y-ink) 52%, var(--y-peach)); background: color-mix(in srgb, var(--y-peach) 22%, #fff);
+      padding: .34rem .85rem; border-radius: 999px; transition: transform .25s var(--y-ease), background .25s var(--y-ease); }
+    .cm-clip-link:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--y-peach) 38%, #fff); }
+
+    /* 会話力／努力家：写真の代わりの“挿絵パネル”（番組切り抜き非掲載の跡地を埋める） */
+    .cm-deco { position: relative; justify-self: center; width: min(82vw, 340px); aspect-ratio: 3 / 2; margin: 0;
+      display: grid; place-content: center; justify-items: center; gap: .55rem; text-align: center; padding: 1rem;
+      background: linear-gradient(150deg, color-mix(in srgb, var(--cc) 26%, #fff), color-mix(in srgb, var(--cc) 8%, #fffdf8));
+      border: 2px dashed color-mix(in srgb, var(--cc) 45%, #fff); border-radius: var(--y-radius-sm);
+      box-shadow: var(--y-shadow-sm); transform: rotate(-2.2deg); transition: transform .4s var(--y-ease), box-shadow .4s var(--y-ease); }
+    .cm-page--rev .cm-deco { transform: rotate(2.2deg); }
+    .cm-page:hover .cm-deco { transform: rotate(0) scale(1.015); box-shadow: var(--y-shadow); }
+    .cm-deco-emoji { font-size: clamp(3rem, 9vw, 4.4rem); line-height: 1; }
+    .cm-deco-sub { font-family: var(--y-font-en); font-weight: 700; font-size: .72rem; letter-spacing: .14em; color: var(--y-ink-soft); }
+    .cm-deco-d { font-size: 1.5rem; }
+    .cm-deco-d--1 { top: 12%; left: 9%; }
+    .cm-deco-d--2 { bottom: 14%; right: 10%; }
+    .cm-deco-d--3 { top: 18%; right: 15%; }
+    @media (prefers-reduced-motion: reduce) { .cm-deco { transform: rotate(-2.2deg); } .cm-page--rev .cm-deco { transform: rotate(2.2deg); } }
     /* 魅力ページ：写真は1カラムで本文の上に（番組由来は非掲載・公式/CM/ブログのみ掲載） */
     @media (min-width: 880px) { .cm-page-body { grid-template-columns: 1fr; } }
 

@@ -3,8 +3,22 @@ import Yumiki from "../../layouts/Yumiki.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { memories, img } from "../../data/yumiki.ts";
 // 自分で撮った/ブログ由来でOKな写真だけ表示。それ以外（会場内・配信・ミーグリ会場）はプレースホルダ。
-const safeMem = new Set(["live_summer2024_goods.jpg", "live_yoda_dome_outside.jpg", "event_stamp_rally.jpg", "event_tgs_pcclub.jpg", "event_nogizaka_cafe.jpg"]);
+const safeMem = new Set([
+  // 既存（自分で撮った/ブログ由来でOK）
+  "live_summer2024_goods.jpg", "live_yoda_dome_outside.jpg", "event_stamp_rally.jpg", "event_tgs_pcclub.jpg", "event_nogizaka_cafe.jpg",
+  // 2026-06-22 追加（本人提供の現場・グッズ写真。HEIC→jpg/webp化・向き補正・EXIF除去済み）
+  "live_13th_birthday.jpg", "live_2025_tour_shizuoka.jpg", "live_2025_jingu.jpg", "live_kubo_grad_d2.jpg", "live_myrespect_d2.jpg", "live_umezawa_14th_d3.jpg",
+  "meet_37th_kyoto.jpg", "meet_38th_nagoya.jpg", "meet_39th_nagoya.jpg", "meet_40th_kyoto.jpg",
+  "event_daikanshasai2024_d1.jpg", "event_fukubukuro_2025.jpg", "event_nogikoi_2025.jpg", "event_nogicafe_2025.jpg", "event_birthday20_nao_cake.jpg",
+]);
 const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)", "var(--y-butter)", "var(--y-peach)"];
+// 写真を載せられない思い出（会場内・ミーグリ会場・配信）は、空白ではなく“描いて残した”装飾カードで埋める。
+const memDeco = (m: { title: string; text: string }, kind: "live" | "meet" | "other") => {
+  if (kind === "live") return { emoji: "🎫", label: "LIVE", sub: "心に焼きつけた" };
+  if (kind === "meet") return { emoji: "🎟️", label: "MEET & GREET", sub: "会えた、その瞬間" };
+  if (m.title.includes("配信") || m.text.includes("配信")) return { emoji: "📺", label: "ON AIR ♡", sub: "おうちで全力参戦" };
+  return { emoji: "♪", label: "MEMORY", sub: "心に残った一コマ" };
+};
 ---
 <Yumiki title="思い出 — YUMIKI WORLD">
   <section class="y-section mem-page">
@@ -42,7 +56,11 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
                   <img src={img(m.img)} alt={m.title} loading="lazy" />
                 </div>
               ) : (
-                <div class="mem-photo noimg" aria-hidden="true"></div>
+                <div class="mem-photo noimg mem-noimg" style={`--cc:${tapes[i % tapes.length]}`} aria-hidden="true">
+                  <span class="mem-noimg-emoji sb-decal">{memDeco(m, "live").emoji}</span>
+                  <span class="mem-noimg-label">{memDeco(m, "live").label}</span>
+                  <span class="mem-noimg-sub">{memDeco(m, "live").sub}</span>
+                </div>
               )}
             </figure>
             <div class="mem-ticket-body">
@@ -77,7 +95,11 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
                 <img src={img(m.img)} alt={m.title} loading="lazy" />
               </div>
             ) : (
-              <div class="mem-photo mem-photo--tall noimg" aria-hidden="true"></div>
+              <div class="mem-photo mem-photo--tall noimg mem-noimg" style="--cc:var(--y-mint)" aria-hidden="true">
+                <span class="mem-noimg-emoji sb-decal">{memDeco(m, "meet").emoji}</span>
+                <span class="mem-noimg-label">{memDeco(m, "meet").label}</span>
+                <span class="mem-noimg-sub">{memDeco(m, "meet").sub}</span>
+              </div>
             )}
             <figcaption>{m.date}</figcaption>
           </figure>
@@ -85,9 +107,9 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
             <span class="sb-head-eyebrow">A Day's Bookmark</span>
             <div class="mem-shiori-head">
               <span class="sb-num mem-bignum" style="--cc:var(--y-mint)">#{i + 1}</span>
-              <h3>{i === 0 ? "はじめての対面" : "また会えた日"}</h3>
+              <h3>{m.head}</h3>
             </div>
-            <span class="sb-stamp" style="--cc:var(--y-peach)">🎫 リアルミーグリ</span>
+            <span class="sb-stamp" style="--cc:var(--y-peach)">{m.kind}</span>
             <h4 class="mem-shiori-title"><span class="sb-mark" style="--cc:var(--y-mint)">{m.title}</span></h4>
             <div class="sb-sticky mem-sticky" style="--cc:var(--y-mint)">
               <p>{m.text}</p>
@@ -117,11 +139,16 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
                   <img src={img(m.img)} alt={m.title} loading="lazy" />
                 </div>
               ) : (
-                <div class="mem-photo mem-photo--wide noimg" aria-hidden="true"></div>
+                <div class="mem-photo mem-photo--wide noimg mem-noimg" style={`--cc:${tapes[(i + 2) % tapes.length]}`} aria-hidden="true">
+                  <span class="mem-noimg-emoji sb-decal">{memDeco(m, "other").emoji}</span>
+                  <span class="mem-noimg-label">{memDeco(m, "other").label}</span>
+                  <span class="mem-noimg-sub">{memDeco(m, "other").sub}</span>
+                </div>
               )}
             </figure>
             <div class="sb-sticky mem-sticky mem-scatter-note" style={`--cc:${tapes[(i + 2) % tapes.length]}`}>
               <h3>{m.title}</h3>
+              {m.date && <span class="sb-stamp mem-scatter-date" style={`--cc:${tapes[(i + 2) % tapes.length]}`}>🗓 {m.date}</span>}
               <p>{m.text}</p>
             </div>
           </article>
@@ -161,6 +188,14 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
     .mem-photo.noimg::before { display: none; }
     .mem-photo.noimg img { display: none; }
     .mem-photo.noimg::after { content: "✿"; display: grid; place-items: center; height: 100%; font-size: 2.2rem; color: var(--y-pink); }
+
+    /* 写真がない思い出＝“描いて残した”装飾カード（番組内・配信・ミーグリ会場の跡地） */
+    .mem-noimg.noimg::after { content: none; }
+    .mem-noimg { display: grid; place-content: center; justify-items: center; gap: .3rem; text-align: center; padding: .7rem;
+      background: linear-gradient(150deg, color-mix(in srgb, var(--cc, var(--y-pink)) 32%, #fff), color-mix(in srgb, var(--cc, var(--y-pink)) 10%, #fffdf8)); }
+    .mem-noimg-emoji { font-size: clamp(1.7rem, 7vw, 2.5rem); line-height: 1; }
+    .mem-noimg-label { font-family: var(--y-font-en); font-weight: 700; font-size: .64rem; letter-spacing: .1em; color: var(--y-ink-soft); }
+    .mem-noimg-sub { font-family: var(--y-font-hand); font-size: .74rem; line-height: 1.4; color: var(--y-ink-soft); max-width: 16ch; }
 
     /* sb-cheki の中身を contain 表示にしたいので cover を上書き（チェキ枠の白フチは維持） */
     .sb-cheki .mem-photo { width: 100%; }
@@ -216,6 +251,7 @@ const tapes = ["var(--y-pink)", "var(--y-mint)", "var(--y-lav)", "var(--y-sky)",
     .mem-scatter-cheki .mem-photo { aspect-ratio: 4 / 3; }
     .mem-scatter-note { margin-top: -.6rem; position: relative; z-index: 2; transform: rotate(.8deg); }
     .mem-scatter-note h3 { font-size: 1.02rem; margin: 0 0 .35rem; line-height: 1.4; }
+    .mem-scatter-date { margin: 0 0 .55rem; font-size: .66rem; }
     .mem-scatter-note p { color: var(--y-ink-soft); font-size: .86rem; line-height: 1.75; margin: 0; }
 
     /* 微回転は reduced-motion でも見た目（静的tilt）は維持。動くアニメだけ停止 */

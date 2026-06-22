@@ -13,7 +13,7 @@ const isActive = (href: string) => href === "/yumiki/" ? pathname === "/yumiki/"
 const curIdx = nav.findIndex((n) => isActive(n.href));
 const nextNav = nav[((curIdx < 0 ? 0 : curIdx) + 1) % nav.length];
 const curHref = nav[curIdx < 0 ? 0 : curIdx].href;
-// 隠しハート集め：ページごとに違う隅に小さな♡を置く（全7枚集めるとご褒美）
+// 隠しハート集め：ページごとに違う隅に小さな♡を置く（全ページ分＝nav.length枚集めるとご褒美。ページ増減に自動追従）
 const eggPos = ["top:34%;left:10px", "bottom:21%;right:12px", "top:47%;right:9px", "bottom:33%;left:13px", "top:59%;left:16px", "bottom:27%;right:18px", "top:41%;left:20px"];
 const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
 ---
@@ -73,7 +73,7 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
     <main><slot /></main>
 
     <!-- 隠しハート（ページごとに違う隅／全7枚集めるとご褒美） -->
-    <button class="y-egg" id="yEgg" data-page={curHref} style={eggStyle} aria-label="かくれハートを集める">♡</button>
+    <button class="y-egg" id="yEgg" data-page={curHref} data-total={nav.length} style={eggStyle} aria-label="かくれハートを集める">♡</button>
 
     <!-- 回遊：ノートをめくる（次のページへ） -->
     <nav class="y-next-wrap" aria-label="次のページ">
@@ -93,7 +93,7 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
             <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}><img src={img(s.icon)} alt={s.label} /></a>
           ))}
         </div>
-        <p class="y-egg-count" id="yEggCount" hidden>かくれ♡ <b>0</b>/7</p>
+        <p class="y-egg-count" id="yEggCount" hidden>かくれ♡ <b>0</b>/{nav.length}</p>
         <p class="y-disclaimer">
           © 2026 YUMIKI WORLD ／ 本ページは弓木奈於さんを応援する非公式ファン制作サイトです。<br />
           掲載している画像・情報の著作権は各権利者に帰属します。問題がある場合は速やかに対応します。
@@ -192,7 +192,7 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
         const btn = d.querySelector("button"); if (btn) btn.addEventListener("click", close);
         d.addEventListener("click", function (e) { if (e.target === d) close(); });
       }
-      const EGG_TOTAL = 7, eggKey = "y-hearts";
+      const EGG_TOTAL = Number(document.getElementById("yEgg")?.dataset.total) || 6, eggKey = "y-hearts";
       const getHearts = function () { try { return JSON.parse(localStorage.getItem(eggKey) || "[]"); } catch (e) { return []; } };
       const eggCount = document.getElementById("yEggCount");
       const renderCount = function () { const n = getHearts().length; if (eggCount) { const b = eggCount.querySelector("b"); if (b) b.textContent = String(Math.min(n, EGG_TOTAL)); eggCount.hidden = n <= 0; } };
@@ -200,7 +200,7 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
       function showEggHint() {
         if (document.getElementById("yEggHint")) return;
         const t = document.createElement("div"); t.id = "yEggHint"; t.className = "y-egg-hint";
-        t.innerHTML = '<span class="y-egg-hint-i" aria-hidden="true">♡</span><span>かくれハート、見つけた！<br>ぜんぶで <b>7つ</b>、集めてみてね ✎</span>';
+        t.innerHTML = '<span class="y-egg-hint-i" aria-hidden="true">♡</span><span>かくれハート、見つけた！<br>ぜんぶで <b>' + EGG_TOTAL + 'つ</b>、集めてみてね ✎</span>';
         document.body.appendChild(t);
         window.requestAnimationFrame(function () { t.classList.add("show"); });
         window.setTimeout(function () { t.classList.remove("show"); window.setTimeout(function () { t.remove(); }, 400); }, 4200);
