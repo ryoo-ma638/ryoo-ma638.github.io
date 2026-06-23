@@ -8,12 +8,14 @@ export type Category = "graphic" | "cg" | "imaging" | "web" | "planning" | "soun
 
 // 分野＝色（プリズムで分光した1分野＝1色のスペクトル・マップ）。6分野すべて別色にして、
 // サムネ・タグ・番号・フィルタで一貫して使う＝「色々な色＝色々な分野に手を出している」を視覚化する。
+// 表示順＝本人の専門分野から（Web・アプリ → 画像処理・インタラクション → CG・映像 → 企画・発表 → グラフィック → サウンド）。
+// この順が トップFields と Works のセクション順・通し番号(01,02…)に連動する。works/index.astro の order 配列も同じ順に。
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
-  graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--c-violet)" },
-  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--c-red)" },
-  imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--c-cyan)" },
   web:      { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
+  imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--c-cyan)" },
+  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--c-red)" },
   planning: { ja: "企画・発表",         en: "Planning & Slides", color: "var(--c-green)" },
+  graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--c-violet)" },
   sound:    { ja: "サウンド・音楽",      en: "Sound & Music", color: "var(--c-orange)" },
 };
 
