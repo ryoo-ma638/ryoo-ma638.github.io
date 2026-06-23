@@ -18,6 +18,7 @@ const data = works.map((w) => ({
   slideGroups: w.slideGroups ?? null,
   audio: w.audio ?? null,
   link: w.link ?? null,
+  links: w.links ?? null,
 }));
 ---
 
@@ -33,6 +34,7 @@ const data = works.map((w) => ({
       <div class="wm-kv" id="wmGoal"><span>狙い</span><p></p></div>
       <div class="wm-kv" id="wmApproach"><span>工夫</span><p></p></div>
       <dl class="wm-meta" id="wmMeta"></dl>
+      <div class="wm-press" id="wmPress" aria-label="掲載メディア"></div>
       <div class="wm-gallery" id="wmGallery" aria-label="関連画像"></div>
       <div class="wm-slides" id="wmSlides" aria-label="スライド・資料"></div>
       <a class="btn btn--primary wm-link" id="wmLink" href="#">サイトを見る →</a>
@@ -121,6 +123,12 @@ const data = works.map((w) => ({
   #workModal .wm-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
   #workModal .wm-slide { flex: 0 0 auto; width: clamp(240px, 72%, 420px); aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
   #workModal .wm-slide:hover { border-color: var(--accent-ink); }
+
+  #workModal .wm-press { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 1.1rem 0 0.2rem; }
+  #workModal .wm-press[hidden] { display: none; }
+  #workModal .wm-press-label { font-size: 0.78rem; font-weight: 700; color: var(--fg-soft); }
+  #workModal .wm-press-link { font-size: 0.8rem; font-weight: 700; color: var(--accent-ink); border: 1px solid var(--line); border-radius: 999px; padding: 0.34rem 0.85rem; transition: border-color 0.25s var(--ease), transform 0.25s var(--ease); }
+  #workModal .wm-press-link:hover { border-color: var(--accent-ink); transform: translateY(-2px); }
 </style>
 
 <script is:inline define:vars={{ data }}>
@@ -171,6 +179,15 @@ const data = works.map((w) => ({
       const meta = $("wmMeta"); meta.innerHTML = "";
       if (w.tools && w.tools.length) meta.insertAdjacentHTML("beforeend", `<div><dt>使用ツール</dt><dd>${w.tools.join(" / ")}</dd></div>`);
       if (w.duration) meta.insertAdjacentHTML("beforeend", `<div><dt>制作時間</dt><dd>${esc(w.duration)}</dd></div>`);
+
+      const press = $("wmPress"); press.innerHTML = "";
+      if (w.links && w.links.length) {
+        press.insertAdjacentHTML("beforeend", '<span class="wm-press-label">📰 掲載メディア</span>');
+        w.links.forEach((l) => {
+          press.insertAdjacentHTML("beforeend", `<a class="wm-press-link" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)} <span aria-hidden="true">↗</span></a>`);
+        });
+        press.hidden = false;
+      } else press.hidden = true;
 
       const gal = $("wmGallery"); gal.innerHTML = "";
       if (w.gallery && w.gallery.length) {

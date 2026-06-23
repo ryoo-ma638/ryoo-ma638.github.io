@@ -70,8 +70,6 @@ const total = works.length;
                 </span>
                 <h3>{w.title}</h3>
                 <p class="work-summary">{w.summary}</p>
-                {w.goal && <p class="kv"><span>狙い</span>{w.goal}</p>}
-                {w.approach && <p class="kv"><span>工夫</span>{w.approach}</p>}
                 <dl class="work-meta">
                   {w.tools && <div><dt>使用ツール</dt><dd>{w.tools.join(" / ")}</dd></div>}
                   {w.duration && <div><dt>制作時間</dt><dd>{w.duration}</dd></div>}
