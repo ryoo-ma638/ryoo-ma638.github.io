@@ -5,10 +5,29 @@ import WorkModal from "../../components/WorkModal.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
 
 const order: Category[] = ["web", "imaging", "cg", "planning", "graphic", "sound"];
+
+// 各分野の中での表示順（売り出したい・評価が高いと思われる作品を上に）。
+// ここに無いslugは元の順で末尾へ回る。data側は触らず、表示順だけを制御する。
+const rankOrder: string[] = [
+  // Web・アプリ：受託 → 公開中アプリ → 公開中サイト → 受賞 → 実案件 → …
+  "drone-note", "meegri", "yumiki-world", "settlo", "chuo-seisakusho", "uriko-site", "ceed-site", "toka-club", "nogi-photo",
+  // 画像処理・インタラクション：完成作品 → 研究中 → 構想中
+  "death-comer", "shuwa-game", "wis-umbrella", "fukuoka-award",
+  // CG・映像：代表作・高評価・出展作を上に
+  "shibuya-crossing", "strikeout", "aitland", "mushiba-animals", "robot-argus", "jojo-scene", "live-stage", "mm2-cinematography", "manga-jitsuei",
+  // 企画・発表
+  "presentation-slides", "todofuken-battle",
+  // グラフィック・ロゴ
+  "color-poster", "character-design", "club-poster",
+  // サウンド・音楽
+  "sound-arrange",
+];
+const rankOf = (slug: string) => { const i = rankOrder.indexOf(slug); return i < 0 ? 999 : i; };
+
 const grouped = order.map((cat) => ({
   cat,
   label: categoryLabels[cat],
-  items: works.filter((w) => w.category === cat),
+  items: works.filter((w) => w.category === cat).sort((a, b) => rankOf(a.slug) - rankOf(b.slug)),
 }));
 const total = works.length;
 ---
