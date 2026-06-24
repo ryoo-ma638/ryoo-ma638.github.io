@@ -17,10 +17,10 @@ const kineticB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
 
 // 「活動と挑戦」＝つくる以外の幅（すべて実績ベース・色＝多分野）。トップで“色々手を出している”を一目で伝える。
 const activities = [
-  { c: "var(--c-violet)", k: "課外", t: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。球場の時間を、もっと楽しく。", link: "https://uriko-v-dome-ryoma.vercel.app" },
-  { c: "var(--c-blue)", k: "役割", t: "学生団体 CEED 副部長", d: "60名規模の運営・新歓・イベント企画。“誰も置いてけぼりにしない”を大切に。" },
-  { c: "var(--c-green)", k: "出展", t: "東京ゲームショウ ほか", d: "『虫歯アニマルズ』でTGS・ゲームマーケット・安城Eフェスに出展。" },
-  { c: "var(--c-yellow)", k: "ハッカソン", t: "ハッカソン 受賞", d: "シスハックで割り勘アプリ『Settlo』を開発し、企業賞を受賞した。" },
+  { c: "var(--c-violet)", k: "課外", t: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。球場の時間を、もっと楽しく。", link: "https://uriko-v-dome-ryoma.vercel.app", linkLabel: "応援サイトへ" },
+  { c: "var(--c-blue)", k: "役割", t: "学生団体 CEED 副部長", d: "60名規模の運営・新歓・イベント企画。“誰も置いてけぼりにしない”を大切に。", link: "/ceed", linkLabel: "CEEDの活動へ" },
+  { c: "var(--c-green)", k: "出展", t: "東京ゲームショウ ほか", d: "『虫歯アニマルズ』でTGS・ゲームマーケット・安城Eフェスに出展。", link: "/works#mushiba-animals", linkLabel: "作品を見る" },
+  { c: "var(--c-yellow)", k: "ハッカソン", t: "ハッカソン 受賞", d: "シスハックで割り勘アプリ『Settlo』を開発し、企業賞を受賞した。", link: "/works#settlo", linkLabel: "作品を見る" },
   { c: "var(--c-orange)", k: "研究", t: "学会発表に挑戦", d: "水野慎士研究室での研究を、外の場へ。いま挑戦の途中。" },
   { c: "var(--c-red)", k: "進学", t: "大学院 進学を準備", d: "CG・画像処理・インタラクションを、もっと深くへ。" },
 ];
@@ -137,12 +137,12 @@ const activities = [
         {activities.map((a, i) => {
           const Tag = a.link ? "a" : "div";
           return (
-            <Tag class:list={["act", "reveal", { "act--link": !!a.link }]} data-delay={(i % 3) + 1} style={`--c:${a.c}`} href={a.link ?? undefined} target={a.link ? "_blank" : undefined} rel={a.link ? "noopener noreferrer" : undefined}>
+            <Tag class:list={["act", "reveal", { "act--link": !!a.link }]} data-delay={(i % 3) + 1} style={`--c:${a.c}`} href={a.link ?? undefined} target={a.link?.startsWith("http") ? "_blank" : undefined} rel={a.link?.startsWith("http") ? "noopener noreferrer" : undefined}>
               <span class="act-no">{String(i + 1).padStart(2, "0")}</span>
               <span class="act-k">{a.k}</span>
               <h3 class="act-t">{a.t}</h3>
               <p class="act-d">{a.d}</p>
-              {a.link && <span class="act-arrow" aria-hidden="true">応援サイトへ ↗</span>}
+              {a.link && <span class="act-arrow" aria-hidden="true">{a.linkLabel ?? "詳しく"} ↗</span>}
             </Tag>
           );
         })}

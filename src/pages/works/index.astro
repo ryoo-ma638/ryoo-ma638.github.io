@@ -155,7 +155,8 @@ const total = works.length;
       else if (location.hash.startsWith("#cat-") && cats.includes(location.hash.slice(5))) active.add(location.hash.slice(5));
       apply();
 
-      if (location.hash.startsWith("#cat-")) {
+      // #cat-xxx（分野）でも #slug（個別作品）でも、対象へスムーズにスクロール
+      if (location.hash) {
         const el = document.getElementById(location.hash.slice(1));
         if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }));
       }
