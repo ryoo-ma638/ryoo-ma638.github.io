@@ -207,10 +207,6 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
     <button class="y-x ymem-x" aria-label="閉じる">✕</button>
     <div class="ymem-card" role="document">
       <span class="ymem-av" id="ymemAv"></span>
-      <div class="ymem-photos" id="ymemPhotos" hidden>
-        <figure class="ymem-photo sb-cheki" style="--tape:var(--y-pink)"><img id="ymemPhoto0" src="" alt="" /><figcaption>弓木さんと ♡</figcaption></figure>
-        <figure class="ymem-photo sb-cheki" style="--tape:var(--y-sky)"><img id="ymemPhoto1" src="" alt="" /><figcaption id="ymemPhoto1cap"></figcaption></figure>
-      </div>
       <h3 class="ymem-name" id="ymemName"></h3>
       <span class="ymem-rel" id="ymemRel"></span>
       <span class="ymem-sub" id="ymemSub"></span>
@@ -479,17 +475,6 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   .rel-burst { position: fixed; z-index: 1200; pointer-events: none; font-size: 1.15rem; transform: translate(-50%, -50%); will-change: transform, opacity; animation: rel-burst .75s ease-out forwards; }
   @keyframes rel-burst { 0% { opacity: 1; transform: translate(-50%, -50%) scale(.5); } 100% { opacity: 0; transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) scale(1.1) rotate(var(--rot, 0deg)); } }
 
-  /* 縁の深い8人＝写真アバター（中心相関図のノード） */
-  .cor-av--photo { padding: 0; overflow: hidden; background: #fff; border: 2.5px solid var(--gc); }
-  .cor-av--photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 50%; }
-  /* メンバー詳細モーダルの写真（弓木さんとの2ショット＋本人アップ＝チェキ風） */
-  .ymem-photos { display: flex; gap: .7rem; justify-content: center; flex-wrap: wrap; margin: .2rem auto 1.1rem; }
-  .ymem-photos[hidden] { display: none; }
-  .ymem-photo { width: min(46%, 152px); margin: 0; padding: .4rem .4rem .85rem; transform: rotate(-2deg); }
-  .ymem-photo:last-child { transform: rotate(2deg); }
-  .ymem-photo img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: center top; border-radius: 3px; }
-  .ymem-photo figcaption { font-family: var(--y-font-hand); font-size: .72rem; text-align: center; margin-top: .35rem; color: var(--y-ink-soft); }
-  @media (prefers-reduced-motion: reduce) { .ymem-photo, .ymem-photo:last-child { transform: none; } }
 </style>
 
 <script>
@@ -501,10 +486,6 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
     const rel = document.getElementById("ymemRel")!;
     const sub = document.getElementById("ymemSub")!;
     const note = document.getElementById("ymemNote")!;
-    const photosBox = document.getElementById("ymemPhotos") as HTMLElement;
-    const photo0 = document.getElementById("ymemPhoto0") as HTMLImageElement;
-    const photo1 = document.getElementById("ymemPhoto1") as HTMLImageElement;
-    const photo1cap = document.getElementById("ymemPhoto1cap") as HTMLElement;
     let lastFocused: HTMLElement | null = null;
     const xBtn = modal.querySelector(".ymem-x") as HTMLElement | null;
     const lockScroll = () => { const b = document.body; const n = (parseInt(b.dataset.scrollLock || "0", 10)) + 1; b.dataset.scrollLock = String(n); b.style.overflow = "hidden"; };
@@ -537,23 +518,8 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
     const open = (btn: HTMLElement) => {
       const name = btn.dataset.name || "";
       const gc = btn.style.getPropertyValue("--gc") || "var(--y-peach)";
-      const photosRaw = btn.dataset.photos;
-      if (photosRaw) {
-        let ph: string[] = [];
-        try { ph = JSON.parse(photosRaw); } catch (_) {}
-        photo0.src = ph[0] || "";
-        photo0.alt = "弓木奈於さんと" + name + "さん";
-        photo1.src = ph[1] || ph[0] || "";
-        photo1.alt = name + "さん";
-        photo1cap.textContent = name;
-        photosBox.hidden = false;
-        (av as HTMLElement).style.display = "none";
-      } else {
-        photosBox.hidden = true;
-        (av as HTMLElement).style.display = "";
-        av.textContent = name.replace(/[\s　]/g, "").charAt(0);
-        (av as HTMLElement).style.background = gc;
-      }
+      av.textContent = name.replace(/[\s　]/g, "").charAt(0);
+      (av as HTMLElement).style.background = gc;
       nm.textContent = name;
       rel.textContent = btn.dataset.rel || "";
       (rel as HTMLElement).style.background = gc;

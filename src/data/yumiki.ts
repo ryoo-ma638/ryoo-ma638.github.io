@@ -115,33 +115,24 @@ export const unit = {
 // groups   = 卒業生・高校の同級生・他グループ・番組など別枠のつながり。
 export const relations = {
   // ── 中心相関図：弓木さんと“線”で結ぶ縁の深い人（3×3で中心を囲む配置） ──
-  // photos = [弓木さんとの2ショット, 本人アップ]。中心相関図のノードを写真化し、押すと2枚表示。
-  // （賀喜・田村は旅行トリオの3人ショットを共有）。出典＝本人提供素材（/assets/yumiki/relations/）。
+  // （旧：ノードの2ショット写真機能は未配線＋画像不在のため撤去。相関図はテキスト・線・♡で表現）
   keyBonds: [
     { name: "遠藤 さくら", rel: "2人旅の相棒", cat: "4期生・同期", color: "var(--y-pink)",
-      note: "「悩みは半分持つよ」と言い合える、心を預けられる2人旅の相棒。",
-      photos: ["relations/endo-with.jpg", "relations/endo-up.jpg"] },
+      note: "「悩みは半分持つよ」と言い合える、心を預けられる2人旅の相棒。" },
     { name: "賀喜 遥香", rel: "旅行トリオ", cat: "4期生・同期", color: "var(--y-pink)",
-      note: "オーディション後、最初に話したのが賀喜さん。気にしぃで優柔不断な“似た者同士”。",
-      photos: ["relations/kaki-tamura.jpg", "relations/kaki-up.jpg"] },
+      note: "オーディション後、最初に話したのが賀喜さん。気にしぃで優柔不断な“似た者同士”。" },
     { name: "田村 真佑", rel: "旅行トリオ", cat: "4期生・同期", color: "var(--y-pink)",
-      note: "迷う2人をさっと決めてくれる、トリオの“舵取り役”。「“どんぐり”一言で100ぐらい話が広がる」ほど笑いが絶えない。",
-      photos: ["relations/kaki-tamura.jpg", "relations/tamura-up.jpg"] },
+      note: "迷う2人をさっと決めてくれる、トリオの“舵取り役”。「“どんぐり”一言で100ぐらい話が広がる」ほど笑いが絶えない。" },
     { name: "小津 玲奈", rel: "推してくれる後輩", cat: "6期生・後輩", color: "var(--y-mint)",
-      note: "「一番の推しは弓木さん」と公言。キャッチフレーズの名付け親も弓木さん、という最も慕う後輩。",
-      photos: ["relations/ozu-with.jpg", "relations/ozu-up.jpg"] },
+      note: "「一番の推しは弓木さん」と公言。キャッチフレーズの名付け親も弓木さん、という最も慕う後輩。" },
     { name: "川﨑 桜", rel: "首ンセス／慕う後輩", cat: "5期生・後輩", color: "var(--y-mint)",
-      note: "「一番話しやすい先輩」に弓木さんの名を挙げる、軍団「首ンセス」の後輩。",
-      photos: ["relations/kawasaki-with.jpg", "relations/kawasaki-up.jpg"] },
+      note: "「一番話しやすい先輩」に弓木さんの名を挙げる、軍団「首ンセス」の後輩。" },
     { name: "与田 祐希", rel: "「祐希ちゃん」", cat: "先輩（卒業生）", color: "var(--y-butter)",
-      note: "「祐希ちゃん」と慕う先輩。海外旅行にも誘われる特別な間柄。",
-      photos: ["relations/yoda-with.jpg", "relations/yoda-up.jpg"] },
+      note: "「祐希ちゃん」と慕う先輩。海外旅行にも誘われる特別な間柄。" },
     { name: "鈴木 絢音", rel: "すずきとゆみき", cat: "先輩（卒業生）", color: "var(--y-butter)",
-      note: "「絢音さんがいたから目標ができた」と語る、全てを教えてくれた同い年の先輩。",
-      photos: ["relations/suzuki-with.jpg", "relations/suzuki-up.jpg"] },
+      note: "「絢音さんがいたから目標ができた」と語る、全てを教えてくれた同い年の先輩。" },
     { name: "和田 まあや", rel: "高校の同級生", cat: "高校時代", color: "var(--y-lav)",
-      note: "日出高校の同級生。昼食を共にし、誕生日を祝い合った仲。",
-      photos: ["relations/wada-with.jpg", "relations/wada-up.jpg"] },
+      note: "日出高校の同級生。昼食を共にし、誕生日を祝い合った仲。" },
   ],
 
   generations: [
