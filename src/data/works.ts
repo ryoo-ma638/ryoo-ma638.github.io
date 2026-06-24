@@ -65,6 +65,8 @@ export const works: Work[] = [
     thumb: "/assets/works/strikeout.jpg",
     video: "/assets/works/video/strikeout.mp4",
   },
+  // === AITランド：本人指示で「一時的に非表示」（2026-06-25）。再表示する時はこの /* */ を外すだけ。 ===
+  /*
   {
     slug: "aitland",
     title: "AITランド（3D遊園地）",
@@ -76,6 +78,7 @@ export const works: Work[] = [
     thumb: "/assets/works/aitland.jpg",
     video: "/assets/works/video/aitland.mp4",
   },
+  */
   {
     slug: "robot-argus",
     title: "オリジナル3DCGロボット",
