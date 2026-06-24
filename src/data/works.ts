@@ -170,6 +170,16 @@ export const works: Work[] = [
     gallery: ["/assets/works/color-additive.jpg", "/assets/works/color-subtractive.jpg", "/assets/works/visible-light-poster.png"],
   },
   {
+    slug: "business-card",
+    title: "名刺デザイン（両面・印刷入稿）",
+    category: "graphic",
+    summary: "「つくる人 × ビール売り子」――自分の二面性をそのまま両面に込めた名刺。おもて＝Creator、うら＝ビール売り子。低ポリのワイヤーフレーム（馬＝稜馬／ビールジョッキ）で世界観を統一した。",
+    goal: "肩書きで固めず、“制作も売り子もやる”自分らしさが一目で伝わる名刺にする。配色（ネイビー×アンバー×生成り）とロゴで全体をまとめた。",
+    approach: "レイアウトをHTML/CSSで組版し、Python（Pillow・qrcode）でQR生成・ロゴの仕上げ・入稿PDF化まで自動化した“コードで作る名刺”。ロゴ（馬・ジョッキ）はAIで低ポリの下絵を生成し、背景・グローの除去、色寄せ、透過処理を自分でコーディングして仕上げた。91×55mm・塗り足し3mmで入稿できる状態。",
+    tools: ["HTML / CSS", "Python（Pillow・qrcode）"],
+    thumb: "/assets/works/business-card.jpg",
+  },
+  {
     slug: "character-design",
     title: "学科マスコット キャラクターデザイン",
     category: "graphic",
