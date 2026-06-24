@@ -178,17 +178,6 @@ export const works: Work[] = [
     thumb: "/assets/works/character-poster.jpg",
     gallery: ["/assets/works/character-poster.jpg", "/assets/works/character-parts.jpg"],
   },
-  {
-    slug: "club-poster",
-    title: "サークル募集ポスター",
-    category: "graphic",
-    summary: "新入部員募集ポスター。視線誘導と行動導線を意識した構成。",
-    approach: "タイトルの迫力で視線をキャッチし、QRコードで興味→行動へ。情報は吹き出しで整理。",
-    tools: ["Illustrator"],
-    duration: "約1時間",
-    thumb: "/assets/works/club-poster.png",
-  },
-
   // ====================== 画像処理・インタラクション（研究室＝CG・画像処理・インタラクションに直結） ======================
   {
     slug: "death-comer",

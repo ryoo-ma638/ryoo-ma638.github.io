@@ -17,7 +17,7 @@ const kineticB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
 
 // 「活動と挑戦」＝つくる以外の幅（すべて実績ベース・色＝多分野）。トップで“色々手を出している”を一目で伝える。
 const activities = [
-  { c: "var(--c-violet)", k: "課外", t: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。球場の時間を、もっと楽しく。" },
+  { c: "var(--c-violet)", k: "課外", t: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。球場の時間を、もっと楽しく。", link: "https://uriko-v-dome-ryoma.vercel.app" },
   { c: "var(--c-blue)", k: "役割", t: "学生団体 CEED 副部長", d: "60名規模の運営・新歓・イベント企画。“誰も置いてけぼりにしない”を大切に。" },
   { c: "var(--c-green)", k: "出展", t: "東京ゲームショウ ほか", d: "『虫歯アニマルズ』でTGS・ゲームマーケット・安城Eフェスに出展。" },
   { c: "var(--c-yellow)", k: "ハッカソン", t: "ハッカソン 受賞", d: "シスハックで割り勘アプリ『Settlo』を開発し、企業賞を受賞した。" },
@@ -134,14 +134,18 @@ const activities = [
         <p class="acts-lead">つくることの外側でも動いてきた。売り場、運営、出展、ハッカソン、そして研究へ。</p>
       </div>
       <div class="acts">
-        {activities.map((a, i) => (
-          <div class="act reveal" data-delay={(i % 3) + 1} style={`--c:${a.c}`}>
-            <span class="act-no">{String(i + 1).padStart(2, "0")}</span>
-            <span class="act-k">{a.k}</span>
-            <h3 class="act-t">{a.t}</h3>
-            <p class="act-d">{a.d}</p>
-          </div>
-        ))}
+        {activities.map((a, i) => {
+          const Tag = a.link ? "a" : "div";
+          return (
+            <Tag class:list={["act", "reveal", { "act--link": !!a.link }]} data-delay={(i % 3) + 1} style={`--c:${a.c}`} href={a.link ?? undefined} target={a.link ? "_blank" : undefined} rel={a.link ? "noopener noreferrer" : undefined}>
+              <span class="act-no">{String(i + 1).padStart(2, "0")}</span>
+              <span class="act-k">{a.k}</span>
+              <h3 class="act-t">{a.t}</h3>
+              <p class="act-d">{a.d}</p>
+              {a.link && <span class="act-arrow" aria-hidden="true">応援サイトへ ↗</span>}
+            </Tag>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -298,6 +302,10 @@ const activities = [
     .act-d { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.85; }
     .act:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c) 50%, var(--line)); }
     .act:hover .act-no, .act:hover .act-k { color: var(--c); }
+    /* 売り子カード等＝外部リンク化したカードの誘導表示 */
+    .act-arrow { display: inline-block; margin-top: 0.8rem; font-family: var(--font-display); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: var(--c); opacity: 0.9; transition: transform 0.3s var(--ease); }
+    .act--link:hover .act-arrow { transform: translateX(3px); }
+    :root[data-theme="light"] .act-arrow { color: color-mix(in srgb, var(--c) 76%, #15151c); }
 
     /* ライトテーマ：明るい分野色を文字に使う箇所は沈めて可読性を確保（色相は維持） */
     :root[data-theme="light"] .field a:hover .field-en { color: color-mix(in srgb, var(--c) 72%, #15151c); }

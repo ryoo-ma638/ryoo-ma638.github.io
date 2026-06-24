@@ -58,7 +58,7 @@ const highlights = [
   { n: "60名", l: "規模へ拡大", d: "CEED副部長として「誰も置いてけぼりにしない」体制づくりを進め、サークルを60名規模のコミュニティへ。", href: "/ceed", c: "var(--c-green)" },
   { n: "企業賞", l: "ハッカソン", d: "シスハックで割り勘アプリ「Settlo」を開発し、企業賞を受賞。", href: "/works#cat-web", c: "var(--c-blue)" },
   { n: "出展", l: "TGS 他", d: "体感型ゲーム「虫歯アニマルズ」をデザイン・造形で担当。東京ゲームショウ・ゲームマーケット・安城Eフェスで出展。", href: "/works#cat-planning", c: "var(--c-red)" },
-  { n: "接客", l: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。通る声・笑顔・野球トークで「応援したくなる接客」を工夫している。", href: null, c: "var(--c-orange)" },
+  { n: "接客", l: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。通る声・笑顔・野球トークで「応援したくなる接客」を工夫している。", href: "https://uriko-v-dome-ryoma.vercel.app", c: "var(--c-orange)" },
 ];
 ---
 
@@ -257,11 +257,11 @@ const highlights = [
         {highlights.map((h, i) => {
           const Tag = h.href ? "a" : "div";
           return (
-            <Tag class:list={["hl", "reveal", { "hl--link": !!h.href }]} href={h.href ?? undefined} data-delay={(i % 4) + 1} style={`--hc:${h.c}`}>
+            <Tag class:list={["hl", "reveal", { "hl--link": !!h.href }]} href={h.href ?? undefined} target={h.href?.startsWith("http") ? "_blank" : undefined} rel={h.href?.startsWith("http") ? "noopener noreferrer" : undefined} data-delay={(i % 4) + 1} style={`--hc:${h.c}`}>
               <span class="hl-num">{h.n}</span>
               <span class="hl-label">{h.l}</span>
               <p class="hl-desc">{h.d}</p>
-              {h.href && <span class="hl-arrow">詳しく ↗</span>}
+              {h.href && <span class="hl-arrow">{h.href.startsWith("http") ? "応援サイトへ" : "詳しく"} ↗</span>}
             </Tag>
           );
         })}
