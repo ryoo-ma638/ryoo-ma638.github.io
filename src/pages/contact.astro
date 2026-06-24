@@ -1,77 +1,273 @@
 ---
 import Base from "../layouts/Base.astro";
 
-// 公開連絡先（本人確認 2026-06-23）: Gmail＝主／学籍メール（愛知工業大学・aitech.ac.jp）／GitHub／本垢Instagram。
+// 公開連絡先（本人確認 2026-06-23）: Gmail＝主／学籍メール（愛知工業大学）／GitHub／本垢Instagram。
+const primaryEmail = "osaki638ryoma@gmail.com";
+const mailtoHref = `mailto:${primaryEmail}?subject=${encodeURIComponent("ポートフォリオを見て / お問い合わせ")}&body=${encodeURIComponent("大崎さん\n\nポートフォリオを拝見しました。\n\n")}`;
+
+// 連絡チャネル（メール以外）。color＝スペクトラム上の分離色＝サイトのアイデンティティに連動。
 const channels = [
-  { label: "Email", value: "osaki638ryoma@gmail.com", href: "mailto:osaki638ryoma@gmail.com" },
-  { label: "Email（大学）", value: "x24231xx@aitech.ac.jp", href: "mailto:x24231xx@aitech.ac.jp" },
-  { label: "GitHub", value: "github.com/ryoo-ma638", href: "https://github.com/ryoo-ma638" },
-  { label: "Instagram", value: "@ryoma_v_dome", href: "https://www.instagram.com/ryoma_v_dome" },
+  { key: "github",    label: "GitHub",     value: "github.com/ryoo-ma638", href: "https://github.com/ryoo-ma638",          note: "コードと制作物",          color: "var(--c-cyan)",  external: true },
+  { key: "instagram", label: "Instagram",  value: "@ryoma_v_dome",         href: "https://www.instagram.com/ryoma_v_dome", note: "日々の制作と活動",        color: "var(--c-red)",   external: true },
+  { key: "univ",      label: "大学メール", value: "x24231xx@aitech.ac.jp", href: "mailto:x24231xx@aitech.ac.jp",           note: "愛知工業大学（学籍）",    color: "var(--c-blue)",  external: false },
 ];
+
+// 受けたい相談（色＝分野）
+const topics = [
+  { t: "Web サイト制作・リデザイン", c: "var(--c-blue)" },
+  { t: "映像・3DCG / モーション",     c: "var(--c-red)" },
+  { t: "画像処理・インタラクション",  c: "var(--c-cyan)" },
+  { t: "グラフィック・ロゴ",          c: "var(--c-violet)" },
+  { t: "企画・発表スライド",          c: "var(--c-green)" },
+];
+
+// 安心材料（所在地・返信目安・在籍）
+const facts = [
+  { icon: "pin",   text: "愛知・名古屋" },
+  { icon: "clock", text: "通常2〜3日以内に返信" },
+  { icon: "cap",   text: "愛知工業大学 3年" },
+];
+
+// インラインSVGアイコン（外部依存なし・currentColorで配色追従）
+const cap = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/><path d="M22 10v5.5"/></svg>`;
+const icons: Record<string, string> = {
+  mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></svg>`,
+  send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>`,
+  copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>`,
+  github: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z"/></svg>`,
+  instagram: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>`,
+  univ: cap,
+  cap,
+  pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10.5c0 5.4-8 11-8 11s-8-5.6-8-11a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10.5" r="2.6"/></svg>`,
+  clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.8"/></svg>`,
+  external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>`,
+  arrow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>`,
+};
+const icon = (k: string): string => icons[k] ?? "";
 ---
 
-<Base title="Contact — Osaki Ryoma">
-  <section class="contact">
-    <div class="hero-glow" aria-hidden="true"></div>
+<Base
+  title="Contact — Osaki Ryoma"
+  description="大崎稜馬への連絡先。Web・映像・3DCG・グラフィック・企画のご相談やお仕事の依頼は、メール・GitHub・Instagram からお気軽にどうぞ。"
+>
+  <!-- ===== HERO ===== -->
+  <section class="ct-hero" data-accent="var(--c-violet)">
     <div class="container">
-      <p class="eyebrow reveal">Contact</p>
-      <h1 class="mega display reveal">
-        <span class="line-mask"><span>お話、<span class="spectrum-text">しましょう。</span></span></span>
+      <p class="eyebrow reveal">Contact — お問い合わせ</p>
+      <h1 class="ct-title display reveal">
+        <span class="line-mask"><span>お話、</span></span><span class="line-mask"><span class="spectrum-text">しましょう。</span></span>
       </h1>
-      <p class="lead reveal" data-delay="1">制作のご相談やご連絡は、以下からお気軽にどうぞ。</p>
+      <p class="ct-lead reveal" data-delay="1">
+        制作のご相談、お仕事の依頼、作品の感想まで——どんなことでも歓迎です。<br />
+        個人・チーム、規模の大小を問わず、まずはお気軽にどうぞ。
+      </p>
+      <ul class="ct-facts reveal" data-delay="2">
+        {facts.map((f) => (
+          <li>
+            <span class="ct-fact-ic" set:html={icon(f.icon)} />
+            {f.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-      <div class="contact-grid">
-        <ul class="channels">
-          {channels.map((c, i) => (
-            <li class="reveal" data-delay={(i % 3) + 1}>
-              <a href={c.href} target={c.href.startsWith("http") ? "_blank" : null} rel="noopener noreferrer">
-                <span class="ch-label display">{c.label}</span>
-                <span class="ch-value">{c.value}</span>
-                <span class="ch-arrow" aria-hidden="true">↗</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+  <!-- ===== PRIMARY EMAIL + CHANNELS ===== -->
+  <section class="ct-main" data-accent="var(--c-blue)">
+    <div class="container">
+      <!-- 主：メール -->
+      <div class="ct-primary reveal">
+        <span class="ct-primary-edge" aria-hidden="true"></span>
+        <div class="ct-primary-top">
+          <span class="ct-primary-ic" set:html={icon("mail")} />
+          <div>
+            <p class="ct-primary-kicker">まずはメールで</p>
+            <p class="ct-primary-sub">いちばん確実に届きます</p>
+          </div>
+        </div>
+        <p class="ct-email display" id="ctEmail">{primaryEmail}</p>
+        <div class="ct-primary-actions">
+          <a class="ct-btn ct-btn--go" href={mailtoHref}>
+            <span set:html={icon("send")} /> メールを書く
+          </a>
+          <button class="ct-btn ct-btn--copy" type="button" data-copy={primaryEmail} aria-label="メールアドレスをコピー">
+            <span class="ct-copy-ic" set:html={icon("copy")} />
+            <span class="ct-copy-ic ct-copy-ic--done" set:html={icon("check")} />
+            <span class="copy-label" aria-live="polite">コピー</span>
+          </button>
+        </div>
+      </div>
 
-        <aside class="contact-aside reveal" data-delay="2">
+      <!-- 副：その他のチャネル -->
+      <ul class="ct-channels">
+        {channels.map((c, i) => (
+          <li class="reveal" data-delay={(i % 3) + 1}>
+            <a
+              href={c.href}
+              target={c.external ? "_blank" : null}
+              rel={c.external ? "noopener noreferrer" : null}
+              style={`--ch:${c.color}`}
+              class="ct-ch"
+            >
+              <span class="ct-ch-ic" set:html={icon(c.key)} />
+              <span class="ct-ch-body">
+                <span class="ct-ch-label">{c.label}</span>
+                <span class="ct-ch-value">{c.value}</span>
+                <span class="ct-ch-note">{c.note}</span>
+              </span>
+              <span class="ct-ch-arrow" aria-hidden="true" set:html={icon(c.external ? "external" : "arrow")} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== OPEN TO ===== -->
+  <section class="ct-open" data-accent="var(--c-cyan)">
+    <div class="container">
+      <div class="ct-open-card reveal">
+        <div class="ct-open-head">
           <span class="spectrum-bar" aria-hidden="true"></span>
-          <p class="aside-eyebrow">Open to</p>
-          <h2 class="aside-title">こんなご相談を<br />歓迎します</h2>
-          <ul class="topics">
-            <li>Web サイト制作・リデザイン</li>
-            <li>映像・3DCG / モーション</li>
-            <li>グラフィック・ロゴ</li>
-            <li>企画・発表スライド</li>
+          <p class="eyebrow">Open to</p>
+          <h2 class="ct-open-title">こんなご相談を<br />歓迎します。</h2>
+        </div>
+        <div class="ct-open-body">
+          <ul class="ct-topics">
+            {topics.map((t) => (
+              <li><span class="ct-dot" style={`background:${t.c}`}></span>{t.t}</li>
+            ))}
           </ul>
-          <p class="aside-note">学生ですが、一つひとつ本気で取り組みます。まずは気軽にメッセージをどうぞ。</p>
-        </aside>
+          <p class="ct-open-note">
+            学生ですが、一つひとつ本気で取り組みます。「こんなこと頼めるかな？」という段階でも大丈夫。
+            まずは一言、声をかけてください。
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
   <style>
-    .contact { position: relative; min-height: 90svh; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-5); overflow: hidden; display: flex; align-items: center; }
-    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(40% 45% at 50% 10%, color-mix(in srgb, var(--c-violet) 26%, transparent), transparent 70%); filter: blur(8px); }
-    .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1rem; }
-    .lead { color: var(--fg-soft); margin-bottom: var(--space-4); max-width: 50ch; }
+    /* ===== HERO ===== */
+    .ct-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-4); }
+    .ct-title { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.5rem 0 1.2rem; letter-spacing: -0.02em; }
+    .ct-title .line-mask { display: inline-block; vertical-align: top; }
+    .ct-lead { color: var(--fg-soft); max-width: 54ch; font-size: clamp(1rem, 1.4vw, 1.18rem); }
 
-    .contact-grid { display: grid; gap: 1.2rem; grid-template-columns: 1fr; align-items: stretch; }
-    @media (min-width: 900px) { .contact-grid { grid-template-columns: 1.15fr 0.85fr; gap: 2rem; } }
-    .channels { display: grid; gap: 0.8rem; align-content: start; }
-    .channels a { display: flex; align-items: center; gap: 1.2rem; padding: 1.5rem 1.8rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
-    .channels a:hover { transform: translateX(8px); border-color: var(--accent-ink); }
-    .ch-label { min-width: 130px; font-size: 1.2rem; font-weight: 700; }
-    .ch-value { color: var(--fg-soft); flex: 1; }
-    .ch-arrow { color: var(--accent-ink); font-size: 1.3rem; }
-    @media (max-width: 540px) { .channels a { flex-wrap: wrap; gap: 0.3rem; } .ch-label { min-width: 0; width: 100%; } }
+    .ct-facts { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: var(--space-4); }
+    .ct-facts li { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--line); border-radius: 999px; font-size: var(--fs-small); color: var(--fg-soft); background: color-mix(in srgb, var(--card) 60%, transparent); }
+    .ct-fact-ic { display: inline-flex; color: var(--accent-ink); }
+    .ct-fact-ic :global(svg) { width: 16px; height: 16px; }
 
-    .contact-aside { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem 1.8rem 2rem; display: flex; flex-direction: column; }
-    .contact-aside .spectrum-bar { margin-bottom: 1.3rem; }
-    .aside-eyebrow { font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); }
-    .aside-title { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.25; margin: 0.5rem 0 1.2rem; }
-    .topics { display: grid; gap: 0.6rem; }
-    .topics li { color: var(--fg-soft); padding-left: 1.4rem; position: relative; font-size: var(--fs-small); }
-    .topics li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 8px; height: 8px; border-radius: 50%; background: var(--spectrum); }
-    .aside-note { margin-top: auto; padding-top: 1.4rem; color: var(--muted); font-size: var(--fs-small); }
+    /* ===== MAIN ===== */
+    .ct-main { padding-block: var(--space-4) var(--space-4); }
+    .container { width: min(100% - 2.5rem, var(--maxw)); margin-inline: auto; }
+
+    /* 主：メール（見せ場の大カード） */
+    .ct-primary {
+      position: relative; overflow: hidden;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--bg-3) 80%, transparent), var(--card));
+      border: 1px solid var(--line); border-radius: clamp(20px, 3vw, 28px);
+      padding: clamp(1.6rem, 4vw, 2.8rem); margin-bottom: 1rem;
+    }
+    .ct-primary-edge { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--spectrum); background-size: 100% 300%; animation: edgeHue 9s linear infinite; }
+    @keyframes edgeHue { to { background-position: 0 300%; } }
+    .ct-primary::after { /* 右上のスペクトラム・グロー */
+      content: ""; position: absolute; right: -10%; top: -60%; width: 60%; height: 160%; pointer-events: none;
+      background: radial-gradient(circle, color-mix(in srgb, var(--c-violet) 22%, transparent), transparent 62%);
+      filter: blur(34px); opacity: 0.8;
+    }
+    .ct-primary-top { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 1; }
+    .ct-primary-ic { display: inline-grid; place-items: center; width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; background: color-mix(in srgb, var(--c-violet) 16%, transparent); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--c-violet) 30%, transparent); }
+    .ct-primary-ic :global(svg) { width: 26px; height: 26px; }
+    .ct-primary-kicker { font-weight: 700; font-size: 1.05rem; }
+    .ct-primary-sub { color: var(--muted); font-size: var(--fs-small); }
+    .ct-email {
+      position: relative; z-index: 1; margin: 1.2rem 0 1.4rem;
+      font-size: clamp(1.2rem, 4.6vw, 3rem); font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;
+      overflow-wrap: anywhere; color: var(--fg);
+    }
+    .ct-primary-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.8rem; }
+    .ct-btn { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.85rem 1.5rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem; font-family: var(--font-display); transition: transform 0.3s var(--ease), background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease); }
+    .ct-btn :global(svg) { width: 18px; height: 18px; }
+    .ct-btn--go { color: var(--bg); background: var(--fg); position: relative; overflow: hidden; }
+    .ct-btn--go::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--spectrum); opacity: 0; transition: opacity 0.3s var(--ease); }
+    .ct-btn--go > * { position: relative; z-index: 1; }
+    .ct-btn--go:hover { transform: translateY(-3px); color: var(--bg); }
+    .ct-btn--go:hover::before { opacity: 1; }
+    .ct-btn--copy { border: 1.5px solid var(--line); color: var(--fg); }
+    .ct-btn--copy:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
+    .ct-copy-ic--done { display: none; color: var(--c-green); }
+    .ct-btn--copy.copied { border-color: color-mix(in srgb, var(--c-green) 60%, var(--line)); color: var(--c-green); }
+    .ct-btn--copy.copied .ct-copy-ic:not(.ct-copy-ic--done) { display: none; }
+    .ct-btn--copy.copied .ct-copy-ic--done { display: inline-flex; }
+
+    /* 副：チャネル */
+    .ct-channels { display: grid; gap: 0.9rem; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .ct-channels { grid-template-columns: repeat(3, 1fr); } }
+    .ct-ch {
+      position: relative; display: flex; align-items: center; gap: 1rem; height: 100%;
+      padding: 1.3rem 1.4rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+    .ct-ch:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--ch) 55%, var(--line)); box-shadow: 0 18px 40px -22px color-mix(in srgb, var(--ch) 60%, transparent); }
+    .ct-ch-ic { display: inline-grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; color: var(--ch); background: color-mix(in srgb, var(--ch) 14%, transparent); border: 1px solid color-mix(in srgb, var(--ch) 26%, transparent); transition: background 0.35s var(--ease); }
+    .ct-ch:hover .ct-ch-ic { background: color-mix(in srgb, var(--ch) 24%, transparent); }
+    .ct-ch-ic :global(svg) { width: 22px; height: 22px; }
+    .ct-ch-body { display: flex; flex-direction: column; gap: 0.05rem; min-width: 0; flex: 1; }
+    .ct-ch-label { font-weight: 700; font-size: 1.02rem; }
+    .ct-ch-value { color: var(--fg-soft); font-size: var(--fs-small); overflow-wrap: anywhere; }
+    .ct-ch-note { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+    .ct-ch-arrow { color: var(--muted); flex-shrink: 0; transition: transform 0.35s var(--ease), color 0.35s var(--ease); }
+    .ct-ch-arrow :global(svg) { width: 17px; height: 17px; }
+    .ct-ch:hover .ct-ch-arrow { color: var(--ch); transform: translate(2px, -2px); }
+
+    /* ===== OPEN TO ===== */
+    .ct-open { padding-block: var(--space-4) var(--space-6); }
+    .ct-open-card {
+      display: grid; gap: 1.6rem; grid-template-columns: 1fr; align-items: start;
+      background: color-mix(in srgb, var(--bg-2) 55%, transparent); border: 1px solid var(--line);
+      border-radius: clamp(20px, 3vw, 28px); padding: clamp(1.6rem, 4vw, 2.6rem);
+    }
+    @media (min-width: 820px) { .ct-open-card { grid-template-columns: 0.9fr 1.1fr; gap: 2.4rem; } }
+    .ct-open-head .spectrum-bar { width: 56px; margin-bottom: 1.1rem; }
+    .ct-open-title { font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.2; margin-top: 0.5rem; }
+    .ct-topics { display: grid; gap: 0.7rem; margin-bottom: 1.4rem; }
+    .ct-topics li { display: flex; align-items: center; gap: 0.7rem; color: var(--fg-soft); }
+    .ct-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .ct-open-note { color: var(--muted); font-size: var(--fs-small); line-height: 1.85; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+
+    @media (max-width: 460px) {
+      .ct-primary { padding: 1.5rem 1.3rem; }
+      .ct-primary-actions { flex-direction: column; align-items: stretch; }
+      .ct-btn { justify-content: center; }
+    }
   </style>
+
+  <script>
+    // コピー・トゥ・クリップボード（視覚フィードバック付き）
+    document.addEventListener("click", async (e) => {
+      const btn = (e.target as HTMLElement).closest("[data-copy]") as HTMLElement | null;
+      if (!btn) return;
+      const text = btn.getAttribute("data-copy") || "";
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch {}
+        ta.remove();
+      }
+      const label = btn.querySelector(".copy-label");
+      const prev = label?.textContent ?? "コピー";
+      btn.classList.add("copied");
+      if (label) label.textContent = "コピーしました";
+      window.setTimeout(() => {
+        btn.classList.remove("copied");
+        if (label) label.textContent = prev;
+      }, 1700);
+    });
+  </script>
 </Base>
