@@ -103,7 +103,7 @@ const activities = [
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Focus</span>
-        <h2 class="sec-title">6つの領域を、横断する。</h2>
+        <h2 class="sec-title">{Object.keys(categoryLabels).length}つの領域を、横断する。</h2>
         <p class="fields-lead">ひとつの分野に絞らない。横断するほど、できることが増えていく。</p>
       </div>
       <ul class="fields">
@@ -162,7 +162,7 @@ const activities = [
         興味の向くままに手を出しながら、表現の幅を広げています。次は、学会発表と大学院へ。
       </p>
       <ul class="about-stats reveal" data-delay="1" aria-label="数字で見る">
-        <li><b>06</b><span>領域 / Fields</span></li>
+        <li><b>{Object.keys(categoryLabels).length}</b><span>領域 / Fields</span></li>
         <li><b>{works.length}</b><span>作品 / Works</span></li>
         <li><b>03</b><span>出展 / Exhibitions</span></li>
       </ul>

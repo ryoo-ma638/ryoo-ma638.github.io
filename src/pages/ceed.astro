@@ -398,5 +398,14 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
     .principle h3 { font-family: var(--font-mincho); font-size: 1.12rem; margin: 0.5rem 0; }
     .principle p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
     .result { margin-top: var(--space-3); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; line-height: 1.6; font-family: var(--font-mincho); }
+    /* ライトテーマ：緑(--c-green #4ade80)を文字色に使う箇所が淡背景で読めないため、色相を保ち暗めに補正 */
+    :root[data-theme="light"] .ceed-meta .m b,
+    :root[data-theme="light"] .slink:hover,
+    :root[data-theme="light"] .role-tag,
+    :root[data-theme="light"] .deck-article li::before,
+    :root[data-theme="light"] .ccard-link,
+    :root[data-theme="light"] .block-meta,
+    :root[data-theme="light"] .titem-meta,
+    :root[data-theme="light"] .p-no { color: color-mix(in srgb, var(--c-green) 58%, #15141c); }
   </style>
 </Base>

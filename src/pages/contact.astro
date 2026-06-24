@@ -202,6 +202,9 @@ const icon = (k: string): string => icons[k] ?? "";
     .ct-btn--copy.copied { border-color: color-mix(in srgb, var(--c-green) 60%, var(--line)); color: var(--c-green); }
     .ct-btn--copy.copied .ct-copy-ic:not(.ct-copy-ic--done) { display: none; }
     .ct-btn--copy.copied .ct-copy-ic--done { display: inline-flex; }
+    /* ライトテーマ：コピー完了の緑を暗めに（淡背景での可読性） */
+    :root[data-theme="light"] .ct-btn--copy.copied,
+    :root[data-theme="light"] .ct-copy-ic--done { color: color-mix(in srgb, var(--c-green) 55%, #15141c); }
 
     /* 副：チャネル */
     .ct-channels { display: grid; gap: 0.9rem; grid-template-columns: 1fr; }

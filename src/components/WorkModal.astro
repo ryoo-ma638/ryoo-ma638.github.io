@@ -58,6 +58,19 @@ const data = works.map((w) => ({
   .wm-media img, .wm-media video { width: auto; height: auto; max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 6px; display: block; }
 
   .wm-info { padding: clamp(1.4rem, 3vw, 2.2rem); }
+
+  /* PC：左右2カラム（メディア｜情報）。クリックした瞬間に、タイトル・概要・狙いが目に入るように。
+     情報側だけを内部スクロールにして、メディアは常に見えたまま＝二重スクロールの違和感を出さない。 */
+  @media (min-width: 900px) {
+    .wm.open { align-items: center; }
+    .wm-panel { flex-direction: row; align-items: stretch; width: min(1200px, 100%); max-height: 86vh; }
+    .wm-media { flex: 1.2 1 0; min-width: 0; padding: 1.1rem; border-right: 1px solid var(--line); }
+    .wm-media img, .wm-media video { max-height: calc(86vh - 2.2rem); }
+    .wm-info { flex: 1 1 0; min-width: 0; min-height: 0; max-height: 86vh; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+    .wm-info::-webkit-scrollbar { width: 8px; }
+    .wm-info::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+    .wm-info::-webkit-scrollbar-track { background: transparent; }
+  }
   .wm-tags { display: inline-flex; gap: 0.5rem; align-items: center; margin-bottom: 0.9rem; flex-wrap: wrap; }
   .wm-tag { font-size: 0.7rem; font-weight: 700; padding: 0.32rem 0.8rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
   .wm-status { font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 999px; color: var(--fg); border: 1.5px solid var(--line); }

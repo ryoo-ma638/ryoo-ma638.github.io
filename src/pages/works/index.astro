@@ -14,7 +14,7 @@ const rankOrder: string[] = [
   // 画像処理・インタラクション：完成作品 → 研究中 → 構想中
   "death-comer", "shuwa-game", "wis-umbrella", "fukuoka-award",
   // CG・3D：代表作・高評価を上に
-  "shibuya-crossing", "strikeout", "aitland", "robot-argus", "jojo-scene", "live-stage",
+  "shibuya-crossing", "strikeout", /* "aitland"＝一時非表示中（works.tsでコメントアウト）。再表示時に位置を保つため残置 */ "robot-argus", "jojo-scene", "live-stage",
   // 映像（実写・編集）
   "mm2-cinematography", "manga-jitsuei",
   // 企画・発表（虫歯アニマルズ＝TGS出展もここへ移動）
@@ -181,7 +181,7 @@ const total = works.length;
     .chip.is-active small { color: rgba(6, 6, 10, 0.55); }
     .chip.is-active .d { background: #06060a; }
     /* 「すべて」選択中はスペクトラム＝全分野 */
-    .chip--all.is-active { background: var(--spectrum); background-size: 160% auto; color: #06060a; animation: hue 8s linear infinite; }
+    .chip--all.is-active { background: var(--spectrum); background-size: 160% auto; color: #06060a; animation: hue 8s linear infinite; text-shadow: 0 1px 2px rgba(255,255,255,0.35); }
     .chip--all.is-active small { color: rgba(6, 6, 10, 0.6); }
     @media (prefers-reduced-motion: reduce) { .chip--all.is-active { animation: none; } }
 
