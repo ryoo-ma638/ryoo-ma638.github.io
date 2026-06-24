@@ -64,7 +64,6 @@ export const works: Work[] = [
     tools: ["C++", "OpenGL / GLUT"],
     thumb: "/assets/works/strikeout.jpg",
     video: "/assets/works/video/strikeout.mp4",
-    featured: true,
   },
   {
     slug: "aitland",
@@ -238,7 +237,6 @@ export const works: Work[] = [
       { title: "アプリの画面", images: ["/assets/works/shuwa-play.jpg", "/assets/works/shuwa-app-2.jpg", "/assets/works/shuwa-app-1.jpg", "/assets/works/shuwa-app-3.jpg", "/assets/works/shuwa-app-4.jpg", "/assets/works/shuwa-result.jpg"] },
       { title: "開発レポート（発表スライド）", images: ["/assets/works/shuwa-rep-1.jpg", "/assets/works/shuwa-rep-2.jpg", "/assets/works/shuwa-rep-3.jpg", "/assets/works/shuwa-rep-4.jpg", "/assets/works/shuwa-rep-5.jpg"] },
     ],
-    featured: true,
   },
 
   // ====================== Web・アプリ ======================
@@ -307,6 +305,7 @@ export const works: Work[] = [
     tools: ["JavaScript", "WebGL / GLSL", "Node.js", "Gemini API"],
     thumb: "/assets/works/meegri.jpg",
     link: "https://meegri.vercel.app/",
+    featured: true,
   },
   {
     slug: "ceed-site",
@@ -359,6 +358,7 @@ export const works: Work[] = [
     tools: ["HTML", "CSS", "JavaScript"],
     thumb: "/assets/works/uriko.jpg",
     link: "https://uriko-v-dome-ryoma.vercel.app",
+    featured: true,
   },
 
   // ====================== 企画・発表（スライド制作・プレゼン・企画） ======================
@@ -414,4 +414,9 @@ export const works: Work[] = [
   },
 ];
 
-export const featuredWorks = works.filter((w) => w.featured);
+// トップBento（Featured）の並び順を明示制御。featured な作品を、この順で大きく見せる。
+// 1番目＝大カード、2番目＝準大カード（強調枠）。
+const featuredOrder = ["shibuya-crossing", "meegri", "robot-argus", "death-comer", "uriko-site", "chuo-seisakusho", "drone-note", "yumiki-world"];
+export const featuredWorks = works
+  .filter((w) => w.featured)
+  .sort((a, b) => featuredOrder.indexOf(a.slug) - featuredOrder.indexOf(b.slug));
