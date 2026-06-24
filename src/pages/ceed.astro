@@ -7,7 +7,7 @@ import Lightbox from "../components/Lightbox.astro";
 //  ・「大崎個人の担当（一次資料で確認）」と「CEEDチームの活動」を分離・捏造なし。
 //  ・技術講座=運営のみ／規模=60名規模／中央製作所=社名OK・コラボロゴは伏せる。
 //  ・運動会/ハロウィン/クリスマス/正月/忘年会は別サークル（シスケ天文工学研究会・総務補佐）の企画＝CEEDに混ぜない。
-//  ・写真は活動ごとにまとめて掲載（本人提供・掲載許可済）。AI講座の写真は後日追加予定。
+//  ・写真は活動ごとにまとめて掲載（本人提供・掲載許可済）。AI講座の写真も掲載済み（IMG_882x由来・EXIF/GPS除去）。
 const socials = [
   { label: "Instagram", url: "https://www.instagram.com/ceed.create" },
   { label: "YouTube", url: "https://youtube.com/@ceed_ait" },
@@ -71,6 +71,13 @@ const bbqPhotos = [
 const lecturePhotos = [
   { src: "/assets/ceed/lecture.jpg", cap: "満員の701教室（カメラ講座）" },
   { src: "/assets/ceed/camera-lecture.jpg", cap: "カメラ講座の様子" },
+];
+// AI講座の写真（本人提供・掲載許可済。EXIF/GPS除去済み）
+const aiPhotos = [
+  { src: "/assets/ceed/ai-1.jpg", cap: "「AIが全部作る」は幻想 ― 本当のクリエイティブを学ぶ" },
+  { src: "/assets/ceed/ai-2.jpg", cap: "デザイナーの働き方とAI活用のリアル" },
+  { src: "/assets/ceed/ai-3.jpg", cap: "講座に集まったメンバー" },
+  { src: "/assets/ceed/ai-4.jpg", cap: "現役デザイナーによる登壇" },
 ];
 
 // CEEDの対外活動（チーム制作＝個人の成果としては書かない）
@@ -240,7 +247,7 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
         </div>
       </div>
 
-      <!-- AI講座（記事・写真は後日） -->
+      <!-- AI講座（記事・写真あり） -->
       <div class="block block--rev reveal">
         <div class="block-text">
           <span class="role-tag">運営・まとめ担当</span>
@@ -253,8 +260,12 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
             <li>AIは情報整理・調査・批評の相棒。<b>最終判断は人間</b>が握る。</li>
           </ul>
         </div>
-        <div class="ai-photo">
-          <div class="ai-ph" aria-hidden="true"><span>📷 写真は後日追加</span></div>
+        <div class="pgrid pgrid--2">
+          {aiPhotos.map((p, i) => (
+            <button class="pcard" data-gallery={lightboxData(aiPhotos)} data-index={i} data-caption={p.cap} aria-label={`${p.cap} を拡大`}>
+              <img src={p.src} alt={p.cap} loading="lazy" /><span class="pcap">{p.cap}</span>
+            </button>
+          ))}
         </div>
       </div>
 
@@ -371,8 +382,6 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
     .block-meta { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--c-green); margin-bottom: 0.7rem; }
     .block-text > p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.9; max-width: 60ch; }
     .block-text b { color: var(--fg); }
-    .ai-photo { display: block; }
-    .ai-ph { aspect-ratio: 4 / 3; border-radius: var(--radius-sm); border: 1px dashed color-mix(in srgb, var(--fg) 22%, transparent); display: grid; place-items: center; color: var(--muted); font-size: var(--fs-small); background: var(--bg-3); }
 
     /* 対外活動（和の索引） */
     .team { border-top: 1px solid var(--line); margin-top: var(--space-3); }
