@@ -4,7 +4,7 @@ import Lightbox from "../../components/Lightbox.astro";
 import WorkModal from "../../components/WorkModal.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
 
-const order: Category[] = ["web", "imaging", "cg", "planning", "graphic", "sound"];
+const order: Category[] = ["web", "imaging", "cg", "video", "planning", "graphic", "sound"];
 
 // 各分野の中での表示順（売り出したい・評価が高いと思われる作品を上に）。
 // ここに無いslugは元の順で末尾へ回る。data側は触らず、表示順だけを制御する。
@@ -13,8 +13,10 @@ const rankOrder: string[] = [
   "drone-note", "meegri", "yumiki-world", "settlo", "chuo-seisakusho", "uriko-site", "ceed-site", "toka-club", "nogi-photo",
   // 画像処理・インタラクション：完成作品 → 研究中 → 構想中
   "death-comer", "shuwa-game", "wis-umbrella", "fukuoka-award",
-  // CG・映像：代表作・高評価・出展作を上に
-  "shibuya-crossing", "strikeout", "aitland", "mushiba-animals", "robot-argus", "jojo-scene", "live-stage", "mm2-cinematography", "manga-jitsuei",
+  // CG・3D：代表作・高評価・出展作を上に
+  "shibuya-crossing", "strikeout", "aitland", "mushiba-animals", "robot-argus", "jojo-scene", "live-stage",
+  // 映像（実写・編集）
+  "mm2-cinematography", "manga-jitsuei",
   // 企画・発表
   "presentation-slides", "todofuken-battle",
   // グラフィック・ロゴ

@@ -4,7 +4,7 @@
 // ※虚偽厳禁。「授業でやっただけ」の習作は載せず、見せられるものだけを厳選する方針。
 // =========================================================
 
-export type Category = "graphic" | "cg" | "imaging" | "web" | "planning" | "sound";
+export type Category = "graphic" | "cg" | "video" | "imaging" | "web" | "planning" | "sound";
 
 // 分野＝色（プリズムで分光した1分野＝1色のスペクトル・マップ）。6分野すべて別色にして、
 // サムネ・タグ・番号・フィルタで一貫して使う＝「色々な色＝色々な分野に手を出している」を視覚化する。
@@ -13,7 +13,8 @@ export type Category = "graphic" | "cg" | "imaging" | "web" | "planning" | "soun
 export const categoryLabels: Record<Category, { ja: string; en: string; color: string }> = {
   web:      { ja: "Web・アプリ",        en: "Web & App",     color: "var(--c-blue)" },
   imaging:  { ja: "画像処理・インタラクション", en: "Vision & Interaction", color: "var(--c-cyan)" },
-  cg:       { ja: "CG・映像",          en: "CG & Video",    color: "var(--c-red)" },
+  cg:       { ja: "CG・3D",           en: "3D Graphics",   color: "var(--c-red)" },
+  video:    { ja: "映像",             en: "Film & Video",  color: "var(--c-yellow)" },
   planning: { ja: "企画・発表",         en: "Planning & Slides", color: "var(--c-green)" },
   graphic:  { ja: "グラフィック・ロゴ", en: "Graphic & Logo", color: "var(--c-violet)" },
   sound:    { ja: "サウンド・音楽",      en: "Sound & Music", color: "var(--c-orange)" },
@@ -132,7 +133,7 @@ export const works: Work[] = [
   {
     slug: "mm2-cinematography",
     title: "映像制作 ― 構図とアクション繋ぎ",
-    category: "cg",
+    category: "video",
     summary: "同じ被写体を「接写」と「望遠」で同じ大きさに見せ分け、複数カットをアクション繋ぎで1シーンにまとめた撮影・編集作品。",
     goal: "カメラワークと編集だけで、被写体の見え方と動きの流れをコントロールする。",
     approach: "三分割法・水平・アングルを意識して構図を設計。寄り（接写）と引き（望遠）で距離感を作り分け、動き出すタイミングでカットを切り替えるアクション繋ぎで一連の所作を一つのシーンに編集した。",
@@ -143,7 +144,7 @@ export const works: Work[] = [
   {
     slug: "manga-jitsuei",
     title: "漫画「ひゃくえむ。」再現映像 ― 全力疾走のワンシーン",
-    category: "cg",
+    category: "video",
     summary: "魚豊の漫画「ひゃくえむ。」（100m走に人生を懸ける物語）の走るシーンを実写で再現した映像。スタート前の緊張から全力疾走、こみ上げる感情までを構図とカット割りで再構成した。",
     goal: "静止画である漫画の「疾走感」と「熱量」を、実写の映像演出に翻訳する。",
     approach: "原作の象徴的な走りの場面をモチーフに、時計の寄りで緊張を、低いアングルの追走ショットでスピード感を、人物の表情のカットで感情のピークを表現。シネマティックな比率（レターボックス）でまとめ、撮影から編集までを担当した。",
