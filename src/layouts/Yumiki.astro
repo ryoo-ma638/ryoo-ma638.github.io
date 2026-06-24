@@ -52,14 +52,14 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
     <!-- 初回イントロ（ノートをひらく・軽め／JS無効・reduced-motion・2回目以降は出さない） -->
     <div class="y-intro" id="yIntro" aria-hidden="true">
       <div class="y-intro-inner">
-        <span class="y-intro-logo">YUMIKI <span class="heart">♡</span> WORLD</span>
+        <span class="y-intro-logo">YUMIKI <span class="heart" aria-hidden="true">♡</span> WORLD</span>
         <span class="y-intro-sub">推し活スクラップブック、ひらきます ♡</span>
       </div>
     </div>
 
     <header class="y-header">
       <div class="y-container y-header-inner">
-        <a href="/yumiki/" class="y-logo">YUMIKI<span class="heart">♡</span>WORLD</a>
+        <a href="/yumiki/" class="y-logo">YUMIKI<span class="heart" aria-hidden="true">♡</span>WORLD</a>
         <nav class="y-nav" id="yNav" aria-label="弓木サイト ナビ">
           {nav.map((n) => (
             <a href={n.href} class:list={[{ active: isActive(n.href) }]}>{n.emoji} {n.label}</a>
@@ -87,7 +87,7 @@ const eggStyle = eggPos[(curIdx < 0 ? 0 : curIdx) % eggPos.length];
 
     <footer class="y-footer">
       <div class="y-container">
-        <a href="/yumiki/" class="y-logo">YUMIKI<span class="heart">♡</span>WORLD</a>
+        <a href="/yumiki/" class="y-logo">YUMIKI<span class="heart" aria-hidden="true">♡</span>WORLD</a>
         <div class="y-sns">
           {sns.map((s) => (
             <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}><img src={img(s.icon)} alt={s.label} /></a>
