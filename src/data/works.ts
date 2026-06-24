@@ -117,7 +117,7 @@ export const works: Work[] = [
   {
     slug: "mushiba-animals",
     title: "虫歯アニマルズ！（東京ゲームショウ2024 出展）",
-    category: "cg",
+    category: "planning",
     summary: "東京ゲームショウ2024に出展した、1年次の学生チーム制作。飼育員になって、虫歯で痛がる動物の歯を“巨大ブラシ”で磨く体感型ゲーム。",
     goal: "「動物園で見たカバの歯磨き実演をゲームにしたい」が出発点。ルールは言葉で説明しなくても、ブラシで歯を磨く姿を見れば伝わる——来場者、特に子どもや海外のお客さんが直感的に楽しめる体験を、チームでめざした。",
     approach: "動物の顔は、巨大なウレタンフォーム（発泡スチロールに似た素材）を何度もカットして約8層に重ね、削り出して塗装——軽くて丈夫、そして子どもが思わず近づきたくなる可愛らしさにこだわって造形した。特製の歯はレジン製で、内部に圧力センサーとLEDを仕込み、虫歯の歯が赤く光る→巨大ブラシでこすると白い歯に戻る連動を Unity＋Arduino で実現。自分は1年生としてチームに参加し、主にこの「デザインと見せ方」——キャラクターの造形やブースの装飾——を、先輩の力を借りながら精一杯やり切った。チーム一丸で作り上げた一台は、日経クロストレンド／ゲームメーカーズに“注目の学生作”として紹介され、海外来場者の関心も集めた。TGS後は make.ctrl.Japan 11（ゲームマーケット内・幕張メッセ）など複数のイベントにも出展した。",
@@ -128,6 +128,7 @@ export const works: Work[] = [
     ],
     status: "東京ゲームショウ2024 出展",
     thumb: "/assets/works/mushiba.jpg",
+    featured: true,
   },
   {
     slug: "mm2-cinematography",
@@ -191,12 +192,13 @@ export const works: Work[] = [
   // ====================== 画像処理・インタラクション（研究室＝CG・画像処理・インタラクションに直結） ======================
   {
     slug: "death-comer",
-    title: "Death カマー ― 身体で操る空間アクション",
+    title: "鎌ゲーム ― LiDAR×鎌で戦う全身アクション",
     category: "imaging",
-    summary: "プレイヤーが死神となり、大鎌を振って迫る敵を迎撃する全身体感型アクション。床のLiDARで現実の立ち位置を、手に持つM5Stickの動きで攻撃を検知し、壁・床への投影と連動させた体験型コンテンツ。",
-    goal: "ボタン操作では得られない“全身を使った没入感”を、空間とプロジェクションで作り出す。",
-    approach: "「移動は足（LiDARの位置測位）」「攻撃は手（M5Stickの6軸センサー）」と入力を物理的に分離して誤検知を解消。縦振り＝強攻撃・横振り＝範囲攻撃・静止＝防御を実装し、ウェーブ制（タイムアタック→ミッション→ボス）で構成。企画・ハード実装・C++/OpenGL描画まで個人制作（2000行超）。",
-    tools: ["C++", "OpenGL", "LiDAR", "M5Stick"],
+    status: "研究室で継続開発中",
+    summary: "LiDARで自分の足を追跡し、M5Stickを付けた「鎌」を実際に振って戦う、全身で遊ぶ設置型のアクションゲーム。歩く・振る・止まる――体の動きそのものが操作になる。",
+    goal: "ボタンではなく“体の動き”で遊ぶ爽快感をつくる。足元の床を戦場にして、敵も攻撃も自分の位置もそこに映し、動き回ること自体を楽しさにする。",
+    approach: "床のLiDARで足の位置を、鎌に付けたM5StickC Plus2（6軸センサー）で振りを検知。歩く＝移動＋向き、縦振り＝強攻撃、横振り＝薙ぎ払い、立ち止まる＝防御（前方の弾を跳ね返し、反射でも攻撃できる）。WAVE制（練習→反射→ボス戦）＋「スコア×残りHP」のランク評価で、攻めと守りの両立を促す。床＝戦場／壁＝情報の2画面構成。企画・ハード・C++/OpenGL描画まで個人制作。デジコン演習(2025)で発表したのち、“動かなかった原因はハードではなくコードの調整だった”と精読で突き止め、水野慎士研究室の個人プロジェクトとして再設計・継続開発中（向きの一本化・防御のノイズ対策・デバッグ表示などを実装済み。今後はLiDAR点群からの姿勢推定など研究へ発展）。",
+    tools: ["C++ / OpenGL / GLUT", "M5StickC Plus2", "LiDAR"],
     thumb: "/assets/works/death-comer.jpg",
     video: "/assets/works/video/death-comer.mp4",
     gallery: ["/assets/works/deathcomer-title.jpg", "/assets/works/deathcomer-boss.jpg", "/assets/works/deathcomer-rule.jpg", "/assets/works/deathcomer-scythe.jpg"],
@@ -358,7 +360,6 @@ export const works: Work[] = [
     tools: ["HTML", "CSS", "JavaScript"],
     thumb: "/assets/works/uriko.jpg",
     link: "https://uriko-v-dome-ryoma.vercel.app",
-    featured: true,
   },
 
   // ====================== 企画・発表（スライド制作・プレゼン・企画） ======================
@@ -416,7 +417,7 @@ export const works: Work[] = [
 
 // トップBento（Featured）の並び順を明示制御。featured な作品を、この順で大きく見せる。
 // 1番目＝大カード、2番目＝準大カード（強調枠）。
-const featuredOrder = ["shibuya-crossing", "meegri", "robot-argus", "death-comer", "uriko-site", "chuo-seisakusho", "drone-note", "yumiki-world"];
+const featuredOrder = ["shibuya-crossing", "death-comer", "robot-argus", "meegri", "yumiki-world", "chuo-seisakusho", "drone-note", "mushiba-animals"];
 export const featuredWorks = works
   .filter((w) => w.featured)
   .sort((a, b) => featuredOrder.indexOf(a.slug) - featuredOrder.indexOf(b.slug));
