@@ -275,8 +275,10 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   @media (max-width: 700px) {
     .cor-svg { display: none; }
     .cor-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
-    /* ハブは“縦カード”のまま最上段に中央寄せ。横並び(row)にすると王冠/MY OSHIタグ/キラキラの位置が崩れるため。 */
-    .cor-hub { grid-column: 1 / -1; order: -1; justify-self: center; width: min(100%, 230px); margin: 0.4rem 0 0.9rem; }
+    /* ハブは“縦カード”のまま最上段に中央寄せ。横並び(row)や grid の place-content 依存だと
+       一部ブラウザ(iOS Safari 等)で中心がズレ得るため、flex の縦積みで明示的に中央寄せして堅牢化。 */
+    .cor-hub { grid-column: 1 / -1; order: -1; justify-self: center; width: min(100%, 230px); margin: 0.4rem auto 0.9rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
     .cor-hub img { width: 66px; height: 66px; }
   }
 
