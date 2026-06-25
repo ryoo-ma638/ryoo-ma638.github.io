@@ -204,6 +204,9 @@
 
 /* 見出しのバリエーション：中央寄せテンプレを崩す“ノートの章見出し”（左寄せ＋テープ＋通し番号） */
 .sb-head { display: flex; align-items: flex-end; gap: .8rem; margin-bottom: 1.8rem; }
+/* 見出し右のスタンプ（♡ MY OSHI 等＝短い文言）：flex行で潰れて2行折り返しするのを防ぐ。
+   ※長い日付スタンプ等もある共通 .sb-stamp 全体には掛けない（はみ出し防止のためスコープ限定）。 */
+.sb-head .sb-stamp { flex-shrink: 0; white-space: nowrap; }
 .sb-head .sb-head-num { font-size: clamp(2.2rem, 6vw, 3.4rem); }
 .sb-head .sb-head-tt { display: flex; flex-direction: column; }
 .sb-head .sb-head-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .72rem; color: var(--y-rose); }
@@ -308,14 +311,19 @@
 @keyframes y-confetti-fall { to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)); opacity: 0; } }
 
 /* 隠しハート（ページごとに違う隅に小さく＝見つける楽しみ） */
-.y-egg { position: fixed; z-index: 60; width: 32px; height: 32px; display: grid; place-items: center; border: none; background: none; cursor: pointer;
-  color: color-mix(in srgb, var(--y-peach) 38%, transparent); font-size: 1.05rem; line-height: 1; opacity: .24;
+/* 隠しハート：未発見はピンクのまま“ゆっくり脈打つ＋ふんわり光る”＝目を引いて見つけやすく。
+   発見済み(.found)は静止＆くっきり＝「集めた」状態と明確に区別。 */
+.y-egg { position: fixed; z-index: 60; width: 34px; height: 34px; display: grid; place-items: center; border: none; background: none; cursor: pointer;
+  color: color-mix(in srgb, var(--y-peach) 62%, transparent); font-size: 1.3rem; line-height: 1; opacity: .58;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--y-peach) 50%, transparent));
+  animation: y-egg-beat 1.9s var(--y-ease) infinite;
   transition: transform .3s var(--y-ease), opacity .3s, color .3s; }
-.y-egg:hover, .y-egg:focus-visible { opacity: 1; transform: scale(1.3) rotate(-8deg); color: var(--y-peach); outline: none; }
-.y-egg.found { color: var(--y-peach); opacity: .9; }
+.y-egg:hover, .y-egg:focus-visible { opacity: 1; transform: scale(1.35) rotate(-8deg); color: var(--y-peach); outline: none; animation: none; }
+.y-egg.found { color: var(--y-peach); opacity: .92; animation: none; filter: drop-shadow(0 1px 2px rgba(0,0,0,.12)); }
 .y-egg.pop { animation: y-egg-pop .5s var(--y-ease); }
 @keyframes y-egg-pop { 0% { transform: scale(1); } 40% { transform: scale(1.85) rotate(-10deg); } 100% { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .y-egg.pop { animation: none; } .y-egg:hover { transform: none; } }
+@keyframes y-egg-beat { 0%, 100% { transform: scale(1); opacity: .42; } 50% { transform: scale(1.16); opacity: .72; } }
+@media (prefers-reduced-motion: reduce) { .y-egg { animation: none; opacity: .6; } .y-egg.pop { animation: none; } .y-egg:hover { transform: none; } }
 
 /* フッターの収集カウンタ */
 .y-egg-count { font-family: var(--y-font-en); font-weight: 700; font-size: .74rem; color: var(--y-muted); letter-spacing: .04em; margin: .2rem 0 .7rem; }
