@@ -275,10 +275,9 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   @media (max-width: 700px) {
     .cor-svg { display: none; }
     .cor-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
-    .cor-hub { grid-column: 1 / -1; order: -1; flex-direction: row; }
-    .cor-hub { display: flex; align-items: center; gap: 0.7rem; justify-content: center; }
-    .cor-hub img { width: 56px; height: 56px; }
-    .cor-hub b { margin-top: 0; }
+    /* ハブは“縦カード”のまま最上段に中央寄せ。横並び(row)にすると王冠/MY OSHIタグ/キラキラの位置が崩れるため。 */
+    .cor-hub { grid-column: 1 / -1; order: -1; justify-self: center; width: min(100%, 230px); margin: 0.4rem 0 0.9rem; }
+    .cor-hub img { width: 66px; height: 66px; }
   }
 
   /* クラスター共通 */
@@ -423,7 +422,7 @@ const initial = (name: string) => name.replace(/[\s　]/g, "").charAt(0);
   .cor-hub-spark.s2 { bottom: 24px; left: -10px; color: var(--y-peach); animation-delay: .5s, .3s; }
   .cor-hub-spark.s3 { top: 36%; right: -12px; color: var(--y-lav); animation-delay: 1s, .8s; }
   @media (prefers-reduced-motion: reduce) { .cor-hub-ring, .cor-hub-crown, .cor-hub-spark { animation: none; } }
-  @media (max-width: 700px) { .cor-hub-tag { display: none; } .cor-hub-crown { font-size: 1.25rem; top: -14px; } .cor-hub-spark.s2 { bottom: 6px; } }
+  @media (max-width: 700px) { .cor-hub-tag { bottom: -13px; } .cor-hub-crown { font-size: 1.25rem; top: -14px; } .cor-hub-spark.s2 { bottom: 6px; } }
 
   /* ノード＝シールっぽく（ぷるん・落ち影） */
   .cor-node { transition: transform .28s var(--y-ease), box-shadow .28s var(--y-ease); }
