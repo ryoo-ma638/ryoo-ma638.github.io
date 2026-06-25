@@ -21,6 +21,7 @@
   --y-mint: #9fe3c5;
   --y-lav: #cdbcff;
   --y-sky: #a9d8ff;
+  --y-rose: color-mix(in srgb, var(--y-peach) 40%, var(--y-ink));   /* 読ませる文字用の濃いめローズ（クリーム地で可読性確保・装飾用の淡色とは別） */
 
   --y-font-jp: "Zen Maru Gothic", "Noto Sans JP", system-ui, sans-serif;
   --y-font-en: "Quicksand", "Zen Maru Gothic", system-ui, sans-serif;
@@ -69,7 +70,7 @@
 
 /* セクション見出し */
 .y-head { text-align: center; margin-bottom: 3rem; }
-.y-head .y-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: 0.2em; color: var(--y-peach); text-transform: uppercase; font-size: 0.85rem; }
+.y-head .y-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: 0.2em; color: var(--y-rose); text-transform: uppercase; font-size: 0.85rem; }
 .y-head :is(h1, h2) { font-size: clamp(1.7rem, 4vw, 2.6rem); margin-top: 0.4rem; }
 .y-head :is(h1, h2) .wave { background: linear-gradient(transparent 62%, var(--y-butter) 62%); padding-inline: 0.1em; }
 
@@ -205,7 +206,7 @@
 .sb-head { display: flex; align-items: flex-end; gap: .8rem; margin-bottom: 1.8rem; }
 .sb-head .sb-head-num { font-size: clamp(2.2rem, 6vw, 3.4rem); }
 .sb-head .sb-head-tt { display: flex; flex-direction: column; }
-.sb-head .sb-head-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .72rem; color: var(--y-peach); }
+.sb-head .sb-head-eyebrow { font-family: var(--y-font-en); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .72rem; color: var(--y-rose); }
 .sb-head :is(h1, h2) { font-size: clamp(1.5rem, 4vw, 2.2rem); }
 
 /* チケット半券（思い出などで使用：右側にミシン目） */
@@ -271,7 +272,7 @@
   background: color-mix(in srgb, var(--y-pink) 60%, transparent); opacity: .9; box-shadow: 0 2px 5px rgba(120,90,80,.12);
   -webkit-mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); mask-image: repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 7px); }
 .y-next-eyebrow { font-family: var(--y-font-en); font-weight: 700; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--y-muted); }
-.y-next-eyebrow i { color: var(--y-peach); font-style: normal; }
+.y-next-eyebrow i { color: var(--y-rose); font-style: normal; }
 .y-next-title { font-size: clamp(1.2rem, 4vw, 1.7rem); font-weight: 700; color: var(--y-ink); }
 .y-next-arrow { font-family: var(--y-font-hand); font-size: .92rem; color: var(--y-peach); margin-top: .2rem; }
 @media (prefers-reduced-motion: reduce) { .y-next, .y-next:hover { transform: none; } }
@@ -318,7 +319,7 @@
 
 /* フッターの収集カウンタ */
 .y-egg-count { font-family: var(--y-font-en); font-weight: 700; font-size: .74rem; color: var(--y-muted); letter-spacing: .04em; margin: .2rem 0 .7rem; }
-.y-egg-count b { color: var(--y-peach); font-size: 1.05em; }
+.y-egg-count b { color: var(--y-rose); font-size: 1.05em; }
 
 /* ご褒美カード（全7枚集めた時） */
 .y-egg-reward { position: fixed; inset: 0; z-index: 1300; display: grid; place-items: center; padding: 1.2rem;
