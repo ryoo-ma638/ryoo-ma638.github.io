@@ -13,7 +13,7 @@ const links = [
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a href="/" class="logo display" aria-label="ホームへ">
-      OSAKI<span class="logo-dot"></span>
+      <span class="logo-horse" aria-hidden="true"></span><span class="logo-word">OSAKI</span><span class="logo-dot"></span>
     </a>
 
     <nav class="nav" id="nav" aria-label="メインナビゲーション">
@@ -52,7 +52,12 @@ const links = [
   .header-line { position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: var(--line); opacity: 0; transition: opacity 0.4s var(--ease); }
   .site-header.scrolled .header-line { opacity: 1; }
 
-  .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; display: inline-flex; align-items: center; }
+  .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; display: inline-flex; align-items: center; position: relative; }
+  .logo-word, .logo-dot { position: relative; z-index: 1; }
+  /* 名刺の馬ワイヤーフレームを背面に敷き、その上に OSAKI を重ねる。色は mask＋var(--fg) でテーマ追従（ダーク=白/ライト=黒）。 */
+  .logo-horse { position: absolute; left: 43%; top: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
+    width: 3.6em; height: 1.9em; opacity: 0.42; background: var(--fg);
+    -webkit-mask: url(/assets/horse-wire.png) center / contain no-repeat; mask: url(/assets/horse-wire.png) center / contain no-repeat; }
   .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--spectrum); margin-left: 3px; margin-top: 8px; background-size: 200% auto; animation: hue 8s linear infinite; }
 
   .nav { display: flex; gap: 2rem; }
