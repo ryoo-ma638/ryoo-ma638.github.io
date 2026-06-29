@@ -131,7 +131,7 @@ export const works: Work[] = [
     ],
     status: "学生チャレンジプロジェクト",
     thumb: "/assets/works/mushiba.jpg",
-    gallery: ["/assets/works/mushiba-tgs.jpg", "/assets/works/mushiba-team-2.jpg", "/assets/works/mushiba-2.jpg", "/assets/works/mushiba-poster.jpg"],
+    gallery: ["/assets/works/mushiba-tgs.jpg", "/assets/works/mushiba-team-3.jpg", "/assets/works/mushiba-2.jpg", "/assets/works/mushiba-poster.jpg"],
     featured: true,
   },
   {
