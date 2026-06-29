@@ -54,12 +54,18 @@ const links = [
 
   .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; display: inline-flex; align-items: center; position: relative; }
   .logo-word, .logo-dot { position: relative; z-index: 1; }
-  /* 名刺の馬ワイヤーフレームを背面に敷き、その上に OSAKI を重ねる。色は mask＋var(--fg) でテーマ追従（ダーク=白/ライト=黒）。 */
+  /* 名刺の馬ワイヤーフレームを背面に敷き、その上に OSAKI を重ねる。サイト共通の --spectrum で
+     虹色に発光させてブランド（つくって、光を放つ）に統一。mask の形＝馬、色＝スペクトラム。 */
   .logo-horse { position: absolute; left: 43%; top: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
     width: 3.6em; height: 1.9em; opacity: 0.62;
     background: var(--spectrum); background-size: 200% auto; animation: hue 8s linear infinite;
     -webkit-mask: url(/assets/horse-wire.png) center / contain no-repeat; mask: url(/assets/horse-wire.png) center / contain no-repeat; }
   @media (prefers-reduced-motion: reduce) { .logo-horse { animation: none; } }
+  /* スマホはヘッダーが狭いのでロゴ全体を縮小（馬が主張しすぎないように） */
+  @media (max-width: 600px) {
+    .logo { font-size: 1.16rem; }
+    .logo-horse { width: 3.25em; height: 1.68em; opacity: 0.55; }
+  }
   .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--spectrum); margin-left: 3px; margin-top: 8px; background-size: 200% auto; animation: hue 8s linear infinite; }
 
   .nav { display: flex; gap: 2rem; }
