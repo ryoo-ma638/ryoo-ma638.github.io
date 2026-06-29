@@ -66,6 +66,8 @@ const links = [
     .logo { font-size: 1.16rem; }
     .logo-horse { width: 3.25em; height: 1.68em; opacity: 0.55; }
   }
+  /* PCはロゴを少し右へ寄せ、左上の装飾フレームから離して余白を持たせる */
+  @media (min-width: 821px) { .logo { margin-left: clamp(1rem, 3vw, 2.6rem); } }
   .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--spectrum); margin-left: 3px; margin-top: 8px; background-size: 200% auto; animation: hue 8s linear infinite; }
 
   .nav { display: flex; gap: 2rem; }
