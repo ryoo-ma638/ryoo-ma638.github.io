@@ -13,6 +13,11 @@ const {
   title = "Osaki Ryoma — Portfolio",
   description = "愛知工業大学 情報科学部 情報科学科 メディア情報専攻・水野慎士研究室。CG・映像・グラフィック・画像処理・Web を横断する大崎稜馬のポートフォリオ。",
 } = Astro.props;
+
+// OG画像は「絶対URL＋?v=バージョン」で出す。
+// ・絶対URL：LINE等のクローラは相対パス(/og.png)を解決できず、古い/空のキャッシュを出すことがある＝絶対URL必須。
+// ・?v= ：SNSは画像URL単位でキャッシュする。画像を差し替えたらこの数字を上げる（URLが変わらないと永遠に古い画像のまま）。
+const ogImage = new URL("/og.png?v=2", Astro.site).href;
 ---
 
 <!doctype html>
@@ -26,10 +31,15 @@ const {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/og.png" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="OSAKI RYOMA — つくって、光を放つ。" />
     <meta property="og:url" content={Astro.url.href} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og.png" />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
