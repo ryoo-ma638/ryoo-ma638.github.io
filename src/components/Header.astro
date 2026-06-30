@@ -56,7 +56,8 @@ const links = [
   .logo-word, .logo-dot { position: relative; z-index: 1; }
   /* 名刺の馬ワイヤーフレームを背面に敷き、その上に OSAKI を重ねる。サイト共通の --spectrum で
      虹色に発光させてブランド（つくって、光を放つ）に統一。mask の形＝馬、色＝スペクトラム。 */
-  .logo-horse { position: absolute; left: 43%; top: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
+  .logo-horse { position: absolute; left: 43%; top: 50%;
+    transform: translate(-50%, -50%) rotate(var(--horse-rot, 0deg)); transform-origin: 50% 60%; z-index: 0; pointer-events: none;
     width: 3.6em; height: 1.9em; opacity: 0.62;
     background: var(--spectrum); background-size: 200% auto; animation: hue 8s linear infinite;
     -webkit-mask: url(/assets/horse-wire.png) center / contain no-repeat; mask: url(/assets/horse-wire.png) center / contain no-repeat; }
@@ -111,6 +112,24 @@ const links = [
   const header = document.getElementById("siteHeader");
   const onScroll = () => header?.classList.toggle("scrolled", scrollY > 8);
   onScroll(); addEventListener("scroll", onScroll, { passive: true });
+
+  // 馬ロゴ：スクロール方向に“疾走”するよう傾ける（下=前傾 / 上=後傾、止まると戻る）。
+  // rAFはアイドル時に自己停止＝常時ループしない。reduced-motion は無効。
+  const horse = document.querySelector(".logo-horse");
+  if (horse && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let lastY = window.scrollY, rot = 0, target = 0, running = false;
+    const ease = () => {
+      rot += (target - rot) * 0.16; target *= 0.86;
+      (horse as HTMLElement).style.setProperty("--horse-rot", rot.toFixed(2) + "deg");
+      if (Math.abs(rot) > 0.04 || Math.abs(target) > 0.04) requestAnimationFrame(ease);
+      else { (horse as HTMLElement).style.setProperty("--horse-rot", "0deg"); running = false; }
+    };
+    addEventListener("scroll", () => {
+      const y = window.scrollY, dy = y - lastY; lastY = y;
+      target = Math.max(-8, Math.min(8, target + dy * 0.45));
+      if (!running) { running = true; requestAnimationFrame(ease); }
+    }, { passive: true });
+  }
 
   const root = document.documentElement;
   document.getElementById("themeToggle")?.addEventListener("click", () => {
