@@ -89,7 +89,7 @@ const icon = (k: string): string => icons[k] ?? "";
         <p class="ct-email display" id="ctEmail">{primaryEmail}</p>
         <div class="ct-primary-actions">
           <a class="ct-btn ct-btn--go" href={mailtoHref}>
-            <span set:html={icon("send")} /> メールを書く
+            <span set:html={icon("send")} /><span>メールを書く</span>
           </a>
           <button class="ct-btn ct-btn--copy" type="button" data-copy={primaryEmail} aria-label="メールアドレスをコピー">
             <span class="ct-copy-ic" set:html={icon("copy")} />
@@ -194,7 +194,9 @@ const icon = (k: string): string => icons[k] ?? "";
     .ct-btn--go { color: var(--bg); background: var(--fg); position: relative; overflow: hidden; }
     .ct-btn--go::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--spectrum); opacity: 0; transition: opacity 0.3s var(--ease); }
     .ct-btn--go > * { position: relative; z-index: 1; }
-    .ct-btn--go:hover { transform: translateY(-3px); color: var(--bg); }
+    /* ホバー時はスペクトラムが前面に出るので、文字色はテーマ非依存の濃色＋白ハローで虹の上でも必ず読める
+       （旧: color:var(--bg) ＝ライトでは明色になり明るい虹色に溶けて消えていた） */
+    .ct-btn--go:hover { transform: translateY(-3px); color: #0b0a14; text-shadow: 0 1px 1.5px rgba(255,255,255,0.45); }
     .ct-btn--go:hover::before { opacity: 1; }
     .ct-btn--copy { border: 1.5px solid var(--line); color: var(--fg); }
     .ct-btn--copy:hover { transform: translateY(-3px); border-color: var(--accent-ink); }
