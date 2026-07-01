@@ -1,4 +1,6 @@
-# Osaki Ryoma — Portfolio
+# ポートフォリオ vol.1（最新版）
+
+**Osaki Ryoma — Portfolio & YUMIKI WORLD**
 
 > つくって、光を放つ。
 
