@@ -215,7 +215,7 @@ const total = works.length;
     .work-media.is-poster { aspect-ratio: 4/5; max-width: 460px; justify-self: center; width: 100%; }
     /* 縦長画像も見切れないよう、ぼかした同画像を背景に敷き本体は全体表示 */
     .work-media::before { content: ""; position: absolute; inset: -8%; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(26px) brightness(0.5) saturate(1.3); z-index: 0; }
-    .work-media img, .work-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
+    .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-row:hover .work-media img { transform: scale(1.04); }
     /* 準備中（サムネ未配置）は、分野色の点線カードで“意図された枠”に見せる */
     .work-media.is-empty { border-style: dashed; border-color: color-mix(in srgb, var(--c) 38%, var(--line)); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
