@@ -38,6 +38,7 @@ const data = works.map((w) => ({
       <div class="wm-gallery" id="wmGallery" aria-label="関連画像"></div>
       <div class="wm-slides" id="wmSlides" aria-label="スライド・資料"></div>
       <a class="btn btn--primary wm-link" id="wmLink" href="#">サイトを見る →</a>
+      <a class="wm-permalink" id="wmPermalink" href="#">この作品の個別ページを開く <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </div>
@@ -108,6 +109,10 @@ const data = works.map((w) => ({
   .wm-slide:hover { border-color: var(--accent-ink); }
   .wm-link { margin-top: 1.4rem; }
   .wm-link[hidden] { display: none; }
+  /* 個別ページ(/works/slug)への内部リンク＝共有・検索・ブラウザ戻り用の独立URLへ誘導 */
+  .wm-permalink { display: block; width: fit-content; margin-top: 0.9rem; font-family: var(--font-display); font-size: 0.8rem; font-weight: 700;
+    color: var(--fg-soft); border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: color 0.25s var(--ease), border-color 0.25s var(--ease); }
+  .wm-permalink:hover { color: var(--fg); border-color: var(--accent-ink); }
 
   .wm-close { position: fixed; top: clamp(0.8rem, 2.5vw, 1.6rem); right: clamp(0.8rem, 2.5vw, 1.6rem); z-index: 901;
     width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; color: #0b0a12; font-size: 1.5rem; font-weight: 700;
@@ -220,6 +225,7 @@ const data = works.map((w) => ({
       }
       const link = $("wmLink");
       if (w.link) { link.hidden = false; link.href = w.link; const ext = /^https?:/.test(w.link); link.target = ext ? "_blank" : ""; link.rel = ext ? "noopener noreferrer" : ""; } else link.hidden = true;
+      $("wmPermalink").href = `/works/${w.slug}`;
 
       lastFocused = document.activeElement;
       modal.classList.add("open");
