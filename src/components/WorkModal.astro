@@ -209,6 +209,11 @@ const data = works.map((w) => ({
         const cells = w.stageVideos.map((sv) => `<figure><video src="${esc(sv.src)}" autoplay muted loop playsinline preload="none"></video><figcaption>${esc(sv.label)}</figcaption></figure>`).join("");
         stg.innerHTML = `<p class="wm-vlabel">ステージ別プレイ</p><div class="wm-stagegrid">${cells}</div>`;
       }
+      // モーダルを開いた瞬間に動画を確実に再生する（innerHTML生成のautoplayは環境差で発火しないことがあるため、明示的に読み込み＋再生）。
+      [media, v2, stg].forEach((box) => box.querySelectorAll("video").forEach((vid) => {
+        if (!vid.currentSrc && vid.getAttribute("src")) { try { vid.load(); } catch {} }
+        vid.muted = true; vid.play?.().catch(() => {});
+      }));
 
       const au = $("wmAudio"); au.innerHTML = "";
       if (w.audio && w.audio.length) {
