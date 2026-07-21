@@ -14,6 +14,8 @@ const data = works.map((w) => ({
   duration: w.duration ?? null,
   thumb: w.thumb ?? null,
   video: w.video ?? null,
+  video2: w.video2 ?? null,
+  stageVideos: w.stageVideos ?? null,
   gallery: w.gallery ?? null,
   slideGroups: w.slideGroups ?? null,
   audio: w.audio ?? null,
@@ -30,6 +32,8 @@ const data = works.map((w) => ({
       <div class="wm-tags"><span class="wm-tag" id="wmTag"></span><span class="wm-status" id="wmStatus"></span></div>
       <h2 id="wmTitle" class="display"></h2>
       <p class="wm-summary" id="wmSummary"></p>
+      <div class="wm-v2" id="wmV2"></div>
+      <div class="wm-stages" id="wmStages"></div>
       <div class="wm-audio" id="wmAudio" aria-label="試聴"></div>
       <div class="wm-kv" id="wmGoal"><span>狙い</span><p></p></div>
       <div class="wm-kv" id="wmApproach"><span>工夫</span><p></p></div>
@@ -153,6 +157,16 @@ const data = works.map((w) => ({
   #workModal .wm-press-label { font-size: 0.78rem; font-weight: 700; color: var(--fg-soft); }
   #workModal .wm-press-link { font-size: 0.8rem; font-weight: 700; color: var(--accent-ink); border: 1px solid var(--line); border-radius: 999px; padding: 0.34rem 0.85rem; transition: border-color 0.25s var(--ease), transform 0.25s var(--ease); }
   #workModal .wm-press-link:hover { border-color: var(--accent-ink); transform: translateY(-2px); }
+
+  /* 通しプレイ・ハイライト（video2）とステージ別プレイ（stageVideos）＝JS生成なのでグローバルCSS */
+  #workModal .wm-v2:empty, #workModal .wm-stages:empty { display: none; }
+  #workModal .wm-vlabel { font-size: 0.8rem; font-weight: 700; color: var(--fg-soft); margin: 1rem 0 0.4rem; }
+  #workModal .wm-vlabel span { color: var(--muted); font-weight: 500; }
+  #workModal .wm-v2 video { width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  #workModal .wm-stagegrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  #workModal .wm-stagegrid figure { margin: 0; }
+  #workModal .wm-stagegrid video { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+  #workModal .wm-stagegrid figcaption { font-size: 0.66rem; font-weight: 700; color: var(--fg-soft); margin-top: 0.25rem; line-height: 1.3; }
 </style>
 
 <script is:inline define:vars={{ data }}>
@@ -187,6 +201,14 @@ const data = works.map((w) => ({
       $("wmStatus").textContent = w.status || "";
       $("wmTitle").textContent = w.title;
       $("wmSummary").textContent = w.summary || "";
+
+      const v2 = $("wmV2");
+      v2.innerHTML = w.video2 ? `<p class="wm-vlabel">通しプレイ・ハイライト <span>（早送り）</span></p><video src="${esc(w.video2)}" autoplay muted loop playsinline preload="none"></video>` : "";
+      const stg = $("wmStages"); stg.innerHTML = "";
+      if (w.stageVideos && w.stageVideos.length) {
+        const cells = w.stageVideos.map((sv) => `<figure><video src="${esc(sv.src)}" autoplay muted loop playsinline preload="none"></video><figcaption>${esc(sv.label)}</figcaption></figure>`).join("");
+        stg.innerHTML = `<p class="wm-vlabel">ステージ別プレイ</p><div class="wm-stagegrid">${cells}</div>`;
+      }
 
       const au = $("wmAudio"); au.innerHTML = "";
       if (w.audio && w.audio.length) {
@@ -248,7 +270,7 @@ const data = works.map((w) => ({
       modal.removeEventListener("keydown", onTrap);
       modal.setAttribute("aria-hidden", "true");
       unlockScroll();
-      const v = modal.querySelector("video"); if (v) v.pause();
+      modal.querySelectorAll("video").forEach((v) => v.pause());
       modal.querySelectorAll("audio").forEach((a) => a.pause());
       if (lastFocused && lastFocused.focus) lastFocused.focus();
     }
