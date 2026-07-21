@@ -91,6 +91,17 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
       </div>
     </div>
 
+    <!-- 2本目の動画（現在のPC版プレイ） -->
+    {work.video2 && (
+      <section class="wd-sec reveal">
+        <p class="eyebrow wd-eyebrow">Gameplay</p>
+        <h2 class="wd-h2">現在のPC版プレイ <span class="mut">（キーボードで通しプレイ）</span></h2>
+        <div class="wd-v2">
+          <video src={work.video2} autoplay muted loop playsinline preload="none"></video>
+        </div>
+      </section>
+    )}
+
     <!-- ギャラリー -->
     {work.gallery && work.gallery.length > 0 && (
       <section class="wd-sec reveal">
@@ -190,6 +201,10 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
     letter-spacing: 0.04em; color: var(--fg); background: color-mix(in srgb, #05050a 62%, transparent); border: 1px solid var(--line);
     padding: 0.3rem 0.6rem; border-radius: 999px; opacity: 0; transition: opacity 0.25s var(--ease); }
   .wd-media:hover .wd-zoom { opacity: 1; }
+
+  /* 2本目の動画（Gameplay） */
+  .wd-v2 { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--bg-3); display: grid; place-items: center; }
+  .wd-v2 video { width: 100%; height: auto; max-height: min(72vh, 580px); object-fit: contain; display: block; }
 
   .wd-info h1 { font-size: clamp(1.7rem, 4vw, 2.9rem); line-height: 1.12; margin-bottom: 0.9rem; }
   .wd-sum { color: var(--fg); font-size: 1.02rem; line-height: 1.85; margin-bottom: 1.4rem; }
