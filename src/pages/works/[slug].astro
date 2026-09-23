@@ -139,7 +139,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
         <h2 class="wd-h2">{sg.title} {sg.images.length > 1 && <span class="mut">（{sg.images.length}枚・横スクロール →）</span>}</h2>
         <div class="wd-strip">
           {sg.images.map((s, si) => (
-            <img class="wd-slide" src={s} alt={`${sg.title} ${si + 1}`} loading="lazy"
+            <img class:list={["wd-slide", { "wd-slide--tall": sg.portrait }]} src={s} alt={`${sg.title} ${si + 1}`} loading="lazy"
               data-gallery={JSON.stringify(sg.images)} data-index={si} data-caption={sg.title} />
           ))}
         </div>
@@ -264,6 +264,8 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
   .wd-slide { flex: 0 0 auto; width: clamp(260px, 74vw, 440px); aspect-ratio: 16 / 10; object-fit: contain; background: #eef0f4;
     border: 1px solid var(--line); border-radius: 12px; cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
   .wd-slide:hover { border-color: var(--c); }
+  /* スマホの縦長スクショ用：縦枠にして上部を大きく見せる（全体はライトボックスで） */
+  .wd-slide--tall { aspect-ratio: 3 / 4; object-fit: cover; object-position: top center; }
 
   .wd-tracks { display: grid; gap: 0.8rem; }
   .wd-track { background: var(--bg-3); border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem 0.95rem; }

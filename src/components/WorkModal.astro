@@ -104,13 +104,15 @@ const data = works.map((w) => ({
   /* 横スクロールのスライドグループ（発表資料・カード等を発表/種類ごとに分けて閲覧） */
   .wm-slides { display: flex; flex-direction: column; gap: 1.1rem; margin-top: 0.6rem; }
   .wm-slides:empty { display: none; }
-  .wm-sgroup-title { font-size: 0.92rem; font-weight: 700; margin: 0 0 0.55rem; display: flex; align-items: baseline; gap: 0.6rem; }
-  .wm-sgroup-title span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+  .wm-sgroup-title { font-size: 0.92rem; font-weight: 700; margin: 0 0 0.55rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; }
+  /* 補助表示（○枚・横スクロール →）は途中で折り返さず、入らなければ丸ごと次の行へ落とす */
+  .wm-sgroup-title span { font-size: 0.7rem; font-weight: 500; color: var(--muted); flex: 0 0 auto; white-space: nowrap; }
   .wm-strip { display: flex; gap: 0.7rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.6rem; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
   .wm-strip::-webkit-scrollbar { height: 7px; }
   .wm-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
   .wm-slide { flex: 0 0 auto; width: clamp(240px, 72%, 420px); aspect-ratio: 16 / 10; object-fit: contain; border-radius: 10px; border: 1px solid var(--line); background: #eef0f4; cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
   .wm-slide:hover { border-color: var(--accent-ink); }
+  .wm-slide--tall { aspect-ratio: 3 / 4; object-fit: cover; object-position: top center; }
   .wm-link { margin-top: 1.4rem; }
   .wm-link[hidden] { display: none; }
   /* 個別ページ(/works/slug)への内部リンク＝共有・検索・ブラウザ戻り用の独立URLへ誘導 */
@@ -151,6 +153,7 @@ const data = works.map((w) => ({
   #workModal .wm-strip::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
   #workModal .wm-slide { flex: 0 0 auto; width: clamp(240px, 72%, 420px); aspect-ratio: 16 / 10; object-fit: contain; border-radius: 10px; border: 1px solid var(--line); background: #eef0f4; cursor: zoom-in; scroll-snap-align: start; transition: border-color 0.25s var(--ease); }
   #workModal .wm-slide:hover { border-color: var(--accent-ink); }
+  #workModal .wm-slide--tall { aspect-ratio: 3 / 4; object-fit: cover; object-position: top center; }
 
   #workModal .wm-press { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 1.1rem 0 0.2rem; }
   #workModal .wm-press[hidden] { display: none; }
@@ -251,7 +254,7 @@ const data = works.map((w) => ({
       if (w.slideGroups && w.slideGroups.length) {
         w.slideGroups.forEach((grp) => {
           const imgs = grp.images.map((src, i) =>
-            `<img class="wm-slide" src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(grp.images)}' data-index="${i}" data-caption="${esc(grp.title)}">`).join("");
+            `<img class="wm-slide${grp.portrait ? " wm-slide--tall" : ""}" src="${src}" alt="" loading="lazy" data-gallery='${JSON.stringify(grp.images)}' data-index="${i}" data-caption="${esc(grp.title)}">`).join("");
           sg.insertAdjacentHTML("beforeend",
             `<div class="wm-sgroup"><h4 class="wm-sgroup-title">${esc(grp.title)}${grp.images.length > 1 ? `<span>${grp.images.length}枚 ・ 横スクロール →</span>` : ""}</h4><div class="wm-strip">${imgs}</div></div>`);
         });

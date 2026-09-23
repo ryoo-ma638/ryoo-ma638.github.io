@@ -36,6 +36,7 @@ const qa = [
   { q: "DRAMA / 好きなドラマ", a: "『ROOKIES（ルーキーズ）』。" },
   { q: "DRAGONS / 中日の推し", a: "捕手・加藤匠馬選手。かつては堂上直倫選手。" },
   { q: "OSHI / 推しのきっかけ", a: "TBS『ラヴィット！』で弓木奈於さんの面白さと可愛らしさに惹かれ、乃木坂46の虜に。" },
+  { q: "IDOL / 応援しているグループ", a: "乃木坂46 と ≒JOY（ニアジョイ）。" },
   { q: "DAYS OFF / 休日", a: "寝る。推し活。新しいことに挑戦する。つくりたいものをつくる。" },
   { q: "FOOD / 好きな食べ物", a: "餃子・お寿司・焼肉。" },
   { q: "HOME / 落ち着く場所", a: "家。" },
@@ -56,7 +57,7 @@ const traits = [
 // 実績ハイライト（すべて事実・ガクチカ準拠）
 const highlights = [
   { n: "60名", l: "規模のサークル", d: "CEED副部長として「誰も置いてけぼりにしない」運営を支え、サークルは60名規模のコミュニティに成長。", href: "/ceed", c: "var(--c-green)" },
-  { n: "企業賞", l: "ハッカソン", d: "シスハックで割り勘アプリ「Settlo」を開発し、企業賞を受賞。", href: "/works#settlo", c: "var(--c-blue)" },
+  { n: "企業協賛賞", l: "ハッカソン", d: "シスハックで割り勘アプリ「Settlo」を開発し、企業協賛賞を受賞。", href: "/works#settlo", c: "var(--c-blue)" },
   { n: "出展", l: "TGS 他", d: "体感型ゲーム「虫歯アニマルズ」をデザイン・造形で担当。東京ゲームショウ・ゲームマーケット・安城Eフェスで出展。", href: "/works#mushiba-animals", c: "var(--c-red)" },
   { n: "接客", l: "ビール売り子", d: "バンテリンドームナゴヤで、ビールの売り子として活動。通る声・笑顔・野球トークで「応援したくなる接客」を工夫している。", href: "https://uriko-v-dome-ryoma.vercel.app", c: "var(--c-orange)" },
 ];
@@ -258,7 +259,7 @@ const highlights = [
           const Tag = h.href ? "a" : "div";
           return (
             <Tag class:list={["hl", "reveal", { "hl--link": !!h.href }]} href={h.href ?? undefined} target={h.href?.startsWith("http") ? "_blank" : undefined} rel={h.href?.startsWith("http") ? "noopener noreferrer" : undefined} data-delay={(i % 4) + 1} style={`--hc:${h.c}`}>
-              <span class="hl-num">{h.n}</span>
+              <span class:list={["hl-num", { "hl-num--long": h.n.length >= 4 }]}>{h.n}</span>
               <span class="hl-label">{h.l}</span>
               <p class="hl-desc">{h.d}</p>
               {h.href && <span class="hl-arrow">{h.href.startsWith("http") ? "応援サイトへ" : "詳しく"} ↗</span>}
@@ -413,6 +414,7 @@ const highlights = [
     .hl--link:hover { transform: translateY(-4px); border-color: var(--hc); }
     .hl-num { font-family: var(--font-mincho); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1; color: var(--hc); letter-spacing: -0.02em; }
     .hl-label { font-family: var(--font-display); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .hl-num--long { font-size: clamp(1.4rem, 2.2vw, 1.9rem); letter-spacing: -0.01em; }
     .hl-desc { color: var(--fg-soft); font-size: var(--fs-small); margin-top: 0.3rem; line-height: 1.75; }
     .hl-arrow { margin-top: auto; padding-top: 0.6rem; font-family: var(--font-display); font-size: 0.78rem; font-weight: 600; color: var(--fg-soft); transition: color 0.25s var(--ease); }
     .hl--link:hover .hl-arrow { color: var(--fg); }
