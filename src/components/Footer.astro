@@ -119,9 +119,10 @@ const rowB = showcase.filter((_, i) => i % 2 === 1);
   .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--spectrum); margin-left: 3px; margin-top: 8px; }
   .tagline { color: var(--muted); margin-top: 0.7rem; max-width: 34ch; font-size: var(--fs-small); }
 
-  .col-label { display: block; font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
-  .footer-nav, .footer-social { display: flex; flex-direction: column; gap: 0.7rem; }
-  .footer-nav a, .footer-social a { color: var(--fg-soft); font-size: 1.05rem; width: fit-content; transition: color 0.25s var(--ease); }
+  .col-label { display: block; font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-soft); margin-bottom: 1rem; }
+  .footer-nav, .footer-social { display: flex; flex-direction: column; gap: 0.1rem; }
+  /* 指で押す領域を44px確保（行間は gap を詰めて相殺＝見た目の行送りは変えない） */
+  .footer-nav a, .footer-social a { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg-soft); font-size: 1.05rem; width: fit-content; transition: color 0.25s var(--ease); }
   .footer-nav a:hover, .footer-social a:hover { color: var(--fg); }
 
   .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-top: var(--space-3); border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--muted); }

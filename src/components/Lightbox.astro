@@ -91,9 +91,11 @@
       // 次の画像を先読み
       if (list.length > 1) { const n = new Image(); n.src = list[(i + 1) % list.length]; }
     };
-    const open = (arr: string[], start: number, capText: string) => {
+    const open = (arr: string[], start: number, capText: string, trigger?: HTMLElement | null) => {
       list = arr; i = start; caption = capText || "";
-      lastFocused = document.activeElement as HTMLElement;
+      // 起動元を覚えておく（画像やカードはフォーカスを持てないので activeElement は body になる。
+      //   閉じたときに Tab がページ先頭へ戻らないよう、起動元自身へフォーカスを返す）
+      lastFocused = trigger || (document.activeElement as HTMLElement);
       lb.classList.add("open"); lb.setAttribute("aria-hidden", "false");
       lockScroll();
       lb.addEventListener("keydown", onTrap as EventListener);
@@ -108,7 +110,11 @@
       lb.removeEventListener("keydown", onTrap as EventListener);
       lb.setAttribute("aria-hidden", "true");
       unlockScroll();
-      lastFocused?.focus?.();
+      if (lastFocused && lastFocused !== document.body && lastFocused.focus) {
+        // 画像・カードなど元々フォーカスを持てない要素にも返せるようにする（Tabの順序はその位置から再開）
+        if (!lastFocused.hasAttribute("tabindex") && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(lastFocused.tagName)) lastFocused.setAttribute("tabindex", "-1");
+        lastFocused.focus({ preventScroll: true });
+      }
     };
     const step = (d: number) => { if (list.length) { i = (i + d + list.length) % list.length; show(); } };
 
@@ -118,7 +124,7 @@
         e.preventDefault();
         try {
           const arr = JSON.parse(t.dataset.gallery || "[]");
-          if (arr.length) open(arr, Number(t.dataset.index || 0), t.dataset.caption || "");
+          if (arr.length) open(arr, Number(t.dataset.index || 0), t.dataset.caption || "", t);
         } catch {}
       }
     });
@@ -131,9 +137,11 @@
     }, true);
     // Enter/Space でもトリガー（アクセシビリティ）
     document.addEventListener("keydown", (e) => {
-      if ((e.key === "Enter" || e.key === " ") && document.activeElement?.hasAttribute("data-gallery")) {
+      const ae = document.activeElement as HTMLElement | null;
+      // <button>/<a> は Enter・Space でブラウザが click を出すので二重に発火させない
+      if ((e.key === "Enter" || e.key === " ") && ae?.hasAttribute("data-gallery") && ae.tagName !== "BUTTON" && ae.tagName !== "A") {
         e.preventDefault();
-        (document.activeElement as HTMLElement).click();
+        ae.click();
       }
     });
     lb.querySelector(".lb-close")!.addEventListener("click", close);

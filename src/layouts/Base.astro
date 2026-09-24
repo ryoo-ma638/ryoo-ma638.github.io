@@ -4,7 +4,6 @@ import "../styles/fonts-main.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cursor from "../components/Cursor.astro";
-import BgField from "../components/BgField.astro";
 
 interface Props {
   title?: string;
@@ -58,7 +57,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         if (s === "light") document.documentElement.setAttribute("data-theme", "light");
         try {
           const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-          if (!reduce && !sessionStorage.getItem("introSeen")) {
+          // 幕はトップページだけ。/works/settlo/ のような深いURLを共有された人には出さない。
+          const onTop = location.pathname === "/" || location.pathname === "/index.html";
+          if (onTop && !reduce && !sessionStorage.getItem("introSeen")) {
             document.documentElement.classList.add("intro");
             sessionStorage.setItem("introSeen", "1");
           }
@@ -69,8 +70,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   <body>
     <div class="bg-grid" aria-hidden="true"></div>
     <div class="page-aura" aria-hidden="true"></div>
-    <BgField />
-    <div class="view-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <span class="scroll-progress" id="scrollProgress" aria-hidden="true"></span>
     <div class="site-intro" aria-hidden="true">
       <div class="intro-glow" aria-hidden="true"></div>
@@ -87,16 +86,65 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <Footer />
 
     <script>
-      // スクロールで要素を立ち上げ
-      const els = document.querySelectorAll(".reveal");
+      // スクロールで要素を立ち上げ。
+      // 高速スクロールで“未発火の空白”が見えないよう、①画面の外側400pxまで先出し（rootMargin）
+      // ②しきい値0（1pxでも入ったら発火）③スクロールが止まったら画面内の取りこぼしを掃き寄せる。
+      const els = Array.from(document.querySelectorAll(".reveal"));
       if ("IntersectionObserver" in window && els.length) {
         const io = new IntersectionObserver(
           (entries) => entries.forEach((e) => {
             if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
           }),
-          { threshold: 0.12 }
+          { threshold: 0, rootMargin: "400px 0px 400px 0px" }
         );
         els.forEach((el) => io.observe(el));
+
+        // フォールバック：スクロール停止から120ms後に、画面内（±400px）で未表示のものを立ち上げる。
+        // 一気に飛ぶスクロール（ページ内リンク・End キー・スクロールバーのドラッグ）で飛び越された
+        // 要素が opacity:0 のまま残らないよう、画面より上に通り過ぎたものも表示済みにする。
+        // 表示済みは配列から外し、全部済んだらリスナーを解放＝常時の走査を残さない。
+        let sweepTimer = 0;
+        let pollTimer = 0;
+        let polls = 0;
+        let ro: ResizeObserver | null = null;
+        const stop = () => {
+          removeEventListener("scroll", onScroll);
+          removeEventListener("resize", onScroll);
+          if (ro) { ro.disconnect(); ro = null; }
+          clearInterval(pollTimer);
+          io.disconnect();
+        };
+        const sweep = () => {
+          const h = innerHeight;
+          for (let i = els.length - 1; i >= 0; i--) {
+            const el = els[i];
+            const r = el.getBoundingClientRect();
+            if (r.top < h + 400) { el.classList.add("is-visible"); io.unobserve(el); }
+            if (el.classList.contains("is-visible")) els.splice(i, 1);
+          }
+          // 全部出たら走査を畳む（About は .reveal が58件。常時の全件走査は残さない）
+          if (!els.length) stop();
+        };
+        const onScroll = () => { clearTimeout(sweepTimer); sweepTimer = window.setTimeout(sweep, 120); };
+        addEventListener("scroll", onScroll, { passive: true });
+        // 画像や動画の読み込みで高さが伸びると、End キーで飛んだ位置が「最下部」ではなくなる。
+        // resize と documentElement の高さ変化でも掃き寄せる＝フッターが opacity:0 で残らない。
+        addEventListener("resize", onScroll, { passive: true });
+        if ("ResizeObserver" in window) {
+          ro = new ResizeObserver(onScroll);
+          ro.observe(document.documentElement);
+        }
+        addEventListener("load", () => {
+          sweep();
+          // 最後の保険：読み込み後 1 秒間隔で最大10回だけ見に行く（全部出たら stop で解放）
+          if (els.length) {
+            pollTimer = window.setInterval(() => {
+              sweep();
+              if (++polls >= 10) clearInterval(pollTimer);
+            }, 1000);
+          }
+        });
+        addEventListener("hashchange", sweep);
       } else {
         els.forEach((el) => el.classList.add("is-visible"));
       }
@@ -131,7 +179,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       // イントロ：アニメ後にクラス除去（body の overflow を戻す）／早期スキップ
       if (document.documentElement.classList.contains("intro")) {
         const clearIntro = () => document.documentElement.classList.remove("intro");
-        setTimeout(clearIntro, 2200);
+        setTimeout(clearIntro, 1250);
         addEventListener("pointerdown", clearIntro, { once: true });
         addEventListener("keydown", clearIntro, { once: true });
       }

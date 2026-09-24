@@ -115,7 +115,7 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
         <p class="lead reveal" data-delay="1">
           愛知工業大学のマルチクリエイティブサークル <b>CEED（シード）</b> で <b>副部長</b>。
           発表・スライド制作、Web制作、イベント企画・運営まで「つくって人に届ける」活動を横断し、
-          <span class="spectrum-text">60名規模</span> のコミュニティへ育てる過程に関わってきました。
+          <b>60名規模</b> のコミュニティへ育てる過程に関わってきました。
         </p>
         <div class="ceed-meta reveal" data-delay="2">
           <span class="m"><b>活動</b>火（講座）・木（制作）16:30〜</span>
@@ -298,7 +298,7 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
           </div>
         ))}
       </div>
-      <p class="result reveal">心理的安全性の高いコミュニティづくりに貢献し、サークルは <span class="spectrum-text">60名規模</span> へ成長しました。</p>
+      <p class="result reveal">心理的安全性の高いコミュニティづくりに貢献し、サークルは <b>60名規模</b> へ成長しました。</p>
     </div>
   </section>
 
@@ -397,7 +397,8 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
     .p-no { font-family: var(--font-mincho); font-size: 1.2rem; color: var(--c-green); font-weight: 700; }
     .principle h3 { font-family: var(--font-mincho); font-size: 1.12rem; margin: 0.5rem 0; }
     .principle p { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
-    .result { margin-top: var(--space-3); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; line-height: 1.6; font-family: var(--font-mincho); }
+    .result { margin-top: var(--space-3); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 700; line-height: 1.6; font-family: var(--font-mincho); color: var(--fg-soft); }
+    .result b { color: var(--fg); font-weight: 800; }
     /* ライトテーマ：緑(--c-green #4ade80)を文字色に使う箇所が淡背景で読めないため、色相を保ち暗めに補正 */
     :root[data-theme="light"] .ceed-meta .m b,
     :root[data-theme="light"] .slink:hover,
@@ -407,5 +408,17 @@ const lightboxData = (arr: { src: string }[]) => JSON.stringify(arr.map((x) => x
     :root[data-theme="light"] .block-meta,
     :root[data-theme="light"] .titem-meta,
     :root[data-theme="light"] .p-no { color: color-mix(in srgb, var(--c-green) 58%, #15141c); }
+  
+    /* ---- スマホ（390）での読みやすさ：ラベル／ピルは12px以上 ---- */
+    @media (max-width: 720px) {
+      .ceed-hero-photo figcaption { font-size: 0.78rem; }
+      .ceed-meta .m b { font-size: 0.78rem; }
+      .role-tag { font-size: 0.78rem; }
+      .pcap { font-size: 0.8rem; }
+      .ccard .status { font-size: 0.78rem; }
+      .block-meta { font-size: 0.78rem; }
+      .titem-meta { font-size: 0.78rem; }
+      .ccard-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 0.4rem; }
+    }
   </style>
 </Base>

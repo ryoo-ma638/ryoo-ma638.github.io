@@ -31,16 +31,12 @@ const activities = [
   <section class="hero" data-accent="var(--c-violet)">
     <div class="hero-bg" aria-hidden="true">
     <div class="hero-glow" aria-hidden="true"></div>
-    <div class="hero-aurora" aria-hidden="true"></div>
     <div class="hero-kinetic" aria-hidden="true">
       <div class="hk-row hk-row--1">
         {[...kineticA, ...kineticA, ...kineticA].map((w, i) => (<span class:list={{ on: i % 3 === 1 }}>{w}</span>))}
       </div>
       <div class="hk-row hk-row--2">
         {[...kineticB, ...kineticB, ...kineticB].map((w, i) => (<span class:list={{ on: i % 3 === 2 }}>{w}</span>))}
-      </div>
-      <div class="hk-row hk-row--3">
-        {[...kineticA, ...kineticB, ...kineticA, ...kineticB].map((w, i) => (<span class:list={{ on: i % 4 === 0 }}>{w}</span>))}
       </div>
     </div>
     </div>
@@ -51,7 +47,7 @@ const activities = [
         <span class="line-mask"><span class="spectrum-text">光を放つ。</span></span>
       </h1>
       <div class="hero-foot reveal" data-delay="2">
-        <p class="hero-thesis">いろいろなことに手を出すほど、<span class="spectrum-text">出せる色が増えていく。</span></p>
+        <p class="hero-thesis">いろいろなことに手を出すほど、<b><span class="spectrum-text">出せる色</span>が増えていく。</b></p>
         <p class="hero-lead">
           愛知工業大学 情報科学部 情報科学科 メディア情報専攻。水野慎士研究室で CG・画像処理を学びながら、
           グラフィック・映像・Web・企画、そして球場の売り場まで — 領域を分けずに横断しています。
@@ -128,9 +124,11 @@ const activities = [
   <!-- ===== ACTIVITY & CHALLENGE（つくる以外の幅：色々なことに手を出している） ===== -->
   <section class="section" data-accent="var(--c-orange)">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Activity &amp; Challenge</span>
-        <h2 class="sec-title">色々なことに、手を出してきた。</h2>
+      <div class="sh-split reveal">
+        <div>
+          <span class="eyebrow">Activity &amp; Challenge</span>
+          <h2 class="sec-title">色々なことに、手を出してきた。</h2>
+        </div>
         <p class="acts-lead">つくることの外側でも動いてきた。売り場、運営、出展、ハッカソン、そして研究へ。</p>
       </div>
       <div class="acts">
@@ -153,9 +151,12 @@ const activities = [
   <!-- ===== ABOUT teaser ===== -->
   <section class="section about-teaser" data-accent="var(--c-red)">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">About</span>
-        <h2 class="sec-title about-copy">手を動かして、学ぶ。</h2>
+      <div class="sh-rule reveal">
+        <div>
+          <span class="eyebrow">About</span>
+          <h2 class="sec-title about-copy">手を動かして、学ぶ。</h2>
+        </div>
+        <span class="sh-rule-line" aria-hidden="true"></span>
       </div>
       <p class="about-sub reveal">
         水野慎士研究室での CG・画像処理を軸に、グラフィック・映像・Web・企画まで——
@@ -189,31 +190,21 @@ const activities = [
     .hero + .section { padding-top: var(--space-3); }
     .hero-glow { position: absolute; inset: 0; z-index: -1;
       background:
-        radial-gradient(40% 38% at 78% 18%, color-mix(in srgb, var(--c-violet) 40%, transparent), transparent 70%),
+        radial-gradient(40% 38% at 78% 18%, color-mix(in srgb, var(--c-violet) 32%, transparent), transparent 70%),
         radial-gradient(38% 40% at 10% 88%, color-mix(in srgb, var(--c-cyan) 28%, transparent), transparent 70%),
-        radial-gradient(30% 30% at 92% 92%, color-mix(in srgb, var(--c-red) 24%, transparent), transparent 70%);
+        radial-gradient(30% 30% at 92% 92%, color-mix(in srgb, var(--c-red) 24%, transparent), transparent 70%),
+        /* 主グロー＝見出しのベースライン寄り。文字のグラデと同じ色にして「文字が光源」に見せる */
+        radial-gradient(40% 34% at 26% 56%, color-mix(in srgb, var(--c-cyan) 27%, transparent), transparent 72%),
+        radial-gradient(28% 24% at 18% 62%, color-mix(in srgb, var(--c-green) 17%, transparent), transparent 74%);
       filter: blur(10px); animation: float 16s var(--ease) infinite alternate;
     }
     @keyframes float { to { transform: translate3d(-2%, 2%, 0) scale(1.08); } }
-    /* スペクトラムのオーロラ（ゆっくり回転して呼吸する） */
-    .hero-aurora { position: absolute; inset: -18% -8%; z-index: -1; pointer-events: none;
-      background: conic-gradient(from 0deg at 60% 40%,
-        color-mix(in srgb, var(--c-violet) 22%, transparent),
-        color-mix(in srgb, var(--c-cyan) 20%, transparent),
-        color-mix(in srgb, var(--c-green) 16%, transparent),
-        color-mix(in srgb, var(--c-orange) 18%, transparent),
-        color-mix(in srgb, var(--c-red) 20%, transparent),
-        color-mix(in srgb, var(--c-violet) 22%, transparent));
-      filter: blur(52px); opacity: 0.4; mix-blend-mode: screen;
-      animation: aurora 44s linear infinite; }
-    @keyframes aurora { to { transform: rotate(360deg); } }
-    :root[data-theme="light"] .hero-aurora { mix-blend-mode: multiply; opacity: 0.32; }
-    @media (prefers-reduced-motion: reduce) { .hero-aurora { animation: none; } }
     .hero-inner { position: relative; z-index: 2; padding-top: clamp(64px, 8vh, 100px); }
     .hero-title { font-size: var(--fs-mega); font-weight: 700; line-height: 0.92; letter-spacing: -0.04em; margin-bottom: var(--space-4); }
     .hero-foot { display: grid; gap: var(--space-3); grid-template-columns: 1fr; max-width: 760px; }
-    .hero-thesis { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.15rem, 2.2vw, 1.7rem); line-height: 1.45; letter-spacing: -0.01em; }
-    .hero-lead { color: var(--fg-soft); font-size: clamp(1rem, 1.4vw, 1.2rem); max-width: 52ch; }
+    .hero-thesis { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.15rem, 2.2vw, 1.7rem); line-height: 1.45; letter-spacing: -0.01em; color: var(--muted); }
+    .hero-thesis b { color: var(--fg); font-weight: 700; }
+    .hero-lead { color: var(--fg-soft); font-size: clamp(1rem, 1.4vw, 1.2rem); max-width: 30em; }
     .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
     .hero-scroll { position: absolute; z-index: 3; bottom: 1.6rem; left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-size: 0.7rem; letter-spacing: 0.25em; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
     .hero-scroll span { width: 1px; height: 40px; background: linear-gradient(var(--muted), transparent); }
@@ -244,10 +235,13 @@ const activities = [
     .bento-card.noimg img { display: none; }
     .bento-card:hover .bento-media img { transform: scale(1.05); }
 
-    .bento-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 1.2rem; background: linear-gradient(to top, rgba(5,5,8,0.92) 0%, rgba(5,5,8,0.35) 45%, transparent 75%); }
+    /* スクリム。明るいサムネ（ドローン点検・中央製作所・YUMIKI・ミーグリ）の上でも白文字が読めるよう、
+       文字が乗る下半分を濃くする。上半分は素通しのまま＝作品写真を殺さない。 */
+    .bento-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 1.2rem; background: linear-gradient(to top, rgba(6,6,10,0.94) 0%, rgba(6,6,10,0.80) 32%, rgba(6,6,10,0.28) 58%, transparent 74%); }
     .tag { align-self: flex-start; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.3rem 0.7rem; border-radius: 999px; color: #06060a; background: var(--c, #fff); }
     .bento-text h3 { font-size: var(--fs-h3); color: #fff; margin-bottom: 0.3rem; }
-    .bento-text p { font-size: var(--fs-small); color: rgba(255,255,255,0.7); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    /* 概要はカード上の白文字。--fg-soft 相当まで明度を上げる（ライト配色でも暗いスクリムの上なので固定値） */
+    .bento-text p { font-size: var(--fs-small); color: rgba(255,255,255,0.88); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .bento-view { position: absolute; top: 1.2rem; right: 1.2rem; font-family: var(--font-display); font-size: 0.78rem; color: #fff; opacity: 0; transform: translateY(-6px); transition: all 0.3s var(--ease); }
     .bento-card:hover .bento-view { opacity: 1; transform: none; }
     /* モバイルの小カードは文字を詰めて窮屈さを回避（先頭の大カードは大きめ） */
@@ -263,13 +257,15 @@ const activities = [
     /* FIELDS（番号付き索引＝エディトリアル。色は“ホバーの差し色”だけ＝脱・虹色テンプレ。
        ホバーで代表作サムネが出る＝分野を実作品に紐づける。見出しは明朝＝和の味） */
     .sec-title { font-family: var(--font-mincho); font-weight: 800; font-size: var(--fs-h2); line-height: 1.22; letter-spacing: 0.03em; }
-    .fields-lead { color: var(--fg-soft); margin-top: 1rem; max-width: 46ch; font-size: clamp(0.95rem, 1.2vw, 1.05rem); }
+    .fields-lead { color: var(--fg-soft); margin-top: 1rem; max-width: 30em; font-size: clamp(0.95rem, 1.2vw, 1.05rem); }
     .fields { margin-top: var(--space-4); border-top: 1px solid var(--line); }
     .field { border-bottom: 1px solid var(--line); }
     .field a { position: relative; display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 1.5rem; padding: 1.55rem 0.6rem; transition: padding 0.4s var(--ease); }
-    .field a::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--c); transform: scaleY(0); transform-origin: center; transition: transform 0.4s var(--ease); }
+    /* 分野の色は静止状態でも見せる（スマホはホバーが無い＝7色が一度も現れないため）。
+       常時は 45% の細い色帯、ホバーで色が立つ。 */
+    .field a::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--c); transform: scaleY(1); transform-origin: center; opacity: 0.45; transition: transform 0.4s var(--ease), opacity 0.4s var(--ease); }
     .field a:hover { padding-left: 1.5rem; }
-    .field a:hover::before { transform: scaleY(1); }
+    .field a:hover::before { transform: scaleY(1); opacity: 1; }
     .field-no { font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
     .field-main { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
     .field-en { font-size: clamp(1.5rem, 3.6vw, 2.5rem); font-weight: 700; line-height: 1.05; color: var(--fg); transition: color 0.3s var(--ease); }
@@ -290,10 +286,28 @@ const activities = [
     }
 
     /* ACTIVITY & CHALLENGE（活動と挑戦：色＝多分野） */
-    .acts-lead { color: var(--fg-soft); margin-top: 0.9rem; max-width: 46ch; font-size: clamp(0.95rem, 1.2vw, 1.05rem); }
+    .acts-lead { color: var(--fg-soft); max-width: 30em; font-size: clamp(0.95rem, 1.2vw, 1.05rem); }
     .acts { display: grid; gap: 1rem; grid-template-columns: 1fr; margin-top: var(--space-4); }
     @media (min-width: 680px) { .acts { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1000px) { .acts { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1000px) {
+      /* 反復を崩す：01 だけを全幅の見せ場（大きな明朝の番号＋大きな見出し）にし、
+         02 以降は枠を外して罫線区切りの索引に落とす。同じ寸法のカードを6枚並べない。 */
+      .acts { grid-template-columns: repeat(2, 1fr); column-gap: clamp(2rem, 4vw, 3.6rem); row-gap: 0; }
+      /* 01＝見せ場。左に番号と見出し、右に説明とリンクを置いて全幅を情報で使い切る
+         （空いた右半分を装飾で埋めない＝引き算の方針のまま） */
+      .act:first-child { grid-column: 1 / -1; padding: 2.1rem 2.2rem 2.3rem; margin-bottom: var(--space-3);
+        display: grid; grid-template-columns: 1.02fr 1fr; column-gap: clamp(2rem, 4vw, 3.6rem); align-items: start; }
+      .act:first-child .act-no { grid-column: 1; grid-row: 1; font-size: 4.4rem; margin-bottom: 0.2rem; }
+      .act:first-child .act-k { grid-column: 1; grid-row: 2; }
+      .act:first-child .act-t { grid-column: 1; grid-row: 3; font-size: 1.85rem; margin-bottom: 0; }
+      .act:first-child .act-d { grid-column: 2; grid-row: 1 / span 3; align-self: center; font-size: 1.02rem; line-height: 2; }
+      .act:first-child .act-arrow { grid-column: 2; grid-row: 4; margin-top: 0.9rem; }
+      /* 02〜06 は罫線区切りの索引。5件を2列に組み、最後の1件は全幅にして最終行の穴を作らない */
+      .act:not(:first-child) { border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; padding: 1.5rem 0 1.8rem; }
+      .act:not(:first-child):last-child { grid-column: 1 / -1; }
+      .act:not(:first-child):hover { transform: none; border-top-color: color-mix(in srgb, var(--c) 55%, var(--line)); }
+      .act:not(:first-child) .act-no { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    }
     .act { position: relative; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); padding: 1.7rem 1.5rem 1.8rem; overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s var(--ease); }
     /* 明朝の番号＝和・東映の章アンカー（常時は淡く、ホバーで分野色が灯る） */
     .act-no { display: block; font-family: var(--font-mincho); font-weight: 700; font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--fg) 20%, transparent); margin-bottom: 0.7rem; transition: color 0.35s var(--ease); }
@@ -303,7 +317,8 @@ const activities = [
     .act:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c) 50%, var(--line)); }
     .act:hover .act-no, .act:hover .act-k { color: var(--c); }
     /* 売り子カード等＝外部リンク化したカードの誘導表示 */
-    .act-arrow { display: inline-block; margin-top: 0.8rem; font-family: var(--font-display); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; color: var(--c); opacity: 0.9; transition: transform 0.3s var(--ease); }
+    /* 分野色をそのまま文字に使うと暗い面でコントラストが足りないので、白を混ぜて明るく（AA 4.5:1 を確保） */
+    .act-arrow { display: inline-block; margin-top: 0.8rem; font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; color: color-mix(in srgb, var(--c) 72%, #ffffff); opacity: 1; transition: transform 0.3s var(--ease); }
     .act--link:hover .act-arrow { transform: translateX(3px); }
     :root[data-theme="light"] .act-arrow { color: color-mix(in srgb, var(--c) 76%, #15151c); }
 
@@ -319,7 +334,6 @@ const activities = [
     .hk-row .on { -webkit-text-stroke: 0; color: color-mix(in srgb, var(--accent-ink) 13%, transparent); }
     .hk-row--1 { animation: hk1 55s linear infinite; }
     .hk-row--2 { animation: hk2 70s linear infinite; }
-    .hk-row--3 { animation: hk1 88s linear infinite; }
     @keyframes hk1 { to { transform: translateX(-33.33%); } }
     @keyframes hk2 { from { transform: translateX(-33.33%); } to { transform: translateX(0); } }
     @media (prefers-reduced-motion: reduce) { .hk-row { animation: none; } }
@@ -327,7 +341,7 @@ const activities = [
     /* ABOUT teaser（締め＝叙情コピー → 大数字の帯 → 事実＋CTA の自然な縦の流れ） */
     .center { text-align: center; }
     .about-copy { font-size: clamp(2.2rem, 5.5vw, 4rem); line-height: 1.2; margin-top: 0.4rem; }
-    .about-sub { color: var(--fg-soft); max-width: 60ch; margin: var(--space-4) 0 0; font-size: clamp(1rem, 1.35vw, 1.15rem); line-height: 1.95; }
+    .about-sub { color: var(--fg-soft); max-width: 36em; margin: var(--space-4) 0 0; font-size: clamp(1rem, 1.35vw, 1.15rem); line-height: 1.95; }
     /* 大数字の帯（明朝・極細罫で挟む＝MIKIMOTO/IMAYO型の格） */
     .about-stats { display: flex; flex-wrap: wrap; gap: clamp(1.8rem, 6vw, 4.5rem); margin: var(--space-4) 0; padding: var(--space-3) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .about-stats li { display: flex; flex-direction: column; gap: 0.3rem; }
@@ -336,6 +350,22 @@ const activities = [
     .about-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; }
     .about-facts { display: flex; flex-wrap: wrap; gap: 0.6rem; }
     .about-facts li { font-size: var(--fs-small); color: var(--fg-soft); padding: 0.5rem 1.05rem; border: 1px solid var(--line); border-radius: 999px; }
+  /* ---- スマホ（390）での読みやすさ ----
+       ・ラベル／ピルは12px以上、カードの説明文は13px以上にする
+       ・PC用の読み幅（em上限）は左右のガターまで使い切らせる（行末の取りこぼしを消す） */
+    @media (max-width: 720px) {
+      .hero-lead, .fields-lead, .acts-lead, .about-sub { max-width: none; }
+      .hero-scroll { font-size: 0.78rem; }
+      .tag { font-size: 0.78rem; }
+      .bento-text p { font-size: 0.82rem; }
+      .field-count small { font-size: 0.78rem; }
+      .act-k { font-size: 0.78rem; }
+      .act-d { font-size: 0.85rem; }
+      .act-arrow { font-size: 0.84rem; }
+      .about-stats span { font-size: 0.78rem; }
+      /* 指で押す領域を44px確保 */
+      .link-arrow { display: inline-flex; align-items: center; min-height: 44px; }
+    }
   </style>
 
   <script>

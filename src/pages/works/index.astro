@@ -35,11 +35,10 @@ const total = works.length;
 <Base title="Works — Osaki Ryoma" description="CG・映像・グラフィック・画像処理・Web の制作実績一覧。各作品に狙いと工夫を添えています。">
   <!-- HERO -->
   <section class="works-hero">
-    <div class="hero-glow" aria-hidden="true"></div>
     <div class="container">
       <p class="eyebrow reveal">Works — 制作実績</p>
       <h1 class="mega display reveal"><span class="line-mask"><span>これまでの<span class="spectrum-text">制作</span></span></span></h1>
-      <p class="lead reveal" data-delay="1">授業課題から受託・研究まで、取り組んだ制作を分野別に。各作品はクリックで「狙い・工夫・資料」まで詳しく見られます。<br />色は分野を表します ― 色の数だけ、手を出してきた分野がある。</p>
+      <p class="lead reveal" data-delay="1">授業課題から受託・研究まで、取り組んだ制作を分野別に。各作品は「狙い・工夫・資料」まで詳しく見られます。<br />色は分野を表します ― 色の数だけ、手を出してきた分野がある。</p>
       <div class="wk-filter reveal" data-delay="2" role="group" aria-label="分野で絞り込み">
         <button type="button" class="chip chip--all is-active" data-cat="all" aria-pressed="true">すべて<small>{total}</small></button>
         {grouped.map((g) => (
@@ -47,6 +46,7 @@ const total = works.length;
         ))}
       </div>
       <p class="wk-count reveal" data-delay="2" aria-live="polite"><b id="wkShown">{total}</b><span>/ {total} 作品を表示中</span></p>
+      <span class="wk-rule reveal" data-delay="2" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -169,9 +169,8 @@ const total = works.length;
 
   <style>
     .works-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-4); overflow: hidden; }
-    .hero-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(45% 50% at 80% 0%, color-mix(in srgb, var(--c-violet) 28%, transparent), transparent 70%); filter: blur(8px); }
     .mega { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.4rem 0 1.2rem; }
-    .lead { max-width: 56ch; color: var(--fg-soft); }
+    .lead { max-width: 34em; color: var(--fg-soft); }
     /* 分野フィルタ（チップ）＋表示数カウンタ */
     .wk-filter { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: var(--space-3); }
     .chip { display: inline-flex; align-items: center; gap: 0.5rem; font-size: var(--fs-small); font-weight: 700; padding: 0.55rem 1.05rem; border-radius: 999px; border: 1px solid var(--line); color: var(--fg-soft); background: transparent; cursor: pointer; transition: color 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease); }
@@ -191,8 +190,11 @@ const total = works.length;
 
     .wk-count { margin-top: 1rem; font-family: var(--font-display); font-size: 0.84rem; color: var(--muted); letter-spacing: 0.03em; display: flex; align-items: baseline; gap: 0.45rem; }
     .wk-count b { color: var(--fg); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+    /* 入口の温度を1本だけ戻す（固定レイヤーは増やさない。フッターの LET'S CREATE と同じ語彙） */
+    .wk-rule { display: block; height: 1px; width: 100%; margin-top: var(--space-3); background: var(--spectrum); background-size: 200% auto; animation: hue 8s linear infinite; opacity: 0.85; }
+    @media (prefers-reduced-motion: reduce) { .wk-rule { animation: none; } }
 
-    .cat-section { padding-block: var(--space-5); border-top: 1px solid var(--line); }
+    .cat-section { padding-block: var(--space-5); border-top: 1px solid var(--line); scroll-margin-top: 96px; }
     .cat-section[hidden] { display: none; }
     .cat-head { display: flex; align-items: center; gap: 1.2rem; margin-bottom: var(--space-4); }
     .cat-no { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 700; line-height: 1; opacity: 0.9; color: var(--c); }
@@ -227,7 +229,8 @@ const total = works.length;
     /* グラフィック作品（縦長ポスター）はメディア枠を縦長にして全体を大きく見せる */
     .work-media.is-poster { aspect-ratio: 4/5; max-width: 460px; justify-self: center; width: 100%; }
     /* 縦長画像も見切れないよう、ぼかした同画像を背景に敷き本体は全体表示 */
-    .work-media::before { content: ""; position: absolute; inset: -8%; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(26px) brightness(0.5) saturate(1.3); z-index: 0; }
+    /* 縦長スクショの左右を同じ画像の拡大ぼかしで埋めるのはやめた（2026-09-24）。
+       装飾を足さず、枠の地色（紙面の黒）のまま余白として見せる＝引き算の方針。 */
     .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-row:hover .work-media img { transform: scale(1.04); }
     /* 準備中（サムネ未配置）は、分野色の点線カードで“意図された枠”に見せる */
@@ -235,6 +238,30 @@ const total = works.length;
     .media-ph { position: relative; z-index: 1; display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--fg-soft); font-size: var(--fs-small); font-weight: 700; letter-spacing: 0.04em; }
     .media-ph::before { content: ""; width: 30px; height: 30px; border-radius: 50%; border: 2px dashed var(--c); opacity: 0.75; }
     .work-media { cursor: pointer; }
+    /* 裁ち落とし：3件に1件はフレーム（枠線・角丸）を外し、雑誌のように紙面へ直接置く。
+       角丸デバイスフレームの量産感を崩し、framed / bleed の交替でリズムを作る。 */
+    .work-row:nth-child(3n) .work-media { border: 0; border-radius: 0; background: transparent; }
+    /* 枠を外した行は、ぼかし背景も外して画像そのものを紙面に直に置く（ボックスに見せない） */
+    .work-row:nth-child(3n) .work-media .zoom-hint { bottom: 0.2rem; right: 0.2rem; }
+    /* 枠にはめるのをやめ、画像そのものの縦横で置く＝上下の余白（レターボックス）が出ないので
+       「角丸が欠けたカード」ではなく紙面に刷った1枚に見える。縦も枠のとき（4:3）より大きくなる。 */
+    .work-row:nth-child(3n) .work-media:not(.is-empty) { aspect-ratio: auto; display: block; }
+    .work-row:nth-child(3n) .work-media:not(.is-empty) > img,
+    .work-row:nth-child(3n) .work-media:not(.is-empty) > video { position: relative; inset: auto; height: auto; }
+    /* 紙面の端まで出す（コンテナの余白 1.25rem ぶん外へ）。1360px 以下では余白が常に 1.25rem なので
+       横スクロールは発生しない。それより広い画面では余白が大きいため、はみ出させず枠内に留める。 */
+    @media (max-width: 1360px) {
+      .work-row:nth-child(3n) .work-media:not(.is-empty):not(.is-poster) { margin-inline: -1.25rem; }
+    }
+    /* 2カラムのときは外側（紙面の端に近い側）だけを裁ち落とす */
+    @media (min-width: 880px) and (max-width: 1360px) {
+      .work-row:nth-child(3n):nth-child(odd) .work-media:not(.is-empty):not(.is-poster) { margin-inline: -1.25rem 0; }
+      .work-row:nth-child(3n):nth-child(even) .work-media:not(.is-empty):not(.is-poster) { margin-inline: 0 -1.25rem; }
+    }
+    /* 裁ち落としの行は情報側にも少し余白を足し、枠が無くても列として読めるようにする */
+    @media (min-width: 880px) { .work-row:nth-child(3n) .work-info { padding-left: 0.4rem; } }
+    /* 準備中の点線カードは「意図された枠」なので裁ち落としの対象外に戻す */
+    .work-row:nth-child(3n) .work-media.is-empty { border: 1px dashed color-mix(in srgb, var(--c) 38%, var(--line)); border-radius: var(--radius); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
     .zoom-hint { position: absolute; z-index: 2; bottom: 0.7rem; right: 0.7rem; font-family: var(--font-display); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.2); padding: 0.32rem 0.7rem; border-radius: 999px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); backdrop-filter: blur(4px); pointer-events: none; }
     .work-row:hover .zoom-hint, .work-row:focus-within .zoom-hint { opacity: 1; transform: none; }
     /* タッチ端末はホバーが無いので、操作のヒントを常時うっすら表示（発見性UP） */
@@ -250,5 +277,14 @@ const total = works.length;
     .work-meta { display: flex; gap: 2rem; margin: 1rem 0 0.5rem; flex-wrap: wrap; }
     .work-meta dt { font-family: var(--font-display); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
     .work-meta dd { font-weight: 700; font-size: var(--fs-small); }
+  
+    /* ---- スマホ（390）での読みやすさ：ラベル／ピルは12px以上・読み幅の上限は外す ---- */
+    @media (max-width: 720px) {
+      .lead { max-width: none; }
+      .status-pill { font-size: 0.78rem; }
+      .work-meta dt { font-size: 0.78rem; }
+      .zoom-hint { font-size: 0.78rem; }
+      .chip small { font-size: 0.78rem; }
+    }
   </style>
 </Base>

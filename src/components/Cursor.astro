@@ -1,7 +1,8 @@
 ---
-// マウス追従のカスタムカーソル（PC/fine pointer のみ表示）
+// マウス追従のカスタムカーソル（PC/fine pointer のみ表示）。
+// 追従グロー（460px・blur32px）は 2026-09-24 に撤去＝常時rAFの負荷と装飾の重なりを減らすため。
+// rAF はマウスが動いている間だけ回す（止まれば自分で止まる）。reduced-motion のときは補間しない。
 ---
-<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
@@ -10,31 +11,30 @@
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const dot = document.getElementById("cursorDot");
   const ring = document.getElementById("cursorRing");
-  const glow = document.getElementById("cursorGlow");
   if (fine && dot && ring) {
     let mx = innerWidth / 2, my = innerHeight / 2;
     let rx = mx, ry = my;
-    let gx = mx, gy = my;
-    let glowOn = false;
+    let running = false;
 
-    addEventListener("mousemove", (e) => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-      if (glow && !reduce && !glowOn) { glow.classList.add("on"); glowOn = true; }
-    });
+    const put = (el, x, y) => { el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`; };
 
+    // リングは慣性で追う。ただし止まったらループも止める（常時rAFにしない）。
+    // 動きを減らす設定のときは補間せず、リングもその場で置く＝ループを1本も回さない。
     const loop = () => {
       rx += (mx - rx) * 0.18;
       ry += (my - ry) * 0.18;
-      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-      if (glow && !reduce) {
-        gx += (mx - gx) * 0.09;
-        gy += (my - gy) * 0.09;
-        glow.style.transform = `translate(${gx}px, ${gy}px)`;
-      }
-      requestAnimationFrame(loop);
+      put(ring, rx, ry);
+      if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) requestAnimationFrame(loop);
+      else { rx = mx; ry = my; put(ring, rx, ry); running = false; }
     };
-    loop();
+
+    addEventListener("mousemove", (e) => {
+      mx = e.clientX; my = e.clientY;
+      put(dot, mx, my);
+      if (reduce) { rx = mx; ry = my; put(ring, rx, ry); return; }
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    });
+    put(dot, mx, my); put(ring, rx, ry);
 
     const hoverSel = "a, button, [data-cursor], .work-row, .bento-card";
     document.querySelectorAll(hoverSel).forEach((el) => {
@@ -43,7 +43,7 @@
     });
 
     addEventListener("mouseout", (e) => {
-      if (!e.relatedTarget) { dot.style.opacity = "0"; ring.style.opacity = "0"; glow?.classList.remove("on"); glowOn = false; }
+      if (!e.relatedTarget) { dot.style.opacity = "0"; ring.style.opacity = "0"; }
     });
     addEventListener("mouseover", () => { dot.style.opacity = "1"; ring.style.opacity = "1"; });
   }

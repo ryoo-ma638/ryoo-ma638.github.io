@@ -30,9 +30,6 @@
     var(--c-green) 54%, var(--c-yellow) 70%, var(--c-orange) 85%, var(--c-red) 100%);
   --accent: var(--c-violet);
   --accent-ink: #9d86ff;
-  /* 作品カテゴリの色（スペクトラム上で分離）: graphic=violet / cg=red / imaging=cyan / web=blue */
-  --accent-2: var(--c-red);
-  --accent-3: var(--c-cyan);
 
   /* Type */
   --font-display: "Space Grotesk", "Zen Kaku Gothic New", system-ui, sans-serif;
@@ -110,6 +107,9 @@ ul, ol { list-style: none; padding: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  /* 動きを減らす設定では登場アニメを使わない＝最初から全部見える（JSの発火を待たない） */
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .line-mask > span { transform: none !important; }
 }
 
 /* ---------- Grain overlay（脱AI感の質感） ---------- */
@@ -146,6 +146,10 @@ body { font-feature-settings: "palt"; }
 .container { width: min(100% - 2.5rem, var(--maxw)); margin-inline: auto; }
 .narrow { max-width: var(--maxw-narrow); }
 .section { padding-block: var(--space-6); position: relative; }
+/* 隣り合うセクションは下余白と上余白が足し算になって一律の空白帯ができる（1280で約205px）。
+   続きのセクションは上を詰めてリズムを作る。面の色や地が変わるところだけ元の余白に戻す。 */
+.section + .section { padding-top: var(--space-5); }
+.section + .section--alt, .section + .about-teaser { padding-top: var(--space-6); }
 /* “ひと続きの背景”の上に区画を置く。alt はごく僅かな差で分節（段差・色帯を作らない＝滑らかな繋ぎ） */
 .section--alt { background: color-mix(in srgb, var(--bg-2) 38%, transparent); }
 
@@ -169,6 +173,28 @@ body { font-feature-settings: "palt"; }
 .btn--primary:hover::before { opacity: 1; }
 .btn--ghost { border: 1.5px solid var(--line); color: var(--fg); }
 .btn--ghost:hover { border-color: transparent; background: var(--bg-3); transform: translateY(-3px); }
+
+/* ---------- セクション見出しの型（3種） ----------
+   型A＝.section-head（ティック＋見出し＋副文の縦積み。基本形）
+   型B＝.sh-split   （左＝見出し／右＝副文の左右非対称。上に極細罫。同型反復を崩す）
+   型C＝.sh-rule    （見出しの右へ罫を全幅に伸ばす全幅ブレイク。副文なしの章に使う） */
+.sh-split { display: grid; gap: 1rem 3rem; grid-template-columns: 1fr; align-items: end;
+  border-top: 1px solid var(--line); padding-top: var(--space-3); margin-bottom: var(--space-4); }
+.sh-split > * { min-width: 0; }
+.sh-split .eyebrow { margin-bottom: var(--space-2); }
+/* 見出しは語の途中で割らず、2行になるときも上下を均す（1文字・2文字の孤立行を作らない） */
+.sh-split .sec-title { text-wrap: balance; word-break: auto-phrase; }
+@media (min-width: 880px) {
+  /* 見出し側を広く取り、主見出し（fs-h2 最大51px×15字）が1行で収まるようにする */
+  .sh-split { grid-template-columns: minmax(0, 1.34fr) minmax(0, 0.66fr); }
+  .sh-split > :last-child { padding-bottom: 0.4rem; justify-self: end; text-align: left; max-width: 34em; }
+}
+
+.sh-rule { display: grid; grid-template-columns: auto minmax(2rem, 1fr); align-items: end;
+  gap: clamp(1rem, 3vw, 2.2rem); margin-bottom: var(--space-4); }
+.sh-rule .sh-rule-line { height: 1px; background: var(--line); margin-bottom: 0.7rem; }
+.sh-rule .eyebrow { margin-bottom: 0.7rem; }
+@media (max-width: 720px) { .sh-rule { grid-template-columns: 1fr; gap: 1.1rem; } }
 
 /* ---------- Reveal（クリアに立ち上げる。ブラーは使わない＝高速スクロールでも読みやすい） ---------- */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
@@ -244,49 +270,26 @@ body { animation: pageFade 0.5s var(--ease) both; }
 }
 @media (max-width: 600px) { .bg-grid { background-size: 26px 26px; } }
 
-/* ---------- ビューファインダー風の四隅フレーム（作品集＝構図の格） ---------- */
-.view-frame { position: fixed; inset: 16px; z-index: 200; pointer-events: none; }
-.view-frame i { position: absolute; width: 20px; height: 20px; border: 0 solid color-mix(in srgb, var(--fg) 26%, transparent); }
-.view-frame i:nth-child(1) { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; }
-.view-frame i:nth-child(2) { top: 0; right: 0; border-top-width: 1.5px; border-right-width: 1.5px; }
-.view-frame i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1.5px; border-left-width: 1.5px; }
-.view-frame i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1.5px; border-right-width: 1.5px; }
-@media (max-width: 600px) { .view-frame { inset: 9px; } .view-frame i { width: 13px; height: 13px; } }
-
 /* ---------- シネマティック・イントロ（初回のみ／reduced-motion時はスキップ） ---------- */
-.site-intro { position: fixed; inset: 0; z-index: 2000; display: none; place-items: center; background: var(--bg); overflow: hidden; }
-html.intro .site-intro { display: grid; animation: introWipe 1s var(--ease) 1.15s forwards; }
+.site-intro { position: fixed; inset: 0; z-index: 2000; display: none; place-items: center; background: var(--bg); overflow: hidden; pointer-events: none; }
+html.intro .site-intro { display: grid; animation: introWipe 0.4s var(--ease) 0.8s forwards; }
 html.intro body { overflow: hidden; }
 .site-intro::after { /* グレインは前面に出さない */ content: none; }
 .intro-glow { position: absolute; inset: 0; background:
   radial-gradient(40% 50% at 50% 50%, color-mix(in srgb, var(--c-violet) 40%, transparent), transparent 70%),
   radial-gradient(35% 40% at 30% 60%, color-mix(in srgb, var(--c-cyan) 30%, transparent), transparent 70%),
   radial-gradient(35% 40% at 70% 40%, color-mix(in srgb, var(--c-red) 26%, transparent), transparent 70%);
-  filter: blur(20px); opacity: 0; animation: introGlow 1.6s var(--ease) forwards; }
+  filter: blur(20px); opacity: 0; animation: introGlow 0.9s var(--ease) forwards; }
 .intro-mark { position: relative; text-align: center; }
-.intro-bar { height: 3px; width: 0; margin: 0 auto 0.9rem; background: var(--spectrum); background-size: 200% auto; animation: introBar 0.7s var(--ease) 0.1s forwards, hue 8s linear infinite; }
+.intro-bar { height: 3px; width: 0; margin: 0 auto 0.9rem; background: var(--spectrum); background-size: 200% auto; animation: introBar 0.4s var(--ease) 0s forwards, hue 8s linear infinite; }
 .intro-name { display: block; overflow: hidden; }
-.intro-name span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 11vw, 7.5rem); letter-spacing: 0.08em; line-height: 1; transform: translateY(110%); animation: introName 0.9s var(--ease) 0.45s forwards; }
-.intro-tag { display: block; margin-top: 0.8rem; font-family: var(--font-display); font-size: clamp(0.7rem, 2vw, 0.95rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: introTag 0.7s var(--ease) 0.9s forwards; }
+.intro-name span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 11vw, 7.5rem); letter-spacing: 0.08em; line-height: 1; transform: translateY(110%); animation: introName 0.5s var(--ease) 0.25s forwards; }
+.intro-tag { display: block; margin-top: 0.8rem; font-family: var(--font-display); font-size: clamp(0.7rem, 2vw, 0.95rem); letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: introTag 0.3s var(--ease) 0.5s forwards; }
 @keyframes introGlow { 40% { opacity: 1; } 100% { opacity: 0.7; } }
 @keyframes introBar { to { width: clamp(140px, 32vw, 360px); } }
 @keyframes introName { to { transform: none; } }
 @keyframes introTag { to { opacity: 1; } }
-@keyframes introWipe { to { transform: translateY(-101%); pointer-events: none; } }
-
-/* ---------- カーソル追従グロー（スペクトラムの光が遊ぶ） ---------- */
-.cursor-glow {
-  position: fixed; top: 0; left: 0; z-index: 200; width: 460px; height: 460px; margin: -230px 0 0 -230px;
-  border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: 0; will-change: transform, opacity;
-  transition: opacity 0.5s var(--ease);
-  background: radial-gradient(circle, color-mix(in srgb, var(--page-accent) 36%, transparent), color-mix(in srgb, var(--page-accent) 15%, transparent) 45%, transparent 66%);
-  filter: blur(32px);
-}
-.cursor-glow.on { opacity: 0.55; }
-:root[data-theme="light"] .cursor-glow { mix-blend-mode: multiply; opacity: 0; }
-:root[data-theme="light"] .cursor-glow.on { opacity: 0.22; }
-@media (hover: none), (pointer: coarse) { .cursor-glow { display: none; } }
-@media (prefers-reduced-motion: reduce) { .cursor-glow { display: none !important; } }
+@keyframes introWipe { to { transform: translateY(-101%); } }
 
 /* ---------- Custom cursor（fine pointer のみ） ----------
    テーマで統一: ダーク=白／ライト=黒（var(--fg)）。背景色のハローでどの背景でも視認可能。 */

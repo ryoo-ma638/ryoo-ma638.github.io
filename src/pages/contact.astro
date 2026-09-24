@@ -62,14 +62,6 @@ const icon = (k: string): string => icons[k] ?? "";
         制作のご相談、お仕事の依頼、作品の感想まで——どんなことでも歓迎です。<br />
         個人・チーム、規模の大小を問わず、まずはお気軽にどうぞ。
       </p>
-      <ul class="ct-facts reveal" data-delay="2">
-        {facts.map((f) => (
-          <li>
-            <span class="ct-fact-ic" set:html={icon(f.icon)} />
-            {f.text}
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
@@ -79,6 +71,7 @@ const icon = (k: string): string => icons[k] ?? "";
       <!-- 主：メール -->
       <div class="ct-primary reveal">
         <span class="ct-primary-edge" aria-hidden="true"></span>
+        <div class="ct-primary-body">
         <div class="ct-primary-top">
           <span class="ct-primary-ic" set:html={icon("mail")} />
           <div>
@@ -97,6 +90,15 @@ const icon = (k: string): string => icons[k] ?? "";
             <span class="copy-label" aria-live="polite">コピー</span>
           </button>
         </div>
+        </div>
+        <ul class="ct-facts">
+          {facts.map((f) => (
+            <li>
+              <span class="ct-fact-ic" set:html={icon(f.icon)} />
+              {f.text}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <!-- 副：その他のチャネル -->
@@ -153,9 +155,9 @@ const icon = (k: string): string => icons[k] ?? "";
     .ct-hero { position: relative; padding-top: calc(78px + var(--space-5)); padding-bottom: var(--space-4); }
     .ct-title { font-size: var(--fs-hero); font-weight: 700; line-height: 0.95; margin: 0.5rem 0 1.2rem; letter-spacing: -0.02em; }
     .ct-title .line-mask { display: inline-block; vertical-align: top; }
-    .ct-lead { color: var(--fg-soft); max-width: 54ch; font-size: clamp(1rem, 1.4vw, 1.18rem); }
+    .ct-lead { color: var(--fg-soft); max-width: 34em; font-size: clamp(1rem, 1.4vw, 1.18rem); }
 
-    .ct-facts { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: var(--space-4); }
+    .ct-facts { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: var(--space-3); }
     .ct-facts li { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--line); border-radius: 999px; font-size: var(--fs-small); color: var(--fg-soft); background: color-mix(in srgb, var(--card) 60%, transparent); }
     .ct-fact-ic { display: inline-flex; color: var(--accent-ink); }
     .ct-fact-ic :global(svg) { width: 16px; height: 16px; }
@@ -171,13 +173,17 @@ const icon = (k: string): string => icons[k] ?? "";
       border: 1px solid var(--line); border-radius: clamp(20px, 3vw, 28px);
       padding: clamp(1.6rem, 4vw, 2.8rem); margin-bottom: 1rem;
     }
+    /* 広い画面ではカードの右半分が空くので、上にあった3つの事実（拠点・返信の目安・所属）を
+       右カラムに移して二段組にする。装飾ではなく情報で埋める。 */
+    .ct-primary-body { position: relative; z-index: 1; min-width: 0; }
+    @media (min-width: 900px) {
+      .ct-primary { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(210px, 0.7fr); column-gap: clamp(2rem, 4vw, 3.4rem); align-items: center; }
+      .ct-primary .ct-facts { position: relative; z-index: 1; margin-top: 0; flex-direction: column; align-items: flex-start; gap: 0.55rem; border-left: 1px solid var(--line); padding-left: clamp(1.4rem, 3vw, 2.4rem); }
+    }
     .ct-primary-edge { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--spectrum); background-size: 100% 300%; animation: edgeHue 9s linear infinite; }
     @keyframes edgeHue { to { background-position: 0 300%; } }
-    .ct-primary::after { /* 右上のスペクトラム・グロー */
-      content: ""; position: absolute; right: -10%; top: -60%; width: 60%; height: 160%; pointer-events: none;
-      background: radial-gradient(circle, color-mix(in srgb, var(--c-violet) 22%, transparent), transparent 62%);
-      filter: blur(34px); opacity: 0.8;
-    }
+    /* 右上の紫ラジアルグローは撤去（2026-09-24）。グローはヒーローとフッターの2画面だけに絞り、
+       ここは左端のスペクトラム罫＋素の面で見せる。 */
     .ct-primary-top { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 1; }
     .ct-primary-ic { display: inline-grid; place-items: center; width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; background: color-mix(in srgb, var(--c-violet) 16%, transparent); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--c-violet) 30%, transparent); }
     .ct-primary-ic :global(svg) { width: 26px; height: 26px; }
@@ -247,6 +253,12 @@ const icon = (k: string): string => icons[k] ?? "";
       .ct-primary { padding: 1.5rem 1.3rem; }
       .ct-primary-actions { flex-direction: column; align-items: stretch; }
       .ct-btn { justify-content: center; }
+    }
+  
+    /* スマホは読み幅の上限をやめ、左右のガターまで使い切る（行末の取りこぼしを消す） */
+    @media (max-width: 720px) {
+      .ct-lead { max-width: none; }
+      .ct-ch-note { font-size: 0.82rem; }
     }
   </style>
 

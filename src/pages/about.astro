@@ -145,9 +145,11 @@ const highlights = [
   <!-- ============ つくる以外のわたし（人となり） ============ -->
   <section class="section section--alt" data-accent="var(--c-green)">
     <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Beyond Work</span>
-        <h2 class="sec-title">つくる以外の、わたし。</h2>
+      <div class="sh-split reveal">
+        <div>
+          <span class="eyebrow">Beyond Work</span>
+          <h2 class="sec-title">つくる以外の、わたし。</h2>
+        </div>
         <p class="sec-sub">つくる原動力は、夢中になれる「好き」があること。盛り上げ役の血は、現場でも変わりません。</p>
       </div>
 
@@ -156,7 +158,7 @@ const highlights = [
           <div class="pcard-media" style="--bg-img:url('/assets/about/baseball.jpg')"
                data-gallery='["/assets/about/baseball.jpg"]' data-caption="バンテリンドームナゴヤにて — 中日ドラゴンズを応援。" tabindex="0" role="button" aria-label="写真を拡大">
             <img src="/assets/about/baseball.jpg" alt="バンテリンドームで中日ドラゴンズを応援する大崎稜馬" loading="lazy" />
-            <span class="pcard-chip">⚾ 野球観戦</span>
+            <span class="pcard-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M6.2 5.4c2 2 3.1 4.3 3.1 6.6s-1.1 4.6-3.1 6.6"/><path d="M17.8 5.4c-2 2-3.1 4.3-3.1 6.6s1.1 4.6 3.1 6.6"/></svg>野球観戦</span>
           </div>
           <figcaption class="pcard-body">
             <h3 class="pcard-title">中日ドラゴンズと、バンテリンドーム</h3>
@@ -168,7 +170,7 @@ const highlights = [
           <div class="pcard-media" style="--bg-img:url('/assets/about/oshikatsu.jpg')"
                data-gallery='["/assets/about/oshikatsu.jpg"]' data-caption="14th YEAR BIRTHDAY LIVE — 弓木奈於さんを応援。" tabindex="0" role="button" aria-label="写真を拡大">
             <img src="/assets/about/oshikatsu.jpg" alt="ライブ会場でタオルを掲げて推し活をする大崎稜馬" loading="lazy" />
-            <span class="pcard-chip">💜 推し活</span>
+            <span class="pcard-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>推し活</span>
           </div>
           <figcaption class="pcard-body">
             <h3 class="pcard-title">乃木坂46・弓木奈於さんの応援</h3>
@@ -195,9 +197,12 @@ const highlights = [
   <!-- ============ もっと知る（一問一答＋取扱説明書） ============ -->
   <section class="section" data-accent="var(--c-yellow)">
     <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow">More About Me</span>
-        <h2 class="sec-title">もっと、知る。</h2>
+      <div class="sh-rule reveal">
+        <div>
+          <span class="eyebrow">More About Me</span>
+          <h2 class="sec-title">もっと、知る。</h2>
+        </div>
+        <span class="sh-rule-line" aria-hidden="true"></span>
       </div>
 
       <dl class="qa">
@@ -249,9 +254,12 @@ const highlights = [
   <!-- ============ 主な実績（ハイライト） ============ -->
   <section class="section" data-accent="var(--c-red)">
     <div class="container">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Highlights</span>
-        <h2 class="sec-title">主な実績。</h2>
+      <div class="sh-rule reveal">
+        <div>
+          <span class="eyebrow">Highlights</span>
+          <h2 class="sec-title">主な実績。</h2>
+        </div>
+        <span class="sh-rule-line" aria-hidden="true"></span>
       </div>
       <div class="highlights">
         {highlights.map((h, i) => {
@@ -293,7 +301,7 @@ const highlights = [
     .ab-name .line-mask > span { font-size: clamp(2.8rem, 8.5vw, 6.2rem); display: block; }
     .ab-roman { display: block; font-family: var(--font-display); font-size: clamp(0.9rem, 2vw, 1.4rem); color: var(--muted); font-weight: 500; letter-spacing: 0.22em; margin-top: 0.7rem; }
     .ab-role { color: var(--fg); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.7; margin-bottom: 1.2rem; font-weight: 500; }
-    .ab-lead { max-width: 54ch; color: var(--fg-soft); font-size: clamp(0.98rem, 1.3vw, 1.12rem); line-height: 1.9; }
+    .ab-lead { max-width: 32em; color: var(--fg-soft); font-size: clamp(0.98rem, 1.3vw, 1.12rem); line-height: 1.9; }
 
     .ab-portrait { position: relative; margin: 0; display: flex; flex-direction: column; gap: 0.9rem; max-width: 420px; width: 100%; justify-self: center; }
     /* 背後にスペクトラムの光を放つ（“光を放つ”＝ブランド／モノクロをやめ色で品よく） */
@@ -310,7 +318,7 @@ const highlights = [
     .sec-head { margin-bottom: var(--space-4); }
     .sec-head.center { text-align: center; }
     .sec-title { font-family: var(--font-mincho); font-weight: 800; font-size: var(--fs-h2); line-height: 1.2; letter-spacing: 0.01em; }
-    .sec-sub { color: var(--fg-soft); margin-top: 0.7rem; max-width: 56ch; font-size: clamp(0.92rem, 1.2vw, 1.05rem); line-height: 1.8; }
+    .sec-sub { color: var(--fg-soft); margin-top: 0.7rem; max-width: 34em; font-size: clamp(0.92rem, 1.2vw, 1.05rem); line-height: 1.8; }
 
     /* ====== タイムライン（森山式：大型アウトライン年号＋縦罫） ====== */
     .tl { display: block; }
@@ -355,7 +363,8 @@ const highlights = [
     .pcard-media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
     .pcard-media::before { content: ""; position: absolute; inset: 0; background: var(--bg-img) center/cover no-repeat; filter: blur(28px) brightness(0.5) saturate(1.15); transform: scale(1.2); }
     .pcard-media img { position: relative; width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s var(--ease); }
-    .pcard-chip { position: absolute; left: 0.9rem; top: 0.9rem; z-index: 2; font-size: 0.78rem; font-weight: 700; padding: 0.32rem 0.7rem; border-radius: 999px; background: color-mix(in srgb, #05050a 60%, transparent); border: 1px solid color-mix(in srgb, var(--cc) 60%, transparent); color: #fff; backdrop-filter: blur(6px); }
+    .pcard-chip { position: absolute; left: 0.9rem; top: 0.9rem; z-index: 2; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; padding: 0.32rem 0.75rem; border-radius: 999px; background: color-mix(in srgb, #05050a 60%, transparent); border: 1px solid color-mix(in srgb, var(--cc) 60%, transparent); color: #fff; backdrop-filter: blur(6px); }
+    .pcard-chip svg { width: 14px; height: 14px; flex: 0 0 auto; color: var(--cc); }
     .pcard-body { padding: 1.3rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .pcard-title { font-family: var(--font-mincho); font-weight: 700; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.4; }
     .pcard-text { color: var(--fg-soft); font-size: var(--fs-small); line-height: 1.8; }
@@ -422,5 +431,13 @@ const highlights = [
     .center { text-align: center; }
     .ab-cta-line { font-family: var(--font-mincho); font-weight: 800; font-size: clamp(1.8rem, 5vw, 3.4rem); line-height: 1.3; margin: 0.8rem 0 1.8rem; }
     .ab-cta-btns { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+  
+    /* ---- スマホ（390）での読みやすさ：ラベルは12px以上・読み幅の上限は外す ---- */
+    @media (max-width: 720px) {
+      .ab-lead, .sec-sub { max-width: none; }
+      .tl-tag, .motto-label, .qa-q, .hl-label { font-size: 0.78rem; }
+      .torisetsu-note { font-size: 0.82rem; }
+      .pcard-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 0; }
+    }
   </style>
 </Base>
