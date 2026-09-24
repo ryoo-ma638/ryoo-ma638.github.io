@@ -13,7 +13,7 @@ export default defineConfig({
     // 手書きの public/sitemap.xml は廃止（増減に追従しないため）。
     // 非公式ファンサイト（/yumiki）は noindex 方針なので除外。
     sitemap({
-      filter: (page) => !page.includes('/yumiki'),
+      filter: (page) => !new URL(page).pathname.startsWith('/yumiki'),
     }),
   ],
 });

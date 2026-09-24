@@ -19,8 +19,8 @@ const kineticB = ["GRAPHIC", "WEB", "GAME", "SLIDES", "CREATE", "DESIGN"];
 const activities = [
   { c: "var(--c-violet)", k: "課外", t: "ビール売り子で 新人10位", d: "バンテリンドームナゴヤのビール売り子。2026年の年間ランキングは新人売上10位。おつまみは全体15位で、TOP15に入った新人は自分だけ。", link: "https://uriko-v-dome-ryoma.vercel.app", linkLabel: "応援サイトへ" },
   { c: "var(--c-blue)", k: "役割", t: "学生団体 CEED 副部長", d: "60名規模の運営・新歓・イベント企画。“誰も置いてけぼりにしない”を大切に。", link: "/ceed", linkLabel: "CEEDの活動へ" },
-  { c: "var(--c-green)", k: "出展", t: "東京ゲームショウ ほか", d: "『虫歯アニマルズ』でTGS・ゲームマーケット・安城Eフェスに出展。", link: "/works#mushiba-animals", linkLabel: "作品を見る" },
-  { c: "var(--c-yellow)", k: "ハッカソン", t: "企業協賛賞を受賞", d: "シスハックで割り勘アプリ『Settlo』を開発し、企業協賛賞を受賞した。", link: "/works#settlo", linkLabel: "作品を見る" },
+  { c: "var(--c-green)", k: "出展", t: "東京ゲームショウ ほか", d: "『虫歯アニマルズ』でTGS・ゲームマーケット・安城Eフェスに出展。", link: "/works/mushiba-animals/", linkLabel: "作品を見る" },
+  { c: "var(--c-yellow)", k: "ハッカソン", t: "企業協賛賞を受賞", d: "シスハックで割り勘アプリ『Settlo』を開発し、企業協賛賞を受賞した。", link: "/works/settlo/", linkLabel: "作品を見る" },
   { c: "var(--c-orange)", k: "研究", t: "学会発表に挑戦", d: "水野慎士研究室での研究を、外の場へ。いま挑戦の途中。" },
   { c: "var(--c-red)", k: "進学", t: "大学院 進学を準備", d: "CG・画像処理・インタラクションを、もっと深くへ。" },
 ];
@@ -78,7 +78,7 @@ const activities = [
 
       <div class="bento">
         {featuredWorks.map((w, i) => (
-          <a href={`/works#${w.slug}`} class="bento-card reveal" data-delay={(i % 3) + 1}>
+          <a href={`/works/${w.slug}/`} class="bento-card reveal" data-delay={(i % 3) + 1}>
             <div class="bento-media" style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}>
               {w.video
                 ? <video src={w.video} poster={w.thumb} muted loop playsinline preload="none" data-hover></video>
@@ -109,7 +109,7 @@ const activities = [
       <ul class="fields">
         {Object.entries(categoryLabels).map(([key, c], i) => (
           <li class="field reveal" style={`--c:${c.color}`}>
-            <a href={`/works#cat-${key}`}>
+            <a href={`/works/#cat-${key}`}>
               <span class="field-no">{String(i + 1).padStart(2, "0")}</span>
               <span class="field-main">
                 <span class="field-en display">{c.en}</span>

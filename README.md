@@ -35,8 +35,9 @@
 ## 技術
 
 - **Astro**（静的サイト生成）＋ HTML / CSS / TypeScript
-- 共通レイアウトをコンポーネント化（Header / Footer / WorkModal / Lightbox など）
+- 共通レイアウトをコンポーネント化（Header / Footer / Lightbox など）
 - 動画・音源・画像は遅延読み込み（`preload="none"` ＋ IntersectionObserver）で軽量化
+- Webフォントは自前配信（サブセット化した woff2・太さごとに必要な文字だけ）
 - **GitHub Pages**：`main` への push で GitHub Actions が自動デプロイ
 
 ## ローカル開発
@@ -46,13 +47,15 @@ npm install
 npm run dev      # 開発サーバを起動
 npm run build    # 本番ビルド（dist/ に静的出力）
 npm run preview  # ビルド結果をプレビュー
+npm run fonts:usage  # 太さごとの実使用文字を dist から集める（要: ビルド済み）
+npm run fonts    # Webフォントのサブセット再生成（文字を足したら build → fonts:usage → fonts）
 ```
 
 ## プロジェクト構成
 
 ```
 src/
-├─ components/   共通部品（Header, Footer, WorkModal, Lightbox …）
+├─ components/   共通部品（Header, Footer, Lightbox …）
 ├─ data/         作品・コンテンツのデータ（works.ts, yumiki.ts …）
 ├─ layouts/      ベースレイアウト
 ├─ pages/        各ページ（/ , /works , /about , /ceed , /contact , /yumiki/* …）

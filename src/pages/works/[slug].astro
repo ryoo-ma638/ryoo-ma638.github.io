@@ -1,7 +1,7 @@
 ---
 // 作品の個別詳細ページ（/works/<slug>）。
-// 一覧の没入モーダルと同じ内容を、共有・検索・ブラウザ戻るが効く独立URLとして提供する。
-// ※モーダル（WorkModal.astro）は一覧側に残置。ここはその静的ページ版。
+// 共有・検索・ブラウザ戻るが効く独立URLとして、作品の詳細をすべてここに置く。
+// 一覧（/works）のカードを押すとこのページに来る。モーダルは廃止し、詳細はここに一本化した。
 import Base from "../../layouts/Base.astro";
 import Lightbox from "../../components/Lightbox.astro";
 import { works, categoryLabels, type Category } from "../../data/works.ts";
@@ -40,7 +40,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
   <article class="wd container" data-accent={cat.color} style={`--c:${cat.color}`}>
     <!-- パンくず -->
     <p class="wd-crumb reveal">
-      <a href={`/works#cat-${work.category}`}>← Works 一覧</a>
+      <a href={`/works/#cat-${work.category}`}>← Works 一覧</a>
       <span class="wd-tag">{cat.ja}</span>
       {work.status && <span class="wd-status">{work.status}</span>}
     </p>
@@ -168,13 +168,13 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
 
     <!-- 前後の作品 -->
     <nav class="wd-pn reveal" aria-label="前後の作品">
-      <a class="wd-pn-card" href={`/works/${prev.slug}`}>
+      <a class="wd-pn-card" href={`/works/${prev.slug}/`}>
         <span class="wd-pn-dir">← 前の作品</span>
         {prev.thumb && <img src={prev.thumb} alt="" loading="lazy" />}
         <span class="wd-pn-title">{prev.title}</span>
       </a>
-      <a class="wd-pn-all" href="/works">一覧<br />へ</a>
-      <a class="wd-pn-card next" href={`/works/${next.slug}`}>
+      <a class="wd-pn-all" href="/works/">一覧<br />へ</a>
+      <a class="wd-pn-card next" href={`/works/${next.slug}/`}>
         <span class="wd-pn-dir">次の作品 →</span>
         {next.thumb && <img src={next.thumb} alt="" loading="lazy" />}
         <span class="wd-pn-title">{next.title}</span>
@@ -192,7 +192,9 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
 </Base>
 
 <style>
-  .wd { padding-block: clamp(1.4rem, 4vw, 3rem) var(--space-6); }
+  /* 上余白は「固定ヘッダーの高さ（clamp(58px,15vw,78px)）＋ページ本来の余白」。
+     これが無いとパンくず「← Works 一覧」がヘッダーの下に潜って押せなくなる。 */
+  .wd { padding-block: calc(clamp(58px, 15vw, 78px) + clamp(1.4rem, 4vw, 3rem)) var(--space-6); }
 
   /* パンくず */
   .wd-crumb { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: clamp(1.2rem, 3vw, 2rem); }

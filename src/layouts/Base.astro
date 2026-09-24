@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/fonts-main.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cursor from "../components/Cursor.astro";
@@ -48,12 +49,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Webフォントは自前配信（src/styles/fonts-main.css）。Google Fonts への通信は無し。 -->
 
     <!-- ダーク既定。light保存時のみ切替（チラつき防止で先行適用）＋初回イントロ判定 -->
     <script is:inline>
