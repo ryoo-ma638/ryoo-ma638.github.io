@@ -7,8 +7,8 @@ const order: Category[] = ["web", "imaging", "cg", "video", "planning", "graphic
 // 各分野の中での表示順（売り出したい・評価が高いと思われる作品を上に）。
 // ここに無いslugは元の順で末尾へ回る。data側は触らず、表示順だけを制御する。
 const rankOrder: string[] = [
-  // Web・アプリ：受託 → 公開中アプリ → 公開中サイト → 受賞 → 実案件 → …
-  "drone-note", "meegri", "yumiki-world", "settlo", "nogi-photo", "chuo-seisakusho", "uriko-site", "portfolio-vol2", "ceed-site", "toka-club",
+  // Web・アプリ：Settloを先頭に、ドローン点検アプリは後方へ
+  "settlo", "meegri", "yumiki-world", "nogi-photo", "chuo-seisakusho", "uriko-site", "portfolio-vol2", "ceed-site", "toka-club", "drone-note",
   // 画像処理・インタラクション：完成作品 → 研究中 → 構想中
   "deathcamer", /* "kamakama-quest"＝一時非表示中（works.tsでコメントアウト）。再表示時に位置を保つため残置 */ "shuwa-game", "wis-umbrella", /* "fukuoka-award"＝一時非表示中（同上） */
   // CG・3D：代表作・高評価を上に

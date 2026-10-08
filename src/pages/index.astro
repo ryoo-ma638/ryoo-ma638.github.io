@@ -9,7 +9,7 @@ for (const k of Object.keys(categoryLabels)) {
 // 各分野の代表作サムネ（Fields のホバープレビュー用＝分野を実作品に紐づける＝脱テンプレ）
 const fieldThumb: Record<string, string | undefined> = {};
 for (const k of Object.keys(categoryLabels)) {
-  fieldThumb[k] = works.find((w) => w.category === k && w.thumb)?.thumb;
+  fieldThumb[k] = works.find((w) => (k === "web" ? w.slug === "settlo" : w.category === k) && w.thumb)?.thumb;
 }
 // ヒーロー背景の斜めキネティック文字（複数本が斜めに流れる）
 const kineticA = ["CG", "VIDEO", "3DCG", "MOTION", "INTERACTION", "VISION"];
