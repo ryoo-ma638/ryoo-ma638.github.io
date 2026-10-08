@@ -182,6 +182,35 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
       );
     })}
 
+    {work.introVideo && (
+      <section class="wd-sec reveal">
+        <p class="eyebrow wd-eyebrow">Video</p>
+        <h2 class="wd-h2">紹介動画</h2>
+        {work.introVideo.note && <p class="wd-resource-note">{work.introVideo.note}</p>}
+        <div class="wd-intro-video">
+          <video controls playsinline preload="metadata" poster={work.introVideo.poster} src={work.introVideo.src} aria-label={`${work.title}の紹介動画`}></video>
+        </div>
+        {work.introVideo.credits && <p class="wd-resource-credits">音源：{work.introVideo.credits.map((credit, i) => <><a href={credit.href} target="_blank" rel="noopener noreferrer">{credit.label}</a>{i < work.introVideo!.credits!.length - 1 && <span> ／ </span>}</>)}</p>}
+      </section>
+    )}
+
+    {work.introSlides && (
+      <section class="wd-sec reveal">
+        <p class="eyebrow wd-eyebrow">Slides</p>
+        <h2 class="wd-h2">紹介スライド <span class="mut">（全{work.introSlides.images.length}ページ・横スクロール →）</span></h2>
+        <p class="wd-resource-title">{work.introSlides.title}</p>
+        {work.introSlides.note && <p class="wd-resource-note">{work.introSlides.note}</p>}
+        <div class="wd-strip" role="region" aria-label={`${work.title} の紹介スライド`} tabindex="0">
+          {work.introSlides.images.map((s, si) => (
+            <button type="button" class="wd-slide wd-intro-slide" data-gallery={JSON.stringify(work.introSlides!.images)} data-index={si} data-caption={work.introSlides!.title} aria-label={`紹介スライド ${si + 1} / ${work.introSlides!.images.length} を拡大`}>
+              <img src={s} alt={`紹介スライド ${si + 1} ページ`} loading="lazy" width="1600" height="900" />
+              <span class="wd-slide-number">{si + 1} / {work.introSlides!.images.length}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
+
     <!-- 音源 -->
     {work.audio && work.audio.length > 0 && (
       <section class="wd-sec reveal">
@@ -329,6 +358,15 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
   /* アプリ画面は元画像の比率で表示し、一覧でも下端まで見せる。 */
   .wd-slide--tall { width: clamp(180px, 20vw, 230px); aspect-ratio: auto; }
   .wd-slide--tall img { height: auto; object-fit: contain; }
+  .wd-resource-title { margin: .3rem 0 .5rem; font-weight: 700; line-height: 1.5; }
+  .wd-resource-note { margin: .3rem 0 1rem; color: var(--fg-soft); font-size: .85rem; line-height: 1.7; }
+  .wd-intro-video { width: min(100%, 900px); margin-inline: auto; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #0b1428; }
+  .wd-intro-video video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; }
+  .wd-resource-credits { margin-top: .5rem; color: var(--fg-soft); font-size: .75rem; line-height: 1.6; text-align: center; }
+  .wd-resource-credits a { text-decoration: underline; text-underline-offset: .2em; }
+  .wd-intro-slide { position: relative; width: min(500px, 84vw); aspect-ratio: 16 / 9; background: #fff; }
+  .wd-intro-slide img { height: 100%; aspect-ratio: 16 / 9; }
+  .wd-slide-number { position: absolute; right: .5rem; bottom: .5rem; padding: .15rem .5rem; border-radius: 999px; background: rgba(13, 27, 49, .9); color: #fff; font-size: .72rem; font-weight: 700; }
   @media (max-width: 640px) {
     .wd-slide--tall { width: min(58vw, 230px); }
   }
