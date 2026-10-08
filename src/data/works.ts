@@ -304,7 +304,6 @@ export const works: Work[] = [
       { title: "アプリ画面（PC）", images: ["/assets/works/drone-home.jpg", "/assets/works/drone-records.jpg", "/assets/works/drone-form.jpg", "/assets/works/drone-operators.jpg"] },
       { title: "アプリ画面（スマホ）", images: ["/assets/works/drone-m-home.jpg", "/assets/works/drone-m-drawer.jpg"] },
     ],
-    featured: true,
   },
   {
     slug: "yumiki-world",
@@ -365,13 +364,14 @@ export const works: Work[] = [
     slug: "settlo",
     title: "Settlo（セトロ）― レシートAI割り勘アプリ",
     category: "web",
-    summary: "レシートを撮るだけで旅行や飲み会の割り勘から精算まで済むアプリ。サークル内ハッカソンで企業協賛賞。技育博2026 Vol.2（2026年9月・虎ノ門ヒルズ）に出展した。",
-    goal: "立て替えの計算が面倒で精算はうやむやになりがち。1枚撮れば記録は済み、誰でも迷わず支払いまで終えられる状態をめざした。",
-    approach: "自分はイベント詳細・精算ロジックとデータ設計、レシートのAI読み取りを担当。開発は5人、展示は3人体制で、UI・ホーム画面やフレンド機能はチームで分担した。送金の回数が最小で、できるだけ100円単位で割り切れる金額になる相殺を組み、イベント単位と相手単位の二通りでまとめて片づけられるようにした。現金は受け取った側の承認で完了する二段階にし、戻された分は未払いと分けて表示した。撮ったレシートは店名・金額・消費税・品目まで自動入力し、5枚までまとめて読める。返信案を出すときは相手の名前を渡さず仮のラベルに置き換える。金額の正データは取引1本に決めて二重に持たず、お金を確定させる処理はサーバー側だけに置き、まとめて精算に予約された取引は編集も削除もできないようにした。計算は画面から切り離した純粋関数にし、テストで金額と状態遷移を固定した。",
+    summary: "レシートのAI読み取りと、送金回数を抑えるまとめて精算が特徴の割り勘アプリ。チームで開発し、サークル内ハッカソンで企業協賛賞を受賞。技育博2026 Vol.2に出展した。",
+    goal: "旅行や飲み会で立て替えたお金を記録し、誰が誰にいくら支払うかを分かりやすく整理する。支払いの確認まで迷わず進められる体験をめざした。",
+    approach: "チーム開発の中で、自分はイベント詳細、精算ロジックとデータ設計、レシートのAI読み取りを担当した。イベント全体の貸し借りと、相手ごとの複数イベントにまたがる貸し借りを、それぞれまとめて精算できるようにした。送金回数を抑える計算に加え、現金の受け取り確認や差し戻しの状態を分けて扱う仕組みを設計した。レシートからは店名・金額・消費税・品目を読み取り、入力の手間を減らした。展示後も、来場者の声をもとに使い始めの分かりやすさを検証し、改善を続けている。",
     tools: ["Vue 3 / Vite", "Firebase（Firestore / Cloud Functions / FCM）", "Gemini 2.5 Flash（レシート読み取り・返信案）", "PWA"],
     thumb: "/assets/works/settlo-event.jpg",
     contain: true,
-    status: "ハッカソン企業協賛賞・技育博2026出展",
+    featured: true,
+    status: "企業協賛賞",
     link: "https://settlo-app.web.app",
     slideGroups: [
       { title: "記録する・まとめて精算する（ゲストデモの実画面）", images: ["/assets/works/settlo-home.jpg", "/assets/works/settlo-event.jpg", "/assets/works/settlo-pay.jpg"], portrait: true },
@@ -487,7 +487,7 @@ export const works: Work[] = [
 
 // トップBento（Featured）の並び順を明示制御。featured な作品を、この順で大きく見せる。
 // 1番目＝大カード、2番目＝準大カード（強調枠）。
-const featuredOrder = ["shibuya-crossing", "deathcamer", "robot-argus", "meegri", "yumiki-world", "chuo-seisakusho", "drone-note", "mushiba-animals"];
+const featuredOrder = ["settlo", "deathcamer", "robot-argus", "meegri", "yumiki-world", "chuo-seisakusho", "shibuya-crossing", "mushiba-animals"];
 export const featuredWorks = works
   .filter((w) => w.featured)
   .sort((a, b) => featuredOrder.indexOf(a.slug) - featuredOrder.indexOf(b.slug));
