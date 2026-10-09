@@ -8,9 +8,9 @@ const socials = [
   { label: "Email", href: "mailto:osaki638ryoma@gmail.com" },
 ];
 // Let's Create 背景：作品サムネを斜め2行・逆方向に流すショーケース
-// 専用の極小サムネ(assets/works/footer/*.jpg)を使い、全ページでの読み込みを軽量化
+// 専用の極小サムネ(assets/works/footer/*.jpg)を使う。SVGはそのまま表示する。
 const footerThumb = (t: string) => {
-  if (t === "/assets/ceed-logo.png" || t === "/assets/slides/slide-ceed-1.jpg") return t;
+  if (t.endsWith(".svg") || t === "/assets/ceed-logo.png" || t === "/assets/slides/slide-ceed-1.jpg") return t;
   return "/assets/works/footer/" + t.split("/").pop()!.replace(/\.[^.]+$/, ".jpg");
 };
 const showcase = works.filter((w) => w.thumb).map((w) => ({ src: footerThumb(w.thumb!), contain: w.contain }));
