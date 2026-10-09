@@ -64,7 +64,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
       <div
         class="wd-media reveal"
         data-gallery={JSON.stringify(lbList)}
-        data-caption={work.title}
+        data-caption={work.imageNote ? `${work.title}｜${work.imageNote}` : work.title}
         style={work.thumb ? `--mbg:url(${work.thumb})` : undefined}
       >
         {work.video
@@ -73,6 +73,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
             ? <img src={work.thumb} alt={work.title} />
             : <span class="wd-noimg">画像準備中</span>}
         <span class="wd-bar" aria-hidden="true"></span>
+        {work.imageNote && <span class="wd-media-note">{work.imageNote}</span>}
         {(work.video || work.thumb) && <span class="wd-zoom" aria-hidden="true">クリックで拡大 ↗</span>}
       </div>
 
@@ -282,6 +283,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
     width: auto; height: auto; object-fit: contain; display: block; }
   .wd-media .wd-noimg { position: relative; z-index: 1; color: var(--muted); font-size: var(--fs-small); font-weight: 700; }
   .wd-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 2; background: var(--c); }
+  .wd-media-note { position: absolute; z-index: 2; left: .7rem; bottom: .7rem; padding: .35rem .6rem; border-radius: .45rem; background: #05050acc; color: #fff; font-size: .76rem; font-weight: 700; }
   .wd-zoom { position: absolute; right: 0.7rem; bottom: 0.7rem; z-index: 2; font-family: var(--font-display); font-size: 0.66rem; font-weight: 700;
     letter-spacing: 0.04em; color: var(--fg); background: color-mix(in srgb, #05050a 62%, transparent); border: 1px solid var(--line);
     padding: 0.3rem 0.6rem; border-radius: 999px; opacity: 0; transition: opacity 0.25s var(--ease); }

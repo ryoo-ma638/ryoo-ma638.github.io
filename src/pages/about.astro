@@ -17,14 +17,14 @@ const timeline = [
   { num: "2018", tag: "中学校時代", title: "野球と、生徒会長", text: "野球チームに所属。生徒会長として学校を盛り上げ、リーダーとしての土台をつくる。", c: "var(--c-cyan)" },
   { num: "2021", tag: "高校時代", title: "学業に励んだ3年間", text: "進路を見据えながら、3年間しっかりと学業に打ち込む。", c: "var(--c-green)" },
   { num: "2024", tag: "愛知工業大学 入学", title: "情報科学部へ", text: "情報科学部に入学（コンピュータシステム専攻・KKA）。", c: "var(--c-yellow)" },
-  { num: "2025", tag: "転機", title: "転専攻、そしてCEED", text: "ものづくりへの興味から、メディア情報専攻（KX）へ転専攻。マルチクリエイティブサークル CEED に所属する。", c: "var(--c-orange)" },
-  { num: "2026", tag: "現在", title: "研究室と、副部長", text: "水野慎士研究室（CGメディア）でCG・画像処理を専門に。CEED副部長として、60名規模のサークルの運営を支えている。", c: "var(--c-red)" },
+  { num: "2025", tag: "転機", title: "メディア情報専攻へ", text: "ものづくりへの興味から、メディア情報専攻（KX）へ転専攻。表現と制作を学ぶ範囲が広がる。", c: "var(--c-orange)" },
+  { num: "2026", tag: "現在", title: "研究室と、副部長", text: "研究室でCG・画像処理に取り組む。CEED副部長として60名規模のサークル運営を支え、WEB班の制作をまとめている。", c: "var(--c-red)" },
   { num: "これから", tag: "Future", title: "つくって、光を放つ。", text: "いろんなことに挑戦したい。人生は一度きりだから、後悔のないよう、たくさんの壁を越えていく。", c: "var(--accent-ink)", future: true },
 ];
 
 // 信条（座右の銘・尊敬する人・原点・流儀）— すべて本人の言葉に基づく
 const credo = [
-  { tag: "尊敬する人", title: "戸塚優斗選手（スノーボード）", text: "2026年の冬季オリンピック金メダリスト。怪我を乗り越えて挑み続けるその姿に、勇気をもらった。自分も頑張ろう、と思える存在。", c: "var(--c-cyan)" },
+  { tag: "尊敬する人", title: "挑戦を続ける選手", text: "怪我を乗り越えて挑み続ける姿に勇気をもらう。自分も頑張ろう、と思える存在。", c: "var(--c-cyan)" },
   { tag: "ものづくりの原点", title: "「やりたい」に、突き進む", text: "「自分がやりたい」という気持ちに、ただ突き進んできた。その積み重ねが、今の自分をつくっている。", c: "var(--c-blue)" },
   { tag: "制作の流儀", title: "満足するまで、諦めない", text: "自分を、作品を客観視する。厳しい評価を受け止めてから、納得のいくものに仕上がるまで徹底的に。最後は根気と、根性。", c: "var(--c-violet)" },
 ];
@@ -34,8 +34,8 @@ const qa = [
   { q: "ONE WORD / 一言で言うと", a: "真面目バカ。" },
   { q: "FILMS / 好きな映画", a: "『スター・ウォーズ』『バック・トゥ・ザ・フューチャー』。感性に、新しい気づきとひらめきをくれた。" },
   { q: "DRAMA / 好きなドラマ", a: "『ROOKIES（ルーキーズ）』。" },
-  { q: "DRAGONS / 中日の推し", a: "捕手・加藤匠馬選手。かつては堂上直倫選手。" },
-  { q: "OSHI / 推しのきっかけ", a: "TBS『ラヴィット！』で弓木奈於さんの面白さと可愛らしさに惹かれ、乃木坂46の虜に。" },
+  { q: "DRAGONS / 好きな球団", a: "中日ドラゴンズ。捕手のプレーを見るのが好き。" },
+  { q: "OSHI / 推しのきっかけ", a: "テレビ番組をきっかけに、乃木坂46の魅力を知った。" },
   { q: "IDOL / 応援しているグループ", a: "乃木坂46 と ≒JOY（ニアジョイ）。" },
   { q: "DAYS OFF / 休日", a: "寝る。推し活。新しいことに挑戦する。つくりたいものをつくる。" },
   { q: "FOOD / 好きな食べ物", a: "餃子・お寿司・焼肉。" },
@@ -63,7 +63,7 @@ const highlights = [
 ];
 ---
 
-<Base title="About — Osaki Ryoma" description="名古屋のムードメーカーから、ものづくりの人へ。愛知工業大学 情報科学部 情報科学科 メディア情報専攻・水野慎士研究室の大崎稜馬。CG・映像・グラフィック・画像処理・Web・企画を横断する歩みと、その人となり。座右の銘は「謙虚」。">
+<Base title="About — Osaki Ryoma" description="名古屋のムードメーカーから、ものづくりの人へ。愛知工業大学 情報科学部 情報科学科 メディア情報専攻で画像処理・CGを学ぶ大崎稜馬。CG・映像・グラフィック・画像処理・Web・企画を横断する歩みと、その人となり。座右の銘は「謙虚」。">
   <!-- ============ ヒーロー ============ -->
   <section class="ab-hero" data-accent="var(--c-violet)">
     <div class="container">
@@ -75,7 +75,7 @@ const highlights = [
             <span class="ab-roman">Osaki&nbsp;Ryoma</span>
           </h1>
           <p class="ab-role reveal" data-delay="2">
-            愛知工業大学 情報科学部 情報科学科 メディア情報専攻／<span class="accent">水野慎士研究室</span><br />
+            愛知工業大学 情報科学部 情報科学科 メディア情報専攻／<span class="accent">画像処理・CGの研究室</span><br />
             CG・映像・グラフィック・画像処理・Web・企画を横断するクリエイター。
           </p>
           <p class="ab-lead reveal" data-delay="2">
@@ -128,7 +128,7 @@ const highlights = [
       <div class="motto reveal">
         <span class="motto-label">座右の銘</span>
         <p class="motto-word">「謙虚」</p>
-        <p class="motto-reason">中学の野球部時代に、繰り返し言われてきた言葉。そして、尊敬する大先輩・栗林良吏選手（広島東洋カープ）が大切にしている言葉でもある。</p>
+        <p class="motto-reason">中学の野球部時代に、繰り返し言われてきた言葉。今も大切にしている。</p>
       </div>
       <div class="credo-cards">
         {credo.map((c, i) => (
@@ -162,18 +162,18 @@ const highlights = [
           </div>
           <figcaption class="pcard-body">
             <h3 class="pcard-title">中日ドラゴンズと、バンテリンドーム</h3>
-            <p class="pcard-text">生まれも育ちも名古屋。中日ドラゴンズのファンとして球場へ。推しは捕手の加藤匠馬選手（かつては堂上直倫選手）。スタンドで浴びる熱気が、明日への活力です。</p>
+            <p class="pcard-text">生まれも育ちも名古屋。中日ドラゴンズのファンとして球場へ。捕手のプレーを追い、スタンドで浴びる熱気が明日への活力です。</p>
           </figcaption>
         </figure>
 
         <figure class="pcard reveal" data-delay="2" style="--cc:var(--c-violet)">
           <div class="pcard-media" style="--bg-img:url('/assets/about/oshikatsu.jpg')"
-               data-gallery='["/assets/about/oshikatsu.jpg"]' data-caption="14th YEAR BIRTHDAY LIVE — 弓木奈於さんを応援。" tabindex="0" role="button" aria-label="写真を拡大">
+               data-gallery='["/assets/about/oshikatsu.jpg"]' data-caption="14th YEAR BIRTHDAY LIVE — ライブを楽しむ。" tabindex="0" role="button" aria-label="写真を拡大">
             <img src="/assets/about/oshikatsu.jpg" alt="ライブ会場でタオルを掲げて推し活をする大崎稜馬" loading="lazy" />
             <span class="pcard-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>推し活</span>
           </div>
           <figcaption class="pcard-body">
-            <h3 class="pcard-title">乃木坂46・弓木奈於さんの応援</h3>
+            <h3 class="pcard-title">乃木坂46の応援</h3>
             <p class="pcard-text">『ラヴィット！』をきっかけに乃木坂46の虜に。応援する熱が高じて、ファンサイト「YUMIKI WORLD」を自作するほど。"好き"が、そのまま制作の原動力になりました。</p>
             <a class="pcard-link" href="/yumiki/">YUMIKI WORLD を見る <span aria-hidden="true">↗</span></a>
           </figcaption>
