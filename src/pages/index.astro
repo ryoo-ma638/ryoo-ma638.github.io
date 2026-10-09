@@ -233,10 +233,10 @@ const activities = [
     .bento-media img, .bento-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease), filter 0.5s var(--ease); }
     .bento-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
     .bento-media.is-screen img { padding: .35rem; }
-    .bento-media.is-photo img { object-fit: cover; }
+    .bento-media.is-photo img { position: absolute; inset: 0; object-fit: cover; object-position: center bottom; }
     .bento-media.is-brand { background: radial-gradient(circle at 50% 20%, #273146, #111821 72%); }
     .bento-media.is-brand::before { display: none; }
-    .bento-media.is-brand img { width: min(34%, 105px); height: auto; max-height: 38%; align-self: start; margin-top: 15%; padding: 0; object-fit: contain; }
+    .bento-media.is-brand img { width: min(50%, 145px); height: auto; max-height: 55%; align-self: start; margin-top: 1%; padding: 0; object-fit: contain; }
     .bento-card.noimg .bento-media::after { content: "画像準備中"; color: var(--muted); font-size: var(--fs-small); }
     .bento-card.noimg img { display: none; }
     .bento-card:hover .bento-media img { filter: brightness(1.07); }
