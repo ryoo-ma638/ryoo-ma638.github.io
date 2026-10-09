@@ -30,6 +30,8 @@ export interface Work {
   tools?: string[];       // 使用ツール
   duration?: string;      // 制作時間
   thumb?: string;         // サムネイル画像パス
+  cardImage?: string;     // 一覧・トップ用。詳細の原画像とは分ける
+  cardView?: "photo" | "screen" | "brand";
   video?: string;         // ループ再生する軽量mp4（任意）
   video2?: string;        // 2本目の動画（個別ページ下部に追加表示。任意）
   stageVideos?: { label: string; src: string }[]; // ステージ別の短い動画（3カラム表示。任意）
@@ -135,6 +137,8 @@ export const works: Work[] = [
     ],
     status: "学生チャレンジプロジェクト",
     thumb: "/assets/works/mushiba.jpg",
+    cardImage: "/assets/works/mushiba-2.jpg",
+    cardView: "photo",
     gallery: ["/assets/works/mushiba-tgs.jpg", "/assets/works/mushiba-team-3.jpg", "/assets/works/mushiba-2.jpg", "/assets/works/mushiba-poster.jpg"],
     featured: true,
   },
@@ -278,6 +282,7 @@ export const works: Work[] = [
     approach: "WEB班の制作をまとめながら、画面構成と文章を整理。企業担当者やメンバーと確認を重ねている。",
     tools: ["Figma", "Webデザイン"],
     thumb: "/assets/ceed-logo.png",
+    cardView: "brand",
     contain: true,
     status: "進行中",
     featured: true,
@@ -314,6 +319,7 @@ export const works: Work[] = [
     ],
     tools: ["Astro", "HTML", "CSS", "JavaScript"],
     thumb: "/assets/works/yumiki.jpg",
+    cardView: "screen",
     featured: true,
     link: "/yumiki/",
   },
@@ -333,6 +339,7 @@ export const works: Work[] = [
     ],
     tools: ["JavaScript", "WebGL / GLSL", "Node.js", "Gemini API"],
     thumb: "/assets/works/meegri.jpg",
+    cardView: "screen",
     link: "https://meegri.vercel.app/",
     featured: true,
   },
