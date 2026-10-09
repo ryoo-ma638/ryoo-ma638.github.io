@@ -67,7 +67,7 @@ const total = works.length;
             return (
             <article class="work-row reveal" id={w.slug} style={`--c:${g.label.color}`}>
               <div
-                class={`work-media${w.category === "graphic" ? " is-poster" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
+                class={`work-media${w.category === "graphic" ? " is-poster" : ""}${w.contain ? " is-contained" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
                 style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}
               >
                 {w.video
@@ -232,7 +232,9 @@ const total = works.length;
     /* 縦長スクショの左右を同じ画像の拡大ぼかしで埋めるのはやめた（2026-09-24）。
        装飾を足さず、枠の地色（紙面の黒）のまま余白として見せる＝引き算の方針。 */
     .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
+    .work-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
     .work-row:hover .work-media img { transform: scale(1.04); }
+    .work-row:hover .work-media.is-contained img { transform: none; }
     /* 準備中（サムネ未配置）は、分野色の点線カードで“意図された枠”に見せる */
     .work-media.is-empty { border-style: dashed; border-color: color-mix(in srgb, var(--c) 38%, var(--line)); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
     .media-ph { position: relative; z-index: 1; display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--fg-soft); font-size: var(--fs-small); font-weight: 700; letter-spacing: 0.04em; }
