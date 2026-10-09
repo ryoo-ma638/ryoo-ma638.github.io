@@ -75,7 +75,7 @@ const activities = [
       <div class="bento">
         {featuredWorks.map((w, i) => (
           <a href={`/works/${w.slug}/`} class="bento-card reveal" data-delay={(i % 3) + 1}>
-            <div class:list={["bento-media", { "is-contained": w.contain && w.cardView !== "photo", "is-photo": w.cardView === "photo", "is-screen": w.cardView === "screen", "is-brand": w.cardView === "brand" }]} style={w.cardView !== "brand" && w.thumb ? `--mbg:url(${w.cardImage ?? w.thumb})` : undefined}>
+            <div class:list={["bento-media", { "is-contained": w.contain && w.cardView !== "photo", "is-photo": w.cardView === "photo", "is-screen": w.cardView === "screen", "is-brand": w.cardView === "brand", "is-chuo": w.slug === "chuo-seisakusho" }]} style={w.cardView !== "brand" && w.thumb ? `--mbg:url(${w.cardImage ?? w.thumb})` : undefined}>
               {w.video
                 ? <video src={w.video} poster={w.cardImage ?? w.thumb} muted loop playsinline preload="none" data-hover></video>
                 : <img src={w.cardImage ?? w.thumb} alt={w.title} loading="lazy" onerror="this.closest('.bento-card').classList.add('noimg')" />}
@@ -232,6 +232,7 @@ const activities = [
     .bento-media::before { content: ""; position: absolute; inset: 0; background-image: var(--mbg); background-size: cover; background-position: center; filter: blur(30px) brightness(0.55) saturate(1.3); z-index: 0; }
     .bento-media img, .bento-media video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease), filter 0.5s var(--ease); }
     .bento-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
+    .bento-media.is-chuo img { padding: 0; }
     .bento-media.is-screen img { padding: .35rem; }
     .bento-media.is-photo img { position: absolute; inset: 0; object-fit: cover; object-position: center bottom; }
     .bento-media.is-brand { background: radial-gradient(circle at 50% 20%, #273146, #111821 72%); }
