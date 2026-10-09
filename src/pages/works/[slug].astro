@@ -62,7 +62,7 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
     <!-- ヒーロー（メディア｜情報） -->
     <div class="wd-head">
       <div
-        class="wd-media reveal"
+        class:list={["wd-media reveal", { "is-contained": work.contain }]}
         data-gallery={JSON.stringify(lbList)}
         data-caption={work.title}
         style={work.thumb ? `--mbg:url(${work.thumb})` : undefined}
@@ -280,6 +280,8 @@ const lbList = work.gallery && work.gallery.length ? work.gallery : (work.thumb 
     filter: blur(38px) saturate(1.35) brightness(0.5); transform: scale(1.25); opacity: 0.5; }
   .wd-media img, .wd-media video { position: relative; z-index: 1; max-width: 100%; max-height: min(72vh, 580px);
     width: auto; height: auto; object-fit: contain; display: block; }
+  .wd-media.is-contained { padding: clamp(.9rem, 2.5vw, 1.5rem); }
+  .wd-media.is-contained img { max-width: 100%; }
   .wd-media .wd-noimg { position: relative; z-index: 1; color: var(--muted); font-size: var(--fs-small); font-weight: 700; }
   .wd-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 2; background: var(--c); }
   .wd-zoom { position: absolute; right: 0.7rem; bottom: 0.7rem; z-index: 2; font-family: var(--font-display); font-size: 0.66rem; font-weight: 700;
