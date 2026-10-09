@@ -67,7 +67,7 @@ const total = works.length;
             return (
             <article class="work-row reveal" id={w.slug} style={`--c:${g.label.color}`}>
               <div
-                class={`work-media${(w.contain || w.category === "graphic") && w.cardView !== "photo" ? " is-contained" : ""}${w.cardView === "photo" ? " is-photo" : ""}${w.cardView === "screen" ? " is-screen" : ""}${w.cardView === "brand" ? " is-brand" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
+                class={`work-media${(w.contain || w.category === "graphic") && w.cardView !== "photo" ? " is-contained" : ""}${w.cardView === "photo" ? " is-photo" : ""}${w.cardView === "screen" ? " is-screen" : ""}${w.cardView === "brand" ? " is-brand" : ""}${w.slug === "chuo-seisakusho" ? " is-chuo" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
                 style={w.thumb ? `--mbg:url(${w.cardImage ?? w.thumb})` : undefined}
               >
                 {w.video
@@ -228,6 +228,7 @@ const total = works.length;
     .work-media { position: relative; width: 100%; min-width: 0; border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); display: grid; place-items: center; }
     .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
+    .work-media.is-chuo img { padding: 0; }
     .work-media.is-screen img { padding: .35rem; }
     .work-media.is-photo img { object-fit: cover; object-position: center bottom; padding: 0; }
     .work-media.is-brand img { width: min(55%, 200px); height: auto; max-height: 55%; inset: 10% auto auto 50%; transform: translateX(-50%); padding: 0; }
