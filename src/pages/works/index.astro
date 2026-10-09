@@ -67,7 +67,7 @@ const total = works.length;
             return (
             <article class="work-row reveal" id={w.slug} style={`--c:${g.label.color}`}>
               <div
-                class={`work-media${w.category === "graphic" ? " is-poster" : ""}${w.contain ? " is-contained" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
+                class={`work-media${w.contain || w.category === "graphic" ? " is-contained" : ""}${!w.thumb && !w.video ? " is-empty" : ""}`}
                 style={w.thumb ? `--mbg:url(${w.thumb})` : undefined}
               >
                 {w.video
@@ -225,45 +225,14 @@ const total = works.length;
     /* 「サイトを見る」＝別の行き先なので、カード全面リンクより前面に置いて個別に押せるようにする */
     .work-info .btn { position: relative; z-index: 4; }
 
-    .work-media { position: relative; border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); display: grid; place-items: center; }
-    /* グラフィック作品（縦長ポスター）はメディア枠を縦長にして全体を大きく見せる */
-    .work-media.is-poster { aspect-ratio: 4/5; max-width: 460px; justify-self: center; width: 100%; }
-    /* 縦長画像も見切れないよう、ぼかした同画像を背景に敷き本体は全体表示 */
-    /* 縦長スクショの左右を同じ画像の拡大ぼかしで埋めるのはやめた（2026-09-24）。
-       装飾を足さず、枠の地色（紙面の黒）のまま余白として見せる＝引き算の方針。 */
+    .work-media { position: relative; width: 100%; min-width: 0; border-radius: var(--radius); overflow: hidden; background: var(--bg-3); aspect-ratio: 4/3; border: 1px solid var(--line); display: grid; place-items: center; }
     .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
-    .work-row:hover .work-media img { transform: scale(1.04); }
-    .work-row:hover .work-media.is-contained img { transform: none; }
     /* 準備中（サムネ未配置）は、分野色の点線カードで“意図された枠”に見せる */
     .work-media.is-empty { border-style: dashed; border-color: color-mix(in srgb, var(--c) 38%, var(--line)); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
     .media-ph { position: relative; z-index: 1; display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--fg-soft); font-size: var(--fs-small); font-weight: 700; letter-spacing: 0.04em; }
     .media-ph::before { content: ""; width: 30px; height: 30px; border-radius: 50%; border: 2px dashed var(--c); opacity: 0.75; }
     .work-media { cursor: pointer; }
-    /* 裁ち落とし：3件に1件はフレーム（枠線・角丸）を外し、雑誌のように紙面へ直接置く。
-       角丸デバイスフレームの量産感を崩し、framed / bleed の交替でリズムを作る。 */
-    .work-row:nth-child(3n) .work-media { border: 0; border-radius: 0; background: transparent; }
-    /* 枠を外した行は、ぼかし背景も外して画像そのものを紙面に直に置く（ボックスに見せない） */
-    .work-row:nth-child(3n) .work-media .zoom-hint { bottom: 0.2rem; right: 0.2rem; }
-    /* 枠にはめるのをやめ、画像そのものの縦横で置く＝上下の余白（レターボックス）が出ないので
-       「角丸が欠けたカード」ではなく紙面に刷った1枚に見える。縦も枠のとき（4:3）より大きくなる。 */
-    .work-row:nth-child(3n) .work-media:not(.is-empty) { aspect-ratio: auto; display: block; }
-    .work-row:nth-child(3n) .work-media:not(.is-empty) > img,
-    .work-row:nth-child(3n) .work-media:not(.is-empty) > video { position: relative; inset: auto; height: auto; }
-    /* 紙面の端まで出す（コンテナの余白 1.25rem ぶん外へ）。1360px 以下では余白が常に 1.25rem なので
-       横スクロールは発生しない。それより広い画面では余白が大きいため、はみ出させず枠内に留める。 */
-    @media (max-width: 1360px) {
-      .work-row:nth-child(3n) .work-media:not(.is-empty):not(.is-poster) { margin-inline: -1.25rem; }
-    }
-    /* 2カラムのときは外側（紙面の端に近い側）だけを裁ち落とす */
-    @media (min-width: 880px) and (max-width: 1360px) {
-      .work-row:nth-child(3n):nth-child(odd) .work-media:not(.is-empty):not(.is-poster) { margin-inline: -1.25rem 0; }
-      .work-row:nth-child(3n):nth-child(even) .work-media:not(.is-empty):not(.is-poster) { margin-inline: 0 -1.25rem; }
-    }
-    /* 裁ち落としの行は情報側にも少し余白を足し、枠が無くても列として読めるようにする */
-    @media (min-width: 880px) { .work-row:nth-child(3n) .work-info { padding-left: 0.4rem; } }
-    /* 準備中の点線カードは「意図された枠」なので裁ち落としの対象外に戻す */
-    .work-row:nth-child(3n) .work-media.is-empty { border: 1px dashed color-mix(in srgb, var(--c) 38%, var(--line)); border-radius: var(--radius); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
     .zoom-hint { position: absolute; z-index: 2; bottom: 0.7rem; right: 0.7rem; font-family: var(--font-display); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.2); padding: 0.32rem 0.7rem; border-radius: 999px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); backdrop-filter: blur(4px); pointer-events: none; }
     .work-row:hover .zoom-hint, .work-row:focus-within .zoom-hint { opacity: 1; transform: none; }
     /* タッチ端末はホバーが無いので、操作のヒントを常時うっすら表示（発見性UP） */
