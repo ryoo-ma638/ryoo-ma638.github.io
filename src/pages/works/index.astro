@@ -229,8 +229,8 @@ const total = works.length;
     .work-media img, .work-media video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: transform 0.7s var(--ease); }
     .work-media.is-contained img { padding: clamp(.75rem, 2vw, 1.5rem); }
     .work-media.is-screen img { padding: .35rem; }
-    .work-media.is-photo img { object-fit: cover; padding: 0; }
-    .work-media.is-brand img { width: min(45%, 180px); height: auto; max-height: 45%; inset: 15% auto auto 50%; transform: translateX(-50%); padding: 0; }
+    .work-media.is-photo img { object-fit: cover; object-position: center bottom; padding: 0; }
+    .work-media.is-brand img { width: min(55%, 200px); height: auto; max-height: 55%; inset: 10% auto auto 50%; transform: translateX(-50%); padding: 0; }
     /* 準備中（サムネ未配置）は、分野色の点線カードで“意図された枠”に見せる */
     .work-media.is-empty { border-style: dashed; border-color: color-mix(in srgb, var(--c) 38%, var(--line)); background: linear-gradient(150deg, color-mix(in srgb, var(--c) 9%, var(--bg-3)), var(--bg-3) 72%); }
     .media-ph { position: relative; z-index: 1; display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; color: var(--fg-soft); font-size: var(--fs-small); font-weight: 700; letter-spacing: 0.04em; }
