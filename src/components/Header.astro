@@ -1,9 +1,9 @@
 ---
 const { pathname } = Astro.url;
 const isActive = (href: string) =>
-  href === "/" ? pathname === "/" : pathname.startsWith(href);
+  href === "/vol1/" ? pathname === "/vol1/" : pathname.startsWith(href);
 const links = [
-  { href: "/", label: "Home", num: "01" },
+  { href: "/vol1/", label: "Home", num: "01" },
   { href: "/works", label: "Works", num: "02" },
   { href: "/about", label: "About", num: "03" },
   { href: "/ceed", label: "CEED", num: "04" },
@@ -12,7 +12,7 @@ const links = [
 ---
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a href="/" class="logo display" aria-label="ホームへ">
+    <a href="/vol1/" class="logo display" aria-label="ホームへ">
       <span class="logo-horse" aria-hidden="true"></span><span class="logo-word">OSAKI</span><span class="logo-dot"></span>
     </a>
 

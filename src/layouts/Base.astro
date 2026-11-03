@@ -58,7 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         try {
           const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           // 幕はトップページだけ。/works/settlo/ のような深いURLを共有された人には出さない。
-          const onTop = location.pathname === "/" || location.pathname === "/index.html";
+          const onTop = ["/vol1", "/vol1/", "/vol1/index.html"].includes(location.pathname);
           if (onTop && !reduce && !sessionStorage.getItem("introSeen")) {
             document.documentElement.classList.add("intro");
             sessionStorage.setItem("introSeen", "1");
